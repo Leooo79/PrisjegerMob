@@ -14,6 +14,7 @@ import no.usn.rygleo.prisjegermobv1.navigasjon.MainScreenView
 import no.usn.rygleo.prisjegermobv1.ui.theme.PrisjegerMobV1Theme
 
 class MainActivity : ComponentActivity() {
+    val testval =0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
