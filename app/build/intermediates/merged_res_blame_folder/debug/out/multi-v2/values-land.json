@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "no.usn.rygleo.prisjegermobv1.app-mergeDebugResources-54:/values-land/values-land.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\leona\\.gradle\\caches\\transforms-3\\c1a0c725cb84839f484f1836465a4a41\\transformed\\ui-1.1.1\\res\\values-land\\values-land.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\leona\\.gradle\\caches\\transforms-3\\d3b5a00c8c8d32cf7dccb8ee585ed284\\transformed\\appcompat-1.5.1\\res\\values-land\\values-land.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,125,196",
+                        "endColumns": "69,70,67",
+                        "endOffsets": "120,191,259"
+                    },
+                    "to": {
+                        "startLines": "3,4,5",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "104,174,245",
+                        "endColumns": "69,70,67",
+                        "endOffsets": "169,240,308"
+                    }
+                }
+            ]
+        }
+    ]
+}
