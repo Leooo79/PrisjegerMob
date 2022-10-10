@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 
-private const val TESTNAVN = "Dette_er_test"
-
 /**
  * Klassen inneholder logikk for app Prisjeger
  * Kommuniserer med screens (visningskomponenter)
@@ -25,10 +23,9 @@ class PrisjegerViewModel : ViewModel() {
     // oppretter variabel for å holde på state
     private val _uiState = MutableStateFlow(
         HandlelisteUiState(
-            navn = TESTNAVN,
             handleliste = manuellHandleliste(),
             handlelisteData = manuellHandlelisteData(),
-            sum = nyTotal(manuellHandlelisteData())
+            sum = totalSum(manuellHandlelisteData())
         )
     )
     val uiState: StateFlow<HandlelisteUiState> = _uiState.asStateFlow()
@@ -41,6 +38,11 @@ class PrisjegerViewModel : ViewModel() {
         return HandlelisteData("testListe1", manuellHandleliste())
     }
 
+
+    /**
+     * Funksjon for å opprette en liste av handlelisteItems
+     * Skal erstattes av reelle data fra API
+     */
     private fun manuellHandleliste(): List<HandlelisteItems> {
         var liste = listOf(
             HandlelisteItems("Agurk, 1 stk", 11.11, 5),
@@ -60,13 +62,19 @@ class PrisjegerViewModel : ViewModel() {
         return liste
     }
 
-    fun nyTotal(handlelisteData: HandlelisteData): Double {
-        var nyTotal: Double = 0.0
-        for (handlelisteItems in handlelisteData.handleliste) {
-            nyTotal += handlelisteItems.sumPrVare
+
+
+    /**
+     * Hjelpemetode for å regne ut total sum for hele lista
+     */
+    fun totalSum(handlelisteData: HandlelisteData): Double {
+        var sum = 0.0
+        for (varer in handlelisteData.handleliste) {
+            sum += varer.antall * varer.enhetspris
         }
-        return nyTotal
+        return sum
     }
+
 
     // FORSØK LIVEDATA
     val livedata: MutableLiveData<HandlelisteItems> by lazy {
@@ -74,14 +82,15 @@ class PrisjegerViewModel : ViewModel() {
     }
 
 
-    private fun manuellPrisliste(): List<Pair<String, Double>> {
-        var liste = listOf(
-            Pair("Agurk, 1 stk", 11.11),
-            Pair("Aromat Krydder, 90 gram", 22.22),
-            Pair("Avløpsåpner Pulver Plumbo, 600 gr", 33.33),
-            Pair("vare 4", 44.44)
-        )
-        return liste
+    /**
+     * Hjelpemetode for å øke antall
+     * TODO: API kall avventer oppkobling mot database/ local storage
+     */
+    fun inkrementer(vare: HandlelisteItems) {
+        vare.antall++ // dette går fordi variabel er var og ikke val.
+        // her skal det gå kall til API for å oppdatere antall
+        oppdaterAntall(vare)
+        oppdaterSum(vare)
     }
 
 
@@ -89,12 +98,17 @@ class PrisjegerViewModel : ViewModel() {
      * Hjelpemetode for å redusere antall
      * TODO: API kall avventer oppkobling mot database/ local storage
      */
-    fun dekrementer(vare: HandlelisteItems): Int {
+    fun dekrementer(vare: HandlelisteItems) {
+        vare.antall-- // dette går fordi variabel er var og ikke val.
+        // her skal det gå kall til API for å oppdatere antall
         oppdaterAntall(vare)
         oppdaterSum(vare)
-        return vare.antall--
     }
 
+
+    /**
+     * Hjelpemetode for å oppdatere totalsum for handleliste
+     */
     private fun oppdaterSum(vare: HandlelisteItems) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -105,9 +119,7 @@ class PrisjegerViewModel : ViewModel() {
 
 
     /**
-     * Hjelpemetode for å rekomponere ved hjelp av "dummyvariabel"
-     * For testing av UI
-     * TODO: endres etter oppkobling mot database/ API kall (post/req)
+     * Hjelpemetode for å oppdatere antall pr vare
      */
     fun oppdaterAntall(vare: HandlelisteItems) {
         _uiState.update { currentState ->
@@ -115,35 +127,6 @@ class PrisjegerViewModel : ViewModel() {
                 antall = vare.antall,
             )
         }
-    }
-
-    /**
-     * Hjelpemetode for å øke antall
-     * TODO: API kall avventer oppkobling mot database/ local storage
-     */
-    fun inkrementer(vare: HandlelisteItems): Int {
-        oppdaterAntall(vare)
-        return vare.antall++
-    }
-
-    /**
-     * Hjelpemetode for å regne ut sum pr vare (pr rad i liste)
-     */
-    fun sumPrVare(vare: HandlelisteItems): Double {
-        return Math.round(vare.enhetspris * vare.antall * 100.00) / 100.0
-    }
-
-
-
-    /**
-     * Hjelpemetode for å regne ut total sum for hele lista
-     */
-    fun totalSum(handlelisteData: HandlelisteData): Double {
-        var sum: Double = 0.0
-        for (varer in handlelisteData.handleliste) {
-            sum += varer.antall * varer.enhetspris
-        }
-        return sum
     }
 
 

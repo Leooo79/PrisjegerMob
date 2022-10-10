@@ -58,15 +58,14 @@ fun HandlelisteScreen(
     val uiState by prisjegerViewModel.uiState.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
 
-    val test: String = "dette er tesdt"
-
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {
         HeaderVisning(
             iHandleModus = { handleModus = false },
-            sum = uiState.handlelisteData?.let { prisjegerViewModel.totalSum(handlelisteData = it) },
-            uiState)
+            sum = uiState.handlelisteData?.let {
+                prisjegerViewModel.totalSum(handlelisteData = it)
+            })
         Sokefelt(textState)
         ListeVisning(uiState.handlelisteData, state = textState, prisjegerViewModel)
     }
@@ -82,7 +81,6 @@ fun HandlelisteScreen(
 private fun HeaderVisning(
     iHandleModus: () -> Unit,
     sum: Double?,
-    uiState: HandlelisteUiState
 ) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     Card(
@@ -232,6 +230,7 @@ fun Sokefelt(state: MutableState<TextFieldValue>) {
             }
         },
         singleLine = true,
+        // bør testes på håndholdt enhet :
         colors = TextFieldDefaults.textFieldColors(
             textColor = Color.White,
             cursorColor = Color.White,
@@ -314,16 +313,13 @@ fun ListeVisning(
  */
 @Composable
 fun VarelisteItem(
-    //  varenavn: String,
-    // onItemClick: (String) -> Unit,
     vare: HandlelisteItems,
     prisjegerViewModel: PrisjegerViewModel) {
 
-    //   var antall by rememberSaveable { mutableStateOf(handleliste.antall) }
-    var sumPrVare by rememberSaveable { mutableStateOf(vare.sumPrVare) }
-    var antall by rememberSaveable { mutableStateOf(vare.antall) }
+    // var sumPrVare by rememberSaveable { mutableStateOf(vare.sumPrVare) }
+    // var antall by rememberSaveable { mutableStateOf(vare.antall) }
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var varenavn = ""
+    // var varenavn = ""
 
     Card(
         backgroundColor = MaterialTheme.colors.primary,
@@ -349,12 +345,10 @@ fun VarelisteItem(
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                //    Text(text = "Varenavn")
-                Text(text = vare.varenavn,
-                )
+                Text(text = vare.varenavn)
                 if (expanded) {
                     Text(text = ("Mer informasjon om vare, " +
-                            "bilder av vare?. ").repeat(4),
+                            "bilder av vare?. ").repeat(3),
                     )
                 }
             }
@@ -364,10 +358,7 @@ fun VarelisteItem(
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                //    Text(text = "enhetsPris")
-                Text(
-                    text = vare.enhetspris.toString(),
-                )
+                Text(text = vare.enhetspris.toString())
             }
             Column( // sumPrVare
                 modifier = Modifier
@@ -375,10 +366,7 @@ fun VarelisteItem(
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                //     Text(text = "sumPrVare")
-                Text(
-                    text = (Math.round(vare.enhetspris * vare.antall * 100.00) / 100.0).toString(),
-                )
+                Text(text = (Math.round(vare.enhetspris * vare.antall * 100.00) / 100.0).toString())
             }
             Column(
                 modifier = Modifier
@@ -393,9 +381,7 @@ fun VarelisteItem(
                     ),
                     onClick = {
                         if (vare.antall > 0) {
-                            prisjegerViewModel.dekrementer(vare).also { antall = it }
-                            //  sumPrVare = vare.antall * vare.enhetspris
-                            //   sumPrVare = prisjegerViewModel.sumPrVare(vare)
+                            prisjegerViewModel.dekrementer(vare)
                         }
                     }
                 ) {
@@ -410,16 +396,11 @@ fun VarelisteItem(
                     .align(Alignment.CenterVertically)
             ) {
                 Button( // knapp for å legge til
-                    //    onClick = { expanded = !expanded },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.primaryVariant,
                         contentColor = Color.White
                     ),
-                    onClick = {
-                        prisjegerViewModel.inkrementer(vare).also { antall = it }
-                        //  sumPrVare = vare.antall * vare.enhetspris
-                        //   sumPrVare = prisjegerViewModel.sumPrVare(vare)
-                    }
+                    onClick = { prisjegerViewModel.inkrementer(vare) }
                 ) {
                     Text(vare.antall.toString())
                 }
