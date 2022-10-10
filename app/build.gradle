@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
@@ -81,4 +82,16 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:2.5.0"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    // Lagt til LR for Room DB (fra pensum, slides)
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+// To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
+// To use Kotlin Symbol Processing (KSP) OBS: velge en av to metoder
+   // ksp("androidx.room:room-compiler:$room_version")
+// optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
+// optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+
 }

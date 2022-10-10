@@ -1,10 +1,13 @@
 
 package no.usn.rygleo.prisjegermobv1.ui
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.Room
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteData
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteUiState
@@ -12,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 
 
 /**
@@ -29,6 +33,7 @@ class PrisjegerViewModel : ViewModel() {
         )
     )
     val uiState: StateFlow<HandlelisteUiState> = _uiState.asStateFlow()
+
 
 
     /**
@@ -121,7 +126,7 @@ class PrisjegerViewModel : ViewModel() {
     /**
      * Hjelpemetode for å oppdatere antall pr vare
      */
-    fun oppdaterAntall(vare: HandlelisteItems) {
+    private fun oppdaterAntall(vare: HandlelisteItems) {
         _uiState.update { currentState ->
             currentState.copy(
                 antall = vare.antall,
@@ -131,7 +136,7 @@ class PrisjegerViewModel : ViewModel() {
 
 
 
-    fun setNavn(nyttNavn: String) {
+    private fun setNavn(nyttNavn: String) {
         _uiState.update { currentState ->
             currentState.copy(
                 navn = nyttNavn,
@@ -140,7 +145,7 @@ class PrisjegerViewModel : ViewModel() {
     }
 
 
-    fun setHandleliste(oppdatertHandleliste: List<HandlelisteItems>) {
+    private fun setHandleliste(oppdatertHandleliste: List<HandlelisteItems>) {
         _uiState.update { currentState ->
             currentState.copy(
                 handleliste = oppdatertHandleliste,
