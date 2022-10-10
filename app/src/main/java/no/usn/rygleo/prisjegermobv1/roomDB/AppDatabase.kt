@@ -6,10 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
-@Database(entities = arrayOf(Bruker::class), version = 1)
+@Database(entities = arrayOf(Bruker::class, Varer::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun brukerDAO(): BrukerDAO
+    abstract fun varerDAO(): VarerDAO
 
     companion object{
         @Volatile

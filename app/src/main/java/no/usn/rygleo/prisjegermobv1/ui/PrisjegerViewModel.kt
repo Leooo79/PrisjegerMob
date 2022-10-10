@@ -4,19 +4,17 @@ package no.usn.rygleo.prisjegermobv1.ui
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import no.usn.rygleo.prisjegermobv1.data.HandlelisteData
-import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
-import no.usn.rygleo.prisjegermobv1.data.HandlelisteUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.MainActivity
-import no.usn.rygleo.prisjegermobv1.data.BrukerRepo
+import no.usn.rygleo.prisjegermobv1.data.*
 import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
 import no.usn.rygleo.prisjegermobv1.roomDB.BrukerDAO
+import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 
 
 /**
@@ -40,28 +38,32 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     // oppretter en testbruker for insert i database
     val testBruker = Bruker(66,"testNavn", "testPassord")
+    val testVare = Varer("Agurk, 1 stk", 11.11, 5)
 
     // Reference to repository
-    private val repository: BrukerRepo
+    private val repository: VarerRepo
     // Using LiveData and caching what getAll returns has several benefits:
 // - We can put an observer on the data and only update the UI when the data actually changes.
 // - Repository is completely separated from the UI through the ViewModel.
-    val alleBrukere: LiveData<List<Bruker>>
+    val alleVarer: LiveData<List<Varer>>
     
     init {
-        val brukerDAO = AppDatabase.getRoomDb(application) // Bygger databaseobjektet....
-            .brukerDAO() // ... og henter DAO-objektet fra dette
-        repository = BrukerRepo(brukerDAO) // Bygger Repository-objektet basert på DAO
-        alleBrukere = repository.allUsers // Henter en liste med alle brukere fra databasen (via repository)
+        val varerDAO = AppDatabase.getRoomDb(application) // Bygger databaseobjektet....
+            .varerDAO() // ... og henter DAO-objektet fra dette
+        repository = VarerRepo(varerDAO) // Bygger Repository-objektet basert på DAO
+        alleVarer = repository.alleVarer // Henter en liste med alle brukere fra databasen (via repository)
     }
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
      */
-    fun insert(bruker: Bruker) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insert(bruker)
+    fun insert(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(testVare)
     }
 
 
+    fun getVare() = viewModelScope.launch(Dispatchers.IO) {
+        repository.alleVarer
+    }
 
 
 

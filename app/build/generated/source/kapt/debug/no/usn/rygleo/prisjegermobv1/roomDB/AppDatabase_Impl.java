@@ -32,19 +32,23 @@ import java.util.Set;
 public final class AppDatabase_Impl extends AppDatabase {
   private volatile BrukerDAO _brukerDAO;
 
+  private volatile VarerDAO _varerDAO;
+
   @Override
   protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration configuration) {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(1) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("CREATE TABLE IF NOT EXISTS `Bruker` (`brukerId` INTEGER NOT NULL, `brukerNavn` TEXT, `passord` TEXT, PRIMARY KEY(`brukerId`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `Varer` (`varenavn` TEXT NOT NULL, `enhetspris` REAL, `antall` INTEGER, PRIMARY KEY(`varenavn`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b6f0d9214ed853e8076df75623afc6b8')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e2f805adc82c7942f6c5c7b34d0fd72f')");
       }
 
       @Override
       public void dropAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("DROP TABLE IF EXISTS `Bruker`");
+        _db.execSQL("DROP TABLE IF EXISTS `Varer`");
         if (mCallbacks != null) {
           for (int _i = 0, _size = mCallbacks.size(); _i < _size; _i++) {
             mCallbacks.get(_i).onDestructiveMigration(_db);
@@ -96,9 +100,22 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoBruker + "\n"
                   + " Found:\n" + _existingBruker);
         }
+        final HashMap<String, TableInfo.Column> _columnsVarer = new HashMap<String, TableInfo.Column>(3);
+        _columnsVarer.put("varenavn", new TableInfo.Column("varenavn", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsVarer.put("enhetspris", new TableInfo.Column("enhetspris", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsVarer.put("antall", new TableInfo.Column("antall", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysVarer = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesVarer = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoVarer = new TableInfo("Varer", _columnsVarer, _foreignKeysVarer, _indicesVarer);
+        final TableInfo _existingVarer = TableInfo.read(_db, "Varer");
+        if (! _infoVarer.equals(_existingVarer)) {
+          return new RoomOpenHelper.ValidationResult(false, "Varer(no.usn.rygleo.prisjegermobv1.roomDB.Varer).\n"
+                  + " Expected:\n" + _infoVarer + "\n"
+                  + " Found:\n" + _existingVarer);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "b6f0d9214ed853e8076df75623afc6b8", "9a216b1f34dca82940f08c4d479fbedd");
+    }, "e2f805adc82c7942f6c5c7b34d0fd72f", "b03402f4a9a935c2f74dd4c18e023b8c");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)
@@ -111,7 +128,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "Bruker");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "Bruker","Varer");
   }
 
   @Override
@@ -121,6 +138,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     try {
       super.beginTransaction();
       _db.execSQL("DELETE FROM `Bruker`");
+      _db.execSQL("DELETE FROM `Varer`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -135,6 +153,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected Map<Class<?>, List<Class<?>>> getRequiredTypeConverters() {
     final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
     _typeConvertersMap.put(BrukerDAO.class, BrukerDAO_Impl.getRequiredConverters());
+    _typeConvertersMap.put(VarerDAO.class, VarerDAO_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -160,6 +179,20 @@ public final class AppDatabase_Impl extends AppDatabase {
           _brukerDAO = new BrukerDAO_Impl(this);
         }
         return _brukerDAO;
+      }
+    }
+  }
+
+  @Override
+  public VarerDAO varerDAO() {
+    if (_varerDAO != null) {
+      return _varerDAO;
+    } else {
+      synchronized(this) {
+        if(_varerDAO == null) {
+          _varerDAO = new VarerDAO_Impl(this);
+        }
+        return _varerDAO;
       }
     }
   }

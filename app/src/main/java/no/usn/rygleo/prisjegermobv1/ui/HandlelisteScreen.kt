@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -105,9 +106,9 @@ private fun HeaderVisning(
             }
             Button(
                 modifier = Modifier.padding(vertical = 6.dp),
-                onClick = {prisjegerViewModel.insert(prisjegerViewModel.testBruker)},
+                onClick = {prisjegerViewModel.insert(prisjegerViewModel.testVare)},
             ) {
-                Text(prisjegerViewModel.alleBrukere.toString())
+                Text("funker ikke")
             }
             Column(
 
