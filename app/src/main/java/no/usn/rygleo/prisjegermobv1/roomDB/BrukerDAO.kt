@@ -1,5 +1,6 @@
 package no.usn.rygleo.prisjegermobv1.roomDB
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -8,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface BrukerDAO {
     @Query("SELECT * FROM Bruker")
-    fun getAll(): List<Bruker>
+    fun getAlleBrukere(): LiveData<List<Bruker>>
 
 
     @Query("SELECT * FROM Bruker WHERE brukerId IN (:alleBrukerId)")

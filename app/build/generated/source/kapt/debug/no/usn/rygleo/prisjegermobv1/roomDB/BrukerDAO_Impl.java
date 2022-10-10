@@ -1,6 +1,7 @@
 package no.usn.rygleo.prisjegermobv1.roomDB;
 
 import android.database.Cursor;
+import androidx.lifecycle.LiveData;
 import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
@@ -10,6 +11,7 @@ import androidx.room.util.DBUtil;
 import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import java.lang.Class;
+import java.lang.Exception;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.StringBuilder;
@@ -17,6 +19,7 @@ import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @SuppressWarnings({"unchecked", "deprecation"})
 public final class BrukerDAO_Impl implements BrukerDAO {
@@ -87,40 +90,48 @@ public final class BrukerDAO_Impl implements BrukerDAO {
   }
 
   @Override
-  public List<Bruker> getAll() {
+  public LiveData<List<Bruker>> getAlleBrukere() {
     final String _sql = "SELECT * FROM Bruker";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
-    __db.assertNotSuspendingTransaction();
-    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
-    try {
-      final int _cursorIndexOfBrukerId = CursorUtil.getColumnIndexOrThrow(_cursor, "brukerId");
-      final int _cursorIndexOfBrukerNavn = CursorUtil.getColumnIndexOrThrow(_cursor, "brukerNavn");
-      final int _cursorIndexOfPassord = CursorUtil.getColumnIndexOrThrow(_cursor, "passord");
-      final List<Bruker> _result = new ArrayList<Bruker>(_cursor.getCount());
-      while(_cursor.moveToNext()) {
-        final Bruker _item;
-        final int _tmpBrukerId;
-        _tmpBrukerId = _cursor.getInt(_cursorIndexOfBrukerId);
-        final String _tmpBrukerNavn;
-        if (_cursor.isNull(_cursorIndexOfBrukerNavn)) {
-          _tmpBrukerNavn = null;
-        } else {
-          _tmpBrukerNavn = _cursor.getString(_cursorIndexOfBrukerNavn);
+    return __db.getInvalidationTracker().createLiveData(new String[]{"Bruker"}, false, new Callable<List<Bruker>>() {
+      @Override
+      public List<Bruker> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfBrukerId = CursorUtil.getColumnIndexOrThrow(_cursor, "brukerId");
+          final int _cursorIndexOfBrukerNavn = CursorUtil.getColumnIndexOrThrow(_cursor, "brukerNavn");
+          final int _cursorIndexOfPassord = CursorUtil.getColumnIndexOrThrow(_cursor, "passord");
+          final List<Bruker> _result = new ArrayList<Bruker>(_cursor.getCount());
+          while(_cursor.moveToNext()) {
+            final Bruker _item;
+            final int _tmpBrukerId;
+            _tmpBrukerId = _cursor.getInt(_cursorIndexOfBrukerId);
+            final String _tmpBrukerNavn;
+            if (_cursor.isNull(_cursorIndexOfBrukerNavn)) {
+              _tmpBrukerNavn = null;
+            } else {
+              _tmpBrukerNavn = _cursor.getString(_cursorIndexOfBrukerNavn);
+            }
+            final String _tmpPassord;
+            if (_cursor.isNull(_cursorIndexOfPassord)) {
+              _tmpPassord = null;
+            } else {
+              _tmpPassord = _cursor.getString(_cursorIndexOfPassord);
+            }
+            _item = new Bruker(_tmpBrukerId,_tmpBrukerNavn,_tmpPassord);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
         }
-        final String _tmpPassord;
-        if (_cursor.isNull(_cursorIndexOfPassord)) {
-          _tmpPassord = null;
-        } else {
-          _tmpPassord = _cursor.getString(_cursorIndexOfPassord);
-        }
-        _item = new Bruker(_tmpBrukerId,_tmpBrukerNavn,_tmpPassord);
-        _result.add(_item);
       }
-      return _result;
-    } finally {
-      _cursor.close();
-      _statement.release();
-    }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
   }
 
   @Override

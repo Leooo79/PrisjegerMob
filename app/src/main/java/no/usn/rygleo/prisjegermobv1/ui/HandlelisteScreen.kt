@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteData
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteUiState
+import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
 /*
@@ -62,6 +63,7 @@ fun HandlelisteScreen(
         .background(MaterialTheme.colors.secondary)
     ) {
         HeaderVisning(
+            prisjegerViewModel,
             iHandleModus = { handleModus = false },
             sum = uiState.handlelisteData?.let {
                 prisjegerViewModel.totalSum(handlelisteData = it)
@@ -79,10 +81,12 @@ fun HandlelisteScreen(
  */
 @Composable
 private fun HeaderVisning(
+    prisjegerViewModel: PrisjegerViewModel,
     iHandleModus: () -> Unit,
     sum: Double?,
 ) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
+
     Card(
         backgroundColor = MaterialTheme.colors.secondary,
     ) {
@@ -98,6 +102,12 @@ private fun HeaderVisning(
                 onClick = iHandleModus,
             ) {
                 Text("Nå er vi i handlemodus")
+            }
+            Button(
+                modifier = Modifier.padding(vertical = 6.dp),
+                onClick = {prisjegerViewModel.insert(prisjegerViewModel.testBruker)},
+            ) {
+                Text(prisjegerViewModel.alleBrukere.toString())
             }
             Column(
 
@@ -389,7 +399,7 @@ fun VarelisteItem(
                 }
 
             }
-            Column (
+            Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(2.dp)

@@ -151,7 +151,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   }
 
   @Override
-  public BrukerDAO BrukerDAO() {
+  public BrukerDAO brukerDAO() {
     if (_brukerDAO != null) {
       return _brukerDAO;
     } else {

@@ -2,12 +2,8 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
-import android.content.Context
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.room.Room
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteData
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteUiState
@@ -15,7 +11,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import no.usn.rygleo.prisjegermobv1.MainActivity
+import no.usn.rygleo.prisjegermobv1.data.BrukerRepo
 import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
+import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
+import no.usn.rygleo.prisjegermobv1.roomDB.BrukerDAO
 
 
 /**
@@ -23,7 +24,7 @@ import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
  * Kommuniserer med screens (visningskomponenter)
  * Kommuniserer med datakilder (klasser/ TODO: API/ local storage)
  */
-class PrisjegerViewModel : ViewModel() {
+class PrisjegerViewModel(application: Application) : AndroidViewModel(application) {
     // oppretter variabel for å holde på state
     private val _uiState = MutableStateFlow(
         HandlelisteUiState(
@@ -34,8 +35,37 @@ class PrisjegerViewModel : ViewModel() {
     )
     val uiState: StateFlow<HandlelisteUiState> = _uiState.asStateFlow()
 
+    /**
+     * Testing på LiveData og Room
+     */
+    // oppretter en testbruker for insert i database
+    val testBruker = Bruker(66,"testNavn", "testPassord")
+
+    // Reference to repository
+    private val repository: BrukerRepo
+    // Using LiveData and caching what getAll returns has several benefits:
+// - We can put an observer on the data and only update the UI when the data actually changes.
+// - Repository is completely separated from the UI through the ViewModel.
+    val alleBrukere: LiveData<List<Bruker>>
+    
+    init {
+        val brukerDAO = AppDatabase.getRoomDb(application) // Bygger databaseobjektet....
+            .brukerDAO() // ... og henter DAO-objektet fra dette
+        repository = BrukerRepo(brukerDAO) // Bygger Repository-objektet basert på DAO
+        alleBrukere = repository.allUsers // Henter en liste med alle brukere fra databasen (via repository)
+    }
+    /**
+     * Launching a new coroutine to insert the data in a non-blocking way
+     */
+    fun insert(bruker: Bruker) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(bruker)
+    }
 
 
+
+
+
+    
     /**
      * Hjelpemetoder for å opprette testdata
      */

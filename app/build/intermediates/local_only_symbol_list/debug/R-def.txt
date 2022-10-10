@@ -15,6 +15,7 @@ drawable ic_launcher_foreground
 drawable ic_my_network
 drawable ic_notification
 drawable ic_post
+drawable prisjegerlogo
 mipmap ic_launcher
 mipmap ic_launcher_round
 plurals cupcakes

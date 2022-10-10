@@ -6,7 +6,7 @@ import java.lang.System;
 public final class LoginScreenKt {
     
     @androidx.compose.runtime.Composable()
-    @androidx.compose.ui.tooling.preview.Preview(showBackground = true, widthDp = 320, heightDp = 320)
+    @androidx.compose.ui.tooling.preview.Preview(showBackground = true, widthDp = 320, heightDp = 600)
     public static final void LoginScreen() {
     }
 }
