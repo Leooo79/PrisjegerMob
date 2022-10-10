@@ -58,6 +58,8 @@ fun HandlelisteScreen(
     val uiState by prisjegerViewModel.uiState.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
 
+    val test: String = "dette er tesdt"
+
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {

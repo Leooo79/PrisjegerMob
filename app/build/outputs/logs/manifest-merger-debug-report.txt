@@ -1,37 +1,37 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-MERGED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:17:1-30:12
-MERGED from [androidx.compose.material:material:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\d8bec110acd6c50258e425f6aaf7e6c4\transformed\material-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.runtime:runtime-livedata:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\57f38ebd956e647a6d38e447dc7e7fd1\transformed\runtime-livedata-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.compose.material:material:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\6f428f9524c04aed4fd122bd267309f4\transformed\material-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.runtime:runtime-livedata:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\3fa00e86454999407b895442a8a2e966\transformed\runtime-livedata-1.1.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-compose:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\1e76bb8148d73e60db8de085b5ce36db\transformed\navigation-compose-2.5.0\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui-tooling-data:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\9a3a6c561b9e03e7c21f43cc61628382\transformed\ui-tooling-data-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.material:material-ripple:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\82e1a411db1929d228f51d7604f1069c\transformed\material-ripple-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.foundation:foundation:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\83c4412d3fbff69d813898167303945a\transformed\foundation-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.animation:animation:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\a8147d5d93495020bcfb75fd1384774b\transformed\animation-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.material:material-icons-core:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\5e72f9af173b805161f54ab296d6b5a9\transformed\material-icons-core-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.foundation:foundation-layout:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\a05b49e20d47f98b430f367a341e324d\transformed\foundation-layout-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui-tooling-data:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f1fa81a39658780066f3a3649014daac\transformed\ui-tooling-data-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.material:material-ripple:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\ae9c1c51c193743bdf41b906604e8b18\transformed\material-ripple-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.foundation:foundation:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\b820f4b5468763a3a94a9a1d9a80b09f\transformed\foundation-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.animation:animation:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\b8462ecbac3f2ea48633300009b7c5ea\transformed\animation-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.material:material-icons-core:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\594e4191e06ada53f36692964fff6fbf\transformed\material-icons-core-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.foundation:foundation-layout:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\7e8b81baf40cb64c003a8f17add8c661\transformed\foundation-layout-1.1.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity-compose:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\264f11d432d189c0d6f4a297ba734968\transformed\activity-compose-1.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\3171bf98fa5bd70f810e3ac3568f5218\transformed\lifecycle-viewmodel-compose-2.5.0\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.animation:animation-core:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\6120947b097db06ff8130abc07a1072d\transformed\animation-core-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\402f1d208feec93e7b36bbe177af78fb\transformed\ui-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui-tooling-preview:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\be93b5c534b41011e09455f9d415fd2f\transformed\ui-tooling-preview-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui-text:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\5c490a2c4cf1dcf77151d5da88778e8c\transformed\ui-text-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.runtime:runtime-saveable:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\93e258dc566e2f1d9ab157ec8cfffb69\transformed\runtime-saveable-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui-graphics:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\24679ef30f9c2596fa5a806f4e3e0d66\transformed\ui-graphics-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui-unit:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\f3c9c00ea885ae6b36af5eb625a7d06d\transformed\ui-unit-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui-geometry:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\4de976df1191aba0f47822553fc6f069\transformed\ui-geometry-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.runtime:runtime:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\bd63fc339cfa6e0d85f5172728b52067\transformed\runtime-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.animation:animation-core:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\17b31c3f730a41a279b79a72c10d410f\transformed\animation-core-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c1a0c725cb84839f484f1836465a4a41\transformed\ui-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui-tooling-preview:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\2c6a6015be0210e6fece8be663f0956c\transformed\ui-tooling-preview-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui-text:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\fb9a4876340f7a80f7c006bba0408f22\transformed\ui-text-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.runtime:runtime-saveable:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f70b32fa4dbc02038d7336c2e1aba545\transformed\runtime-saveable-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui-graphics:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\fddb9cf427c0d510f6fadd11e51a186d\transformed\ui-graphics-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui-unit:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\edb6d20ae1dfd4eb157de5c214dbf2ea\transformed\ui-unit-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui-geometry:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\8bdb4557c1deec2aebd6a95d9237ab6c\transformed\ui-geometry-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.runtime:runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\96f96291fb7ee450426fb8326ed2a852\transformed\runtime-1.1.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\84de886ae6b5ccab4f247163b29cc413\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\fb409249425e0f95c621e289d9515302\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity-ktx:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\573b3dbac52526ab16f33c969693692a\transformed\activity-ktx-1.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-common-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\38669c2ea130d6a3e11dc3a1c9f15d6b\transformed\navigation-common-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-common:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\2cef8c6e98c211d73d0671f797fcf007\transformed\navigation-common-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\6a7e9762bc2d4889f231f69be4b28a1e\transformed\lifecycle-viewmodel-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:17:1-30:12
 MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\394ce2d3872be59220855fefa5f09e0a\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\d3b5a00c8c8d32cf7dccb8ee585ed284\transformed\appcompat-1.5.1\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\leona\.gradle\caches\transforms-3\1bfe36f9164299f7976ba335a93a6ba9\transformed\fragment-1.3.6\AndroidManifest.xml:17:1-24:12
@@ -42,7 +42,7 @@ MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\l
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\8cae308842b5b2c0dc20c17b0d543350\transformed\lifecycle-runtime-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c543ade49acaefc4116c2470b0fd06eb\transformed\lifecycle-livedata-ktx-2.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\7031744ebbe4f34ee94f32c6c2ad9848\transformed\core-ktx-1.8.0\AndroidManifest.xml:2:1-9:12
-MERGED from [androidx.compose.ui:ui-util:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\74b730fbe9be133f8fcb328ce860bb36\transformed\ui-util-1.1.0-beta01\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.ui:ui-util:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\7c6393183074724ea1d7c327055db391\transformed\ui-util-1.1.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\16296b637c1181cce1d62655de7958ad\transformed\lifecycle-livedata-core-ktx-2.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\d675fd16f34da305fc8b36f95207523a\transformed\savedstate-ktx-1.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\eb944d955966d410269278d2c4c52cfe\transformed\savedstate-1.2.0\AndroidManifest.xml:17:1-24:12
@@ -55,7 +55,7 @@ MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\leona\.gradl
 MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\6db566fb57605dc708a506976c76524c\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.customview:customview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\1d9f4c63e13b04328c65368b7334da91\transformed\customview-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:17:1-26:12
-MERGED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:17:1-48:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:17:1-48:12
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:17:1-37:12
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\c212f43ac60f4030155113d80650484c\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\f9809ec2080ef6562ba4cd987fca9a13\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -67,37 +67,37 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\leona\.gradle\cach
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9bcfd13e6b946bec3801a597d303f7f2\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\2ec81871c152e69f6d0ec15ea56de76c\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\857e03149483f701a2d3531919e69de5\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
 	package
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:4:5-43
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:4:5-43
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	xmlns:tools
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:3:5-51
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:3:5-51
 	android:versionCode
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:1-29:12
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:2:11-69
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:6:5-27:19
-MERGED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:24:5-28:19
-MERGED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:24:5-28:19
-MERGED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:24:5-28:19
-MERGED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:24:5-28:19
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:6:5-27:19
+MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:24:5-28:19
+MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:24:5-28:19
+MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:24:5-28:19
+MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:24:5-28:19
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\5599effd9ad40bca005e593cdd894a89\transformed\emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\5599effd9ad40bca005e593cdd894a89\transformed\emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:24:5-89
-MERGED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:25:5-46:19
-MERGED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:25:5-46:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:25:5-46:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:25:5-46:19
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:25:5-35:19
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:25:5-35:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\169424ef22b2764469f41a4fa926f240\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
@@ -107,89 +107,89 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\leona\.gradle\cach
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
 	android:supportsRtl
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:13:9-35
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:13:9-35
 	android:label
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:11:9-41
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:11:9-41
 	android:fullBackupContent
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:9:9-54
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:9:9-54
 	android:roundIcon
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:12:9-54
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:12:9-54
 	tools:targetApi
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:15:9-29
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:15:9-29
 	android:icon
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:10:9-43
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:10:9-43
 	android:allowBackup
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:7:9-35
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:7:9-35
 	android:theme
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:14:9-52
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:14:9-52
 	android:dataExtractionRules
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:8:9-65
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:8:9-65
 activity#no.usn.rygleo.prisjegermobv1.MainActivity
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:16:9-26:20
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:16:9-26:20
 	android:label
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:19:13-45
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:19:13-45
 	android:exported
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:18:13-36
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:18:13-36
 	android:theme
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:20:13-56
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:20:13-56
 	android:name
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:17:13-41
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:17:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:21:13-25:29
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:21:13-25:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:22:17-69
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:22:17-69
 	android:name
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:22:25-66
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:22:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:24:17-77
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:24:17-77
 	android:name
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml:24:27-74
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:24:27-74
 uses-sdk
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-MERGED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.material:material:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\d8bec110acd6c50258e425f6aaf7e6c4\transformed\material-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.material:material:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\d8bec110acd6c50258e425f6aaf7e6c4\transformed\material-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.runtime:runtime-livedata:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\57f38ebd956e647a6d38e447dc7e7fd1\transformed\runtime-livedata-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.runtime:runtime-livedata:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\57f38ebd956e647a6d38e447dc7e7fd1\transformed\runtime-livedata-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.material:material:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\6f428f9524c04aed4fd122bd267309f4\transformed\material-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.material:material:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\6f428f9524c04aed4fd122bd267309f4\transformed\material-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime-livedata:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\3fa00e86454999407b895442a8a2e966\transformed\runtime-livedata-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime-livedata:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\3fa00e86454999407b895442a8a2e966\transformed\runtime-livedata-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-compose:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\1e76bb8148d73e60db8de085b5ce36db\transformed\navigation-compose-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-compose:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\1e76bb8148d73e60db8de085b5ce36db\transformed\navigation-compose-2.5.0\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-tooling-data:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\9a3a6c561b9e03e7c21f43cc61628382\transformed\ui-tooling-data-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-tooling-data:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\9a3a6c561b9e03e7c21f43cc61628382\transformed\ui-tooling-data-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.material:material-ripple:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\82e1a411db1929d228f51d7604f1069c\transformed\material-ripple-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.material:material-ripple:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\82e1a411db1929d228f51d7604f1069c\transformed\material-ripple-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.foundation:foundation:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\83c4412d3fbff69d813898167303945a\transformed\foundation-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.foundation:foundation:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\83c4412d3fbff69d813898167303945a\transformed\foundation-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.animation:animation:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\a8147d5d93495020bcfb75fd1384774b\transformed\animation-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.animation:animation:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\a8147d5d93495020bcfb75fd1384774b\transformed\animation-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.material:material-icons-core:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\5e72f9af173b805161f54ab296d6b5a9\transformed\material-icons-core-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.material:material-icons-core:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\5e72f9af173b805161f54ab296d6b5a9\transformed\material-icons-core-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.foundation:foundation-layout:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\a05b49e20d47f98b430f367a341e324d\transformed\foundation-layout-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.foundation:foundation-layout:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\a05b49e20d47f98b430f367a341e324d\transformed\foundation-layout-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-tooling-data:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f1fa81a39658780066f3a3649014daac\transformed\ui-tooling-data-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-tooling-data:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f1fa81a39658780066f3a3649014daac\transformed\ui-tooling-data-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.material:material-ripple:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\ae9c1c51c193743bdf41b906604e8b18\transformed\material-ripple-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.material:material-ripple:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\ae9c1c51c193743bdf41b906604e8b18\transformed\material-ripple-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.foundation:foundation:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\b820f4b5468763a3a94a9a1d9a80b09f\transformed\foundation-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.foundation:foundation:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\b820f4b5468763a3a94a9a1d9a80b09f\transformed\foundation-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.animation:animation:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\b8462ecbac3f2ea48633300009b7c5ea\transformed\animation-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.animation:animation:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\b8462ecbac3f2ea48633300009b7c5ea\transformed\animation-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.material:material-icons-core:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\594e4191e06ada53f36692964fff6fbf\transformed\material-icons-core-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.material:material-icons-core:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\594e4191e06ada53f36692964fff6fbf\transformed\material-icons-core-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.foundation:foundation-layout:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\7e8b81baf40cb64c003a8f17add8c661\transformed\foundation-layout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.foundation:foundation-layout:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\7e8b81baf40cb64c003a8f17add8c661\transformed\foundation-layout-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.activity:activity-compose:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\264f11d432d189c0d6f4a297ba734968\transformed\activity-compose-1.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.activity:activity-compose:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\264f11d432d189c0d6f4a297ba734968\transformed\activity-compose-1.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\3171bf98fa5bd70f810e3ac3568f5218\transformed\lifecycle-viewmodel-compose-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\3171bf98fa5bd70f810e3ac3568f5218\transformed\lifecycle-viewmodel-compose-2.5.0\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.animation:animation-core:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\6120947b097db06ff8130abc07a1072d\transformed\animation-core-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.animation:animation-core:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\6120947b097db06ff8130abc07a1072d\transformed\animation-core-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\402f1d208feec93e7b36bbe177af78fb\transformed\ui-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\402f1d208feec93e7b36bbe177af78fb\transformed\ui-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-tooling-preview:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\be93b5c534b41011e09455f9d415fd2f\transformed\ui-tooling-preview-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-tooling-preview:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\be93b5c534b41011e09455f9d415fd2f\transformed\ui-tooling-preview-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-text:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\5c490a2c4cf1dcf77151d5da88778e8c\transformed\ui-text-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-text:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\5c490a2c4cf1dcf77151d5da88778e8c\transformed\ui-text-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.runtime:runtime-saveable:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\93e258dc566e2f1d9ab157ec8cfffb69\transformed\runtime-saveable-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.runtime:runtime-saveable:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\93e258dc566e2f1d9ab157ec8cfffb69\transformed\runtime-saveable-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-graphics:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\24679ef30f9c2596fa5a806f4e3e0d66\transformed\ui-graphics-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-graphics:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\24679ef30f9c2596fa5a806f4e3e0d66\transformed\ui-graphics-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-unit:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\f3c9c00ea885ae6b36af5eb625a7d06d\transformed\ui-unit-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-unit:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\f3c9c00ea885ae6b36af5eb625a7d06d\transformed\ui-unit-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-geometry:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\4de976df1191aba0f47822553fc6f069\transformed\ui-geometry-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-geometry:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\4de976df1191aba0f47822553fc6f069\transformed\ui-geometry-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.runtime:runtime:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\bd63fc339cfa6e0d85f5172728b52067\transformed\runtime-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.runtime:runtime:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\bd63fc339cfa6e0d85f5172728b52067\transformed\runtime-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.animation:animation-core:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\17b31c3f730a41a279b79a72c10d410f\transformed\animation-core-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.animation:animation-core:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\17b31c3f730a41a279b79a72c10d410f\transformed\animation-core-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c1a0c725cb84839f484f1836465a4a41\transformed\ui-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c1a0c725cb84839f484f1836465a4a41\transformed\ui-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-tooling-preview:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\2c6a6015be0210e6fece8be663f0956c\transformed\ui-tooling-preview-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-tooling-preview:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\2c6a6015be0210e6fece8be663f0956c\transformed\ui-tooling-preview-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-text:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\fb9a4876340f7a80f7c006bba0408f22\transformed\ui-text-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-text:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\fb9a4876340f7a80f7c006bba0408f22\transformed\ui-text-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime-saveable:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f70b32fa4dbc02038d7336c2e1aba545\transformed\runtime-saveable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime-saveable:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f70b32fa4dbc02038d7336c2e1aba545\transformed\runtime-saveable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-graphics:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\fddb9cf427c0d510f6fadd11e51a186d\transformed\ui-graphics-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-graphics:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\fddb9cf427c0d510f6fadd11e51a186d\transformed\ui-graphics-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-unit:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\edb6d20ae1dfd4eb157de5c214dbf2ea\transformed\ui-unit-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-unit:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\edb6d20ae1dfd4eb157de5c214dbf2ea\transformed\ui-unit-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-geometry:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\8bdb4557c1deec2aebd6a95d9237ab6c\transformed\ui-geometry-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-geometry:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\8bdb4557c1deec2aebd6a95d9237ab6c\transformed\ui-geometry-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\96f96291fb7ee450426fb8326ed2a852\transformed\runtime-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\96f96291fb7ee450426fb8326ed2a852\transformed\runtime-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\84de886ae6b5ccab4f247163b29cc413\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\84de886ae6b5ccab4f247163b29cc413\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\fb409249425e0f95c621e289d9515302\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:20:5-22:41
@@ -202,8 +202,8 @@ MERGED from [androidx.navigation:navigation-common:2.5.0] C:\Users\leona\.gradle
 MERGED from [androidx.navigation:navigation-common:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\2cef8c6e98c211d73d0671f797fcf007\transformed\navigation-common-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\6a7e9762bc2d4889f231f69be4b28a1e\transformed\lifecycle-viewmodel-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\6a7e9762bc2d4889f231f69be4b28a1e\transformed\lifecycle-viewmodel-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\394ce2d3872be59220855fefa5f09e0a\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\394ce2d3872be59220855fefa5f09e0a\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\d3b5a00c8c8d32cf7dccb8ee585ed284\transformed\appcompat-1.5.1\AndroidManifest.xml:20:5-44
@@ -224,8 +224,8 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.4.1] C:\Users\leona\.gr
 MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c543ade49acaefc4116c2470b0fd06eb\transformed\lifecycle-livedata-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\7031744ebbe4f34ee94f32c6c2ad9848\transformed\core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\7031744ebbe4f34ee94f32c6c2ad9848\transformed\core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.compose.ui:ui-util:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\74b730fbe9be133f8fcb328ce860bb36\transformed\ui-util-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.compose.ui:ui-util:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\74b730fbe9be133f8fcb328ce860bb36\transformed\ui-util-1.1.0-beta01\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-util:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\7c6393183074724ea1d7c327055db391\transformed\ui-util-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.ui:ui-util:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\7c6393183074724ea1d7c327055db391\transformed\ui-util-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\16296b637c1181cce1d62655de7958ad\transformed\lifecycle-livedata-core-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\16296b637c1181cce1d62655de7958ad\transformed\lifecycle-livedata-core-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\d675fd16f34da305fc8b36f95207523a\transformed\savedstate-ktx-1.2.0\AndroidManifest.xml:20:5-22:41
@@ -250,8 +250,8 @@ MERGED from [androidx.customview:customview:1.0.0] C:\Users\leona\.gradle\caches
 MERGED from [androidx.customview:customview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\1d9f4c63e13b04328c65368b7334da91\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:21:5-23:41
-MERGED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\c212f43ac60f4030155113d80650484c\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
@@ -274,32 +274,32 @@ MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\leona\.gradle\ca
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\2ec81871c152e69f6d0ec15ea56de76c\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\857e03149483f701a2d3531919e69de5\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\857e03149483f701a2d3531919e69de5\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobV1\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 activity#androidx.compose.ui.tooling.PreviewActivity
-ADDED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:25:9-27:39
+ADDED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:25:9-27:39
 	android:exported
-		ADDED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:27:13-36
+		ADDED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:27:13-36
 	android:name
-		ADDED from [androidx.compose.ui:ui-tooling:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\1cfb6eecc19cef0a8cfa45d6161f475c\transformed\ui-tooling-1.1.0-beta01\AndroidManifest.xml:26:13-71
+		ADDED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:26:13-71
 activity#androidx.activity.ComponentActivity
-ADDED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:25:9-27:39
+ADDED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:25:9-27:39
 	android:exported
-		ADDED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:27:13-36
+		ADDED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:27:13-36
 	android:name
-		ADDED from [androidx.compose.ui:ui-test-manifest:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\e565fe8f74dd8e4758d57db4d00be9d4\transformed\ui-test-manifest-1.1.0-beta01\AndroidManifest.xml:26:13-63
+		ADDED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:26:13-63
 provider#androidx.startup.InitializationProvider
 ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\5599effd9ad40bca005e593cdd894a89\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:26:9-34:20
-MERGED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:26:9-34:20
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:26:9-34:20
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:26:9-34:20
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\480346e666ba36302e70fcce1f171922\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
@@ -319,29 +319,29 @@ ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transfor
 	android:name
 		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\5599effd9ad40bca005e593cdd894a89\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
 meta-data#androidx.profileinstaller.ProfileInstallerInitializer
-ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:31:13-33:52
+ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:31:13-33:52
 	android:value
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:33:17-49
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:33:17-49
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:32:17-85
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:32:17-85
 receiver#androidx.profileinstaller.ProfileInstallReceiver
-ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:36:9-45:20
+ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:36:9-45:20
 	android:enabled
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:39:13-35
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:39:13-35
 	android:exported
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:40:13-36
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:40:13-36
 	android:permission
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:41:13-57
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:41:13-57
 	android:directBootAware
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:38:13-44
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:38:13-44
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:37:13-76
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:37:13-76
 intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:42:13-44:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:42:13-44:29
 action#androidx.profileinstaller.action.INSTALL_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:43:17-91
+ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:43:17-91
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0-beta01] C:\Users\leona\.gradle\caches\transforms-3\daf0773dac685fb53f5a09fc646095e8\transformed\profileinstaller-1.1.0-beta01\AndroidManifest.xml:43:25-88
+		ADDED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:43:25-88
 meta-data#androidx.lifecycle.ProcessLifecycleInitializer
 ADDED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
 	android:value
