@@ -9,6 +9,14 @@ class BrukerRepo(private val brukerDAO: BrukerDAO) {
 // Observed LiveData will notify the observer when the data has changed.
     val allUsers: LiveData<List<Bruker>> = brukerDAO.getAlleBrukere()
     suspend fun insert(bruker: Bruker) {
-        brukerDAO.insertAll(bruker)
+        brukerDAO.insert(bruker)
+    }
+
+    suspend fun getBruker(brukerId: Int)  {
+         brukerDAO.getBruker(brukerId)
+    }
+
+    suspend fun getBrukerNavn(brukerId: Int)  {
+        brukerDAO.getBruker(brukerId)
     }
 }

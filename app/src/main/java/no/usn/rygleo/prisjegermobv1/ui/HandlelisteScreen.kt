@@ -22,21 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteData
-import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
-import no.usn.rygleo.prisjegermobv1.data.HandlelisteUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
+import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
 /*
@@ -60,17 +56,22 @@ fun HandlelisteScreen(
     val uiState by prisjegerViewModel.uiState.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
 
+    val brukerListe by prisjegerViewModel.allUsers.observeAsState(initial = emptyList())
+    val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
+
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {
         HeaderVisning(
+            uiState.handlelisteData,
+            brukerListe,
             prisjegerViewModel,
             iHandleModus = { handleModus = false },
             sum = uiState.handlelisteData?.let {
                 prisjegerViewModel.totalSum(handlelisteData = it)
             })
         Sokefelt(textState)
-        ListeVisning(uiState.handlelisteData, state = textState, prisjegerViewModel)
+        ListeVisning(vareListe, uiState.handlelisteData, state = textState, prisjegerViewModel)
     }
 }
 
@@ -82,6 +83,8 @@ fun HandlelisteScreen(
  */
 @Composable
 private fun HeaderVisning(
+    handlelisteData: HandlelisteData?,
+    brukerListe: List<Bruker>,
     prisjegerViewModel: PrisjegerViewModel,
     iHandleModus: () -> Unit,
     sum: Double?,
@@ -106,9 +109,32 @@ private fun HeaderVisning(
             }
             Button(
                 modifier = Modifier.padding(vertical = 6.dp),
-                onClick = {prisjegerViewModel.insert(prisjegerViewModel.testVare)},
+                // HVORDAN KALLE PÅ INSERT UTEN KRASJ ??? - > HUSK Å OPPDATERE VERSJON AV DB!!!!
+                onClick = {
+                    /*
+                    val testBruker = Bruker(5,"testNavn", "testPassord")
+                    prisjegerViewModel.insert(testBruker) // KLARER IKKE INSERT TIL ROOM DB
+                    prisjegerViewModel.selectAllIDs()
+                    if (handlelisteData != null) {
+                        prisjegerViewModel.setNavn(handlelisteData,"nyttNavn")
+                                 } // for recomp
+
+
+                        val testVare = Varer("majones", 66.66, 9)
+                        prisjegerViewModel.insertVare(testVare)
+  */
+                    prisjegerViewModel.lagTestliste()
+
+                }
             ) {
-                Text("funker ikke")
+                if (brukerListe.isEmpty()) {
+                    Text("")
+                } else Text(brukerListe[0].brukerNavn.toString())
+             //   Text(prisjegerViewModel.allUsers.observeAsState().value.toString())
+              //  Text(prisjegerViewModel.sorterteVarer?.get(0).toString())
+             //   if (handlelisteData != null) {
+             //       Text(handlelisteData.navn)
+            //    }
             }
             Column(
 
@@ -267,13 +293,14 @@ fun Sokefelt(state: MutableState<TextFieldValue>) {
  */
 @Composable
 fun ListeVisning(
+    vareListe: List<Varer>,
     handlelisteData: HandlelisteData?,
     state: MutableState<TextFieldValue>,
     prisjegerViewModel: PrisjegerViewModel
 ) {
 
-    val vareliste = ArrayList<HandlelisteItems>()
-    var filtrerteVarer: ArrayList<HandlelisteItems>
+    val vareliste = ArrayList<Varer>()
+    var filtrerteVarer: ArrayList<Varer>
     // bygger LazyColumn - filtrerte treff eller hele lista
     LazyColumn(Modifier
         .fillMaxWidth()
@@ -283,9 +310,9 @@ fun ListeVisning(
         filtrerteVarer = if (searchedText.isEmpty()) {
             vareliste
         } else {
-            val treffListe = ArrayList<HandlelisteItems>()
+            val treffListe = ArrayList<Varer>()
             if (handlelisteData != null) {
-                for (varer in handlelisteData.handleliste) {
+                for (varer in vareListe) {
                     if (varer.varenavn.lowercase().contains(searchedText.lowercase())) {
                         treffListe.add(varer)
                     }
@@ -302,7 +329,7 @@ fun ListeVisning(
         // om filter er tomt vises hele (handle)listen
         else {
             if (handlelisteData != null) {
-                items(handlelisteData.handleliste) { vare ->
+                items(vareListe) { vare ->
                     VarelisteItem(vare, prisjegerViewModel)
                 }
             }
@@ -324,7 +351,7 @@ fun ListeVisning(
  */
 @Composable
 fun VarelisteItem(
-    vare: HandlelisteItems,
+    vareListe: Varer,
     prisjegerViewModel: PrisjegerViewModel) {
 
     // var sumPrVare by rememberSaveable { mutableStateOf(vare.sumPrVare) }
@@ -356,7 +383,8 @@ fun VarelisteItem(
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = vare.varenavn)
+                if (vareListe == null) Text("")
+                else Text(text = vareListe.varenavn)
                 if (expanded) {
                     Text(text = ("Mer informasjon om vare, " +
                             "bilder av vare?. ").repeat(3),
@@ -369,15 +397,18 @@ fun VarelisteItem(
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = vare.enhetspris.toString())
+                Text(text = vareListe.enhetspris.toString())
             }
             Column( // sumPrVare
                 modifier = Modifier
                     .weight(1f)
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
-            ) {
-                Text(text = (Math.round(vare.enhetspris * vare.antall * 100.00) / 100.0).toString())
+            ) { // rotete kode som fungerer, bør utbedres
+                if (vareListe.antall == null) Text("")
+                else Text(text = (Math.round((vareListe.enhetspris?.times(vareListe.antall))?.times(
+                    100.00
+                ) ?: 0.0) / 100.0).toString())
             }
             Column(
                 modifier = Modifier
@@ -391,12 +422,17 @@ fun VarelisteItem(
                         contentColor = Color.White
                     ),
                     onClick = {
-                        if (vare.antall > 0) {
-                            prisjegerViewModel.dekrementer(vare)
+
+                        if (vareListe.antall!! > 0) {
+                 //           prisjegerViewModel.dekrementer(vareListe)
+                            prisjegerViewModel.oppdaterVare(
+                                vareListe.antall?.minus(1) ?: 0, vareListe.varenavn)
+                            prisjegerViewModel.oppdaterSumFraLD(vareListe)
+
                         }
                     }
                 ) {
-                    Text(vare.antall.toString())
+                    Text(vareListe.antall.toString())
                 }
 
             }
@@ -411,9 +447,15 @@ fun VarelisteItem(
                         backgroundColor = MaterialTheme.colors.primaryVariant,
                         contentColor = Color.White
                     ),
-                    onClick = { prisjegerViewModel.inkrementer(vare) }
+                   onClick = {
+                       prisjegerViewModel.oppdaterVare(
+                           vareListe.antall?.plus(1) ?: 0, vareListe.varenavn)
+                       prisjegerViewModel.oppdaterSumFraLD(vareListe)
+                 //   prisjegerViewModel.inkrementer(vareListe)
+
+            }
                 ) {
-                    Text(vare.antall.toString())
+                    Text(vareListe.antall.toString())
                 }
             }
         }

@@ -34,7 +34,7 @@ public final class BrukerDAO_Impl implements BrukerDAO {
     this.__insertionAdapterOfBruker = new EntityInsertionAdapter<Bruker>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR ABORT INTO `Bruker` (`brukerId`,`brukerNavn`,`passord`) VALUES (?,?,?)";
+        return "INSERT OR REPLACE INTO `Bruker` (`brukerId`,`brukerNavn`,`passord`) VALUES (?,?,?)";
       }
 
       @Override
@@ -71,6 +71,18 @@ public final class BrukerDAO_Impl implements BrukerDAO {
     __db.beginTransaction();
     try {
       __insertionAdapterOfBruker.insert(brukere);
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+    }
+  }
+
+  @Override
+  public void insert(final Bruker bruker) {
+    __db.assertNotSuspendingTransaction();
+    __db.beginTransaction();
+    try {
+      __insertionAdapterOfBruker.insert(bruker);
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
@@ -174,6 +186,71 @@ public final class BrukerDAO_Impl implements BrukerDAO {
         }
         _item_1 = new Bruker(_tmpBrukerId,_tmpBrukerNavn,_tmpPassord);
         _result.add(_item_1);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public Bruker getBruker(final int brukerId) {
+    final String _sql = "SELECT * FROM Bruker WHERE brukerId IN (?)";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, brukerId);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfBrukerId = CursorUtil.getColumnIndexOrThrow(_cursor, "brukerId");
+      final int _cursorIndexOfBrukerNavn = CursorUtil.getColumnIndexOrThrow(_cursor, "brukerNavn");
+      final int _cursorIndexOfPassord = CursorUtil.getColumnIndexOrThrow(_cursor, "passord");
+      final Bruker _result;
+      if(_cursor.moveToFirst()) {
+        final int _tmpBrukerId;
+        _tmpBrukerId = _cursor.getInt(_cursorIndexOfBrukerId);
+        final String _tmpBrukerNavn;
+        if (_cursor.isNull(_cursorIndexOfBrukerNavn)) {
+          _tmpBrukerNavn = null;
+        } else {
+          _tmpBrukerNavn = _cursor.getString(_cursorIndexOfBrukerNavn);
+        }
+        final String _tmpPassord;
+        if (_cursor.isNull(_cursorIndexOfPassord)) {
+          _tmpPassord = null;
+        } else {
+          _tmpPassord = _cursor.getString(_cursorIndexOfPassord);
+        }
+        _result = new Bruker(_tmpBrukerId,_tmpBrukerNavn,_tmpPassord);
+      } else {
+        _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public String getBrukerNavn(final int brukerId) {
+    final String _sql = "SELECT brukerNavn FROM Bruker WHERE brukerId IN (?)";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, brukerId);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final String _result;
+      if(_cursor.moveToFirst()) {
+        if (_cursor.isNull(0)) {
+          _result = null;
+        } else {
+          _result = _cursor.getString(0);
+        }
+      } else {
+        _result = null;
       }
       return _result;
     } finally {

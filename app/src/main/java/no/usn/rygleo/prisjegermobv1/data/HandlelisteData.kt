@@ -3,7 +3,7 @@ package no.usn.rygleo.prisjegermobv1.data
 
 data class HandlelisteData(
     // val bruker : Bruker,
-    val navn: String,
+    var navn: String, // OBS! var for test
     val handleliste : List<HandlelisteItems>,
     val sum: Double = nyTotal(handleliste), // burde aggregert grandTotal av alle rader i handleliste
 )

@@ -6,6 +6,7 @@ import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
+import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.room.util.StringUtil;
@@ -31,12 +32,14 @@ public final class VarerDAO_Impl implements VarerDAO {
 
   private final EntityDeletionOrUpdateAdapter<Varer> __deletionAdapterOfVarer;
 
+  private final SharedSQLiteStatement __preparedStmtOfUpdate;
+
   public VarerDAO_Impl(RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfVarer = new EntityInsertionAdapter<Varer>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR ABORT INTO `Varer` (`varenavn`,`enhetspris`,`antall`) VALUES (?,?,?)";
+        return "INSERT OR REPLACE INTO `Varer` (`varenavn`,`enhetspris`,`antall`) VALUES (?,?,?)";
       }
 
       @Override
@@ -73,6 +76,13 @@ public final class VarerDAO_Impl implements VarerDAO {
         }
       }
     };
+    this.__preparedStmtOfUpdate = new SharedSQLiteStatement(__db) {
+      @Override
+      public String createQuery() {
+        final String _query = "UPDATE varer SET antall=? WHERE varenavn = ?";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -96,6 +106,28 @@ public final class VarerDAO_Impl implements VarerDAO {
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
+    }
+  }
+
+  @Override
+  public void update(final int nyAntall, final String varenavn) {
+    __db.assertNotSuspendingTransaction();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfUpdate.acquire();
+    int _argIndex = 1;
+    _stmt.bindLong(_argIndex, nyAntall);
+    _argIndex = 2;
+    if (varenavn == null) {
+      _stmt.bindNull(_argIndex);
+    } else {
+      _stmt.bindString(_argIndex, varenavn);
+    }
+    __db.beginTransaction();
+    try {
+      _stmt.executeUpdateDelete();
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+      __preparedStmtOfUpdate.release(_stmt);
     }
   }
 
@@ -146,6 +178,36 @@ public final class VarerDAO_Impl implements VarerDAO {
         _statement.release();
       }
     });
+  }
+
+  @Override
+  public String getVare(final String varenavn) {
+    final String _sql = "SELECT varenavn FROM Varer WHERE varenavn IN (?)";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (varenavn == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, varenavn);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final String _result;
+      if(_cursor.moveToFirst()) {
+        if (_cursor.isNull(0)) {
+          _result = null;
+        } else {
+          _result = _cursor.getString(0);
+        }
+      } else {
+        _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
   }
 
   @Override

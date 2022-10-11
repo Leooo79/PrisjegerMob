@@ -13,4 +13,16 @@ class VarerRepo(private val varerDAO: VarerDAO) {
     suspend fun insert(varer: Varer) {
         varerDAO.insertAll(varer)
     }
+
+    suspend fun update(nyAntall: Int, varenavn: String) {
+        varerDAO.update(nyAntall, varenavn)
+    }
+
+    suspend fun getAlleVarer() {
+        varerDAO.getAlleVarer()
+    }
+
+    suspend fun getVare(varenavn: String) {
+        varerDAO.getVare(varenavn)
+    }
 }
