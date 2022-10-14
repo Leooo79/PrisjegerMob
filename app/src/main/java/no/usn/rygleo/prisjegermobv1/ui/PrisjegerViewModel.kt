@@ -17,27 +17,36 @@ import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
 
 
 /**
- * Klassen inneholder logikk for app Prisjeger
+ * Klassen inneholder logikk for App Prisjeger
  * Kommuniserer med screens (visningskomponenter)
- * Kommuniserer med datakilder (klasser/ TODO: API/ local storage)
+ * Kommuniserer med datakilder : klasser - repo - lokal DB (Room) TODO: API/
  */
 class PrisjegerViewModel(application: Application) : AndroidViewModel(application) {
-
-    // DEN NYE MÅTEN MED ROOM OG LIVEDATA ::::
-
-    /**
-     * Testing på LiveData og Room FOR HANDLELISTE
-     */
-
-
-    // Variabler/ ref til repo, LiveData for handlelister fra Room,
-    // default liste(navn) som skal vises TODO: siste lagrede??
+    // Referanse til repo
     private val repoVarer: VarerRepo
+
+    // Livedata liste for komposisjon av handlelister fra lokal DB
     var alleVarer: LiveData<List<Varer>> // MÅ SETTES SOM VAR MED EGEN SETTER FOR ENDRING LISTENAVN
-        private set
+        private set                      // KAN DEN EVENTUELT LEGGES I VAREUISTATE ??
+
+    // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
+
+    // Referanse til DAO for handlelister
     val varerDAO: VarerDAO
 
+    // Statevariabel for rekomposisjon ved nytt listenavn
+    // TODO: Her kan man etablere flere statevariabler, kan virke for hele App Prisjeger. Benytter kopier for å endre state, se under
+    private val _uiStateNy = MutableStateFlow(
+        VarerUiState(listenavn = currentListenavn)
+    )
+    val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
+
+
+    /**
+     * "Konstruktør" ved hjelp av init : kode som kjøres ved oppstart (instansiering av vM)
+     * Her kan man legge inn initielle kall på API og andre oppstartsrutiner
+     */
     // Kode som kjøres ved oppstart. Etablere Room database om denne ikke finnes, knytter til repo,
     // og setter livedata til å spørre Room DB etter handlelister
     init {
@@ -47,23 +56,32 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
-    // statevariabel for rekomposisjon ved nytt listenavn
-    private val _uiStateNy = MutableStateFlow(
-        VarerUiState(
-            listenavn = currentListenavn,
-        )
-    )
-    val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
+    /**
+     * Funksjon for å regne ut sum pr handleliste.
+     * Kalles fra composables (HandlelisteScreen.HeaderVisning())
+     * Rekomp ikke nødvendig, trigges av endret antall pr varelinje
+     */
+    fun sumPrHandleliste(): Double {
+        var sum = 0.0
+        alleVarer.value
+            ?.forEach { varer -> sum +=
+            varer.antall?.times(varer.enhetspris!!) ?: 0.0
+        }
+        return sum
+    }
+
+
 
     /**
      * Funksjonen kalles fra composables for å oppdatere hvilken handleliste
-     * som vises
+     * som vises. Nytt kall på lokal DB + endrer statevariabel listenavn
      */
     fun setListeNavn(nyttListeNavn: String) {
         currentListenavn = nyttListeNavn
         oppdaterListenavn(nyttListeNavn) // for rekomposisjon
         alleVarer = varerDAO.getAlleVarer(currentListenavn)
     }
+
 
 
     /**
@@ -77,16 +95,19 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+
+
     /**
-     * Launching a new coroutine to insert the data in a non-blocking way
+     * Fuksjon for å sette inn ny vare i lokal DB, tabell Vare (handlelister)
      */
     fun insertVare(vare: Varer) = viewModelScope.launch(Dispatchers.IO) {
         repoVarer.insert(vare)
     }
 
 
+
     /**
-     * Lager en testliste og kjører insert mot lokal DB (Room)
+     * Lager en testliste og kjører insert mot lokal DB (Room), tabell Vare (handlelister)
      */
     fun lagTestliste() {
         val dummy = manuellVareliste()
@@ -95,6 +116,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+
+
     /**
      * Funksjon for å oppdatere en vare (antall)
      */
@@ -102,12 +125,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         repoVarer.update(nyAntall, varenavn, listenavn)
     }
 
+
+
     /**
      * returnerer vare pr handliliste pr varenavn
      */
     fun getVare(listenavn: String, varenavn: String) = viewModelScope.launch(Dispatchers.IO) {
         repoVarer.getVare(varenavn)
     }
+
+
 
     /**
      * Funksjon for å opprette en liste av handlelisteItems
