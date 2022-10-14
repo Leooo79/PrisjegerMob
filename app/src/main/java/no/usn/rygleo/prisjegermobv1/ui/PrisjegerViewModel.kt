@@ -2,7 +2,6 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +13,7 @@ import no.usn.rygleo.prisjegermobv1.data.*
 import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
+import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
 
 
 /**
@@ -26,17 +26,131 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // DEN NYE MÅTEN MED ROOM OG LIVEDATA ::::
 
     /**
+     * Testing på LiveData og Room FOR HANDLELISTE
+     */
+
+
+    // Variabler/ ref til repo, LiveData for handlelister fra Room,
+    // default liste(navn) som skal vises TODO: siste lagrede??
+    private val repoVarer: VarerRepo
+    var alleVarer: LiveData<List<Varer>> // MÅ SETTES SOM VAR MED EGEN SETTER FOR ENDRING LISTENAVN
+        private set
+    var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
+    val varerDAO: VarerDAO
+
+    // Kode som kjøres ved oppstart. Etablere Room database om denne ikke finnes, knytter til repo,
+    // og setter livedata til å spørre Room DB etter handlelister
+    init {
+        varerDAO = AppDatabase.getRoomDb(application).varerDAO()
+        repoVarer = VarerRepo(varerDAO)
+        alleVarer = varerDAO.getAlleVarer(currentListenavn)
+    }
+
+
+    // statevariabel for rekomposisjon ved nytt listenavn
+    private val _uiStateNy = MutableStateFlow(
+        VarerUiState(
+            listenavn = currentListenavn,
+        )
+    )
+    val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
+
+    /**
+     * Funksjonen kalles fra composables for å oppdatere hvilken handleliste
+     * som vises
+     */
+    fun setListeNavn(nyttListeNavn: String) {
+        currentListenavn = nyttListeNavn
+        oppdaterListenavn(nyttListeNavn) // for rekomposisjon
+        alleVarer = varerDAO.getAlleVarer(currentListenavn)
+    }
+
+
+    /**
+     * Hjelpemetode for å oppdatere state på listenavn -> rekomposisjon
+     */
+    private fun oppdaterListenavn(listenavn: String) {
+        _uiStateNy.update { currentState ->
+            currentState.copy(
+                listenavn = listenavn,
+            )
+        }
+    }
+
+    /**
+     * Launching a new coroutine to insert the data in a non-blocking way
+     */
+    fun insertVare(vare: Varer) = viewModelScope.launch(Dispatchers.IO) {
+        repoVarer.insert(vare)
+    }
+
+
+    /**
+     * Lager en testliste og kjører insert mot lokal DB (Room)
+     */
+    fun lagTestliste() {
+        val dummy = manuellVareliste()
+        for (varer in dummy) {
+            insertVare(varer)
+        }
+    }
+
+    /**
+     * Funksjon for å oppdatere en vare (antall)
+     */
+    fun oppdaterVare(nyAntall: Int, varenavn: String, listenavn: String) = viewModelScope.launch(Dispatchers.IO) {
+        repoVarer.update(nyAntall, varenavn, listenavn)
+    }
+
+    /**
+     * returnerer vare pr handliliste pr varenavn
+     */
+    fun getVare(listenavn: String, varenavn: String) = viewModelScope.launch(Dispatchers.IO) {
+        repoVarer.getVare(varenavn)
+    }
+
+    /**
+     * Funksjon for å opprette en liste av handlelisteItems
+     * Skal erstattes av reelle data fra API
+     */
+    private fun manuellVareliste(): List<Varer> {
+        var liste = listOf(
+            Varer("RoomListe1","AGGGGGGGGGGgurk, 1 stk", 11.11, 5),
+            Varer("RoomListe1","Aromat Krydder, 90 gram", 22.22, 4),
+            Varer("RoomListe1","Avløpsåpner Pulver Plumbo, 600 gr", 33.33, 0),
+            Varer("RoomListe1","Bakepulver Freia, 250 gram", 44.44, 0),
+            Varer("RoomListe1","Fish and Crips, Findus, 480 gram", 55.55, 0),
+            Varer("RoomListe1","Daim Dobbel Freia, 56 gr", 66.66, 0),
+            Varer("RoomListe1","Havregryn lettkokte Axa, 1,1 kg", 77.77, 0),
+            Varer("RoomListe1","Favoritt Salami, Gilde, 150 gram", 88.88, 0),
+            Varer("RoomListe1","Gilde Kjøttkaker, 800 gram", 99.99, 0),
+            Varer("RoomListe1","Grillpølser Gilde, 600 gr", 100.0, 0),
+            Varer("RoomListe1","Kokt skinke Gilde, 110 gr", 110.11, 0),
+            Varer("RoomListe1","Bretagne kylling saus, 27 gram", 239.89, 0),
+            Varer("RoomListe1","Kjøttdeig billigste type, 400 gr", 999.99, 0),
+            Varer("RoomListe2","AGGGGGGGGGGgurk, 1 stk", 11.11, 5),
+            Varer("RoomListe2","Aromat Krydder, 90 gram", 22.22, 4),
+            Varer("RoomListe2","Avløpsåpner Pulver Plumbo, 600 gr", 33.33, 0),
+            Varer("RoomListe2","Bakepulver Freia, 250 gram", 44.44, 0),
+            Varer("RoomListe2","Fish and Crips, Findus, 480 gram", 55.55, 0),
+        )
+        return liste
+    }
+
+
+    // ALT NEDENFOR ER GAMMELT/ EKSPERIMENTER *********************************************************************************
+    // ************************************************************************************************************************
+
+
+
+    /**
      * Testing på LiveData og Room FOR BRUKERE
      */
-    // oppretter en testbruker for insert i database
+
     val testBruker = Bruker(2,"testNavn", "testPassord")
-    // val testVare = Varer("Aromat Krydder, 90 gram", 11.11, 5)
 
     // Reference to repository
     private val repository: BrukerRepo
-    // Using LiveData and caching what getAll returns has several benefits:
-// - We can put an observer on the data and only update the UI when the data actually changes.
-// - Repository is completely separated from the UI through the ViewModel.
     val allUsers: LiveData<List<Bruker>>
 
     init {
@@ -73,97 +187,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
-    /**
-     * Testing på LiveData og Room FOR HANDLELISTE
-     */
-
-    // Reference to repository
-    private val repoVarer: VarerRepo
-    val alleVarer: LiveData<List<Varer>>
-
-    init {
-        val varerDAO = AppDatabase.getRoomDb(application) // Bygger databaseobjektet....
-            .varerDAO() // ... og henter DAO-objektet fra dette
-        repoVarer = VarerRepo(varerDAO) // Bygger Repository-objektet basert på DAO
-        alleVarer = repoVarer.alleVarer // Henter en liste med alle brukere fra databasen (via repository)
-    }
-
-    val sorterteVarer: ArrayList<Int>? = null
-
-    fun selectAllVarer() {
-        allUsers.value?.forEach {
-            sorterteVarer?.add(it.brukerId)
-        }
-    }
-
-
-    /**
-     * Launching a new coroutine to insert the data in a non-blocking way
-     */
-    fun insertVare(vare: Varer) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.insert(vare)
-    }
-
-
-    /**
-     * Lager en testliste og kjører insert mot lokal DB (Room)
-     */
-    fun lagTestliste() {
-        val dummy = manuellVareliste()
-        for (varer in dummy) {
-            insertVare(varer)
-        }
-    }
-
-    /**
-     * Funksjon for å oppdatere en vare (antall)
-     */
-    fun oppdaterVare(nyAntall: Int, varenavn: String) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.update(nyAntall, varenavn)
-    }
-
-    /**
-     * returnerer vare pr varenavn
-     */
-    fun getVare(varenavn: String) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.getVare(varenavn)
-    }
-
-    /**
-     * Funksjon for å opprette en liste av handlelisteItems
-     * Skal erstattes av reelle data fra API
-     */
-    private fun manuellVareliste(): List<Varer> {
-        var liste = listOf(
-            Varer("Agurk, 1 stk", 11.11, 5),
-            Varer("Aromat Krydder, 90 gram", 22.22, 4),
-            Varer("Avløpsåpner Pulver Plumbo, 600 gr", 33.33, 0),
-            Varer("Bakepulver Freia, 250 gram", 44.44, 0),
-            Varer("Fish and Crips, Findus, 480 gram", 55.55, 0),
-            Varer("Daim Dobbel Freia, 56 gr", 66.66, 0),
-            Varer("Havregryn lettkokte Axa, 1,1 kg", 77.77, 0),
-            Varer("Favoritt Salami, Gilde, 150 gram", 88.88, 0),
-            Varer("Gilde Kjøttkaker, 800 gram", 99.99, 0),
-            Varer("Grillpølser Gilde, 600 gr", 100.0, 0),
-            Varer("Kokt skinke Gilde, 110 gr", 110.11, 0),
-            Varer("Bretagne kylling saus, 27 gram", 239.89, 0),
-            Varer("Kjøttdeig billigste type, 400 gr", 999.99, 0),
-        )
-        return liste
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -174,6 +197,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // oppretter variabel for å holde på state
     private val _uiState = MutableStateFlow(
         HandlelisteUiState(
+            navn = currentListenavn,
             handleliste = manuellHandleliste(),
             handlelisteData = manuellHandlelisteData(),
             sum = totalSum(manuellHandlelisteData())
@@ -322,6 +346,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             )
         }
     }
+
 }
 
 

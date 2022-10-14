@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
-@Database(entities = arrayOf(Bruker::class, Varer::class), version = 3) // HUSK Å ENDRE VERSJON
+@Database(entities = arrayOf(Bruker::class, Varer::class), version = 6) // HUSK Å ENDRE VERSJON
 abstract class AppDatabase : RoomDatabase() {                           // VED NYTT SCHEMA
 
     abstract fun brukerDAO(): BrukerDAO
@@ -30,7 +30,6 @@ abstract class AppDatabase : RoomDatabase() {                           // VED N
                 }
             }
             return instans!!
-            // https://kotlinlang.org/docs/null-safety.html#the-operator
         }
     }
 

@@ -1,25 +1,26 @@
 package no.usn.rygleo.prisjegermobv1.data
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
-import no.usn.rygleo.prisjegermobv1.roomDB.BrukerDAO
-import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
+import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
+
 
 class VarerRepo(private val varerDAO: VarerDAO) {
-    // Room executes all queries on a separate thread.
-// Observed LiveData will notify the observer when the data has changed.
-    val alleVarer: LiveData<List<Varer>> = varerDAO.getAlleVarer()
+
     suspend fun insert(varer: Varer) {
         varerDAO.insertAll(varer)
     }
 
-    suspend fun update(nyAntall: Int, varenavn: String) {
-        varerDAO.update(nyAntall, varenavn)
+    suspend fun update(nyAntall: Int, varenavn: String, listenavn: String) {
+        varerDAO.update(nyAntall, varenavn, listenavn)
     }
 
-    suspend fun getAlleVarer() {
-        varerDAO.getAlleVarer()
+    suspend fun getAlleVarer(listenavn: String) {
+        varerDAO.getAlleVarer(listenavn)
     }
 
     suspend fun getVare(varenavn: String) {

@@ -39,47 +39,57 @@ public final class VarerDAO_Impl implements VarerDAO {
     this.__insertionAdapterOfVarer = new EntityInsertionAdapter<Varer>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `Varer` (`varenavn`,`enhetspris`,`antall`) VALUES (?,?,?)";
+        return "INSERT OR REPLACE INTO `Varer` (`listenavn`,`varenavn`,`enhetspris`,`antall`) VALUES (?,?,?,?)";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, Varer value) {
-        if (value.getVarenavn() == null) {
+        if (value.getListenavn() == null) {
           stmt.bindNull(1);
         } else {
-          stmt.bindString(1, value.getVarenavn());
+          stmt.bindString(1, value.getListenavn());
         }
-        if (value.getEnhetspris() == null) {
+        if (value.getVarenavn() == null) {
           stmt.bindNull(2);
         } else {
-          stmt.bindDouble(2, value.getEnhetspris());
+          stmt.bindString(2, value.getVarenavn());
         }
-        if (value.getAntall() == null) {
+        if (value.getEnhetspris() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindLong(3, value.getAntall());
+          stmt.bindDouble(3, value.getEnhetspris());
+        }
+        if (value.getAntall() == null) {
+          stmt.bindNull(4);
+        } else {
+          stmt.bindLong(4, value.getAntall());
         }
       }
     };
     this.__deletionAdapterOfVarer = new EntityDeletionOrUpdateAdapter<Varer>(__db) {
       @Override
       public String createQuery() {
-        return "DELETE FROM `Varer` WHERE `varenavn` = ?";
+        return "DELETE FROM `Varer` WHERE `listenavn` = ? AND `varenavn` = ?";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, Varer value) {
-        if (value.getVarenavn() == null) {
+        if (value.getListenavn() == null) {
           stmt.bindNull(1);
         } else {
-          stmt.bindString(1, value.getVarenavn());
+          stmt.bindString(1, value.getListenavn());
+        }
+        if (value.getVarenavn() == null) {
+          stmt.bindNull(2);
+        } else {
+          stmt.bindString(2, value.getVarenavn());
         }
       }
     };
     this.__preparedStmtOfUpdate = new SharedSQLiteStatement(__db) {
       @Override
       public String createQuery() {
-        final String _query = "UPDATE varer SET antall=? WHERE varenavn = ?";
+        final String _query = "UPDATE varer SET antall=? WHERE varenavn = ? AND listenavn = ?";
         return _query;
       }
     };
@@ -110,7 +120,7 @@ public final class VarerDAO_Impl implements VarerDAO {
   }
 
   @Override
-  public void update(final int nyAntall, final String varenavn) {
+  public void update(final int nyAntall, final String varenavn, final String listenavn) {
     __db.assertNotSuspendingTransaction();
     final SupportSQLiteStatement _stmt = __preparedStmtOfUpdate.acquire();
     int _argIndex = 1;
@@ -120,6 +130,12 @@ public final class VarerDAO_Impl implements VarerDAO {
       _stmt.bindNull(_argIndex);
     } else {
       _stmt.bindString(_argIndex, varenavn);
+    }
+    _argIndex = 3;
+    if (listenavn == null) {
+      _stmt.bindNull(_argIndex);
+    } else {
+      _stmt.bindString(_argIndex, listenavn);
     }
     __db.beginTransaction();
     try {
@@ -132,20 +148,33 @@ public final class VarerDAO_Impl implements VarerDAO {
   }
 
   @Override
-  public LiveData<List<Varer>> getAlleVarer() {
-    final String _sql = "SELECT * FROM Varer";
-    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+  public LiveData<List<Varer>> getAlleVarer(final String listenavn) {
+    final String _sql = "SELECT * FROM Varer WHERE listenavn IN (?)";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (listenavn == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, listenavn);
+    }
     return __db.getInvalidationTracker().createLiveData(new String[]{"Varer"}, false, new Callable<List<Varer>>() {
       @Override
       public List<Varer> call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
+          final int _cursorIndexOfListenavn = CursorUtil.getColumnIndexOrThrow(_cursor, "listenavn");
           final int _cursorIndexOfVarenavn = CursorUtil.getColumnIndexOrThrow(_cursor, "varenavn");
           final int _cursorIndexOfEnhetspris = CursorUtil.getColumnIndexOrThrow(_cursor, "enhetspris");
           final int _cursorIndexOfAntall = CursorUtil.getColumnIndexOrThrow(_cursor, "antall");
           final List<Varer> _result = new ArrayList<Varer>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final Varer _item;
+            final String _tmpListenavn;
+            if (_cursor.isNull(_cursorIndexOfListenavn)) {
+              _tmpListenavn = null;
+            } else {
+              _tmpListenavn = _cursor.getString(_cursorIndexOfListenavn);
+            }
             final String _tmpVarenavn;
             if (_cursor.isNull(_cursorIndexOfVarenavn)) {
               _tmpVarenavn = null;
@@ -164,7 +193,7 @@ public final class VarerDAO_Impl implements VarerDAO {
             } else {
               _tmpAntall = _cursor.getInt(_cursorIndexOfAntall);
             }
-            _item = new Varer(_tmpVarenavn,_tmpEnhetspris,_tmpAntall);
+            _item = new Varer(_tmpListenavn,_tmpVarenavn,_tmpEnhetspris,_tmpAntall);
             _result.add(_item);
           }
           return _result;
@@ -230,12 +259,19 @@ public final class VarerDAO_Impl implements VarerDAO {
       public List<Varer> call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
+          final int _cursorIndexOfListenavn = CursorUtil.getColumnIndexOrThrow(_cursor, "listenavn");
           final int _cursorIndexOfVarenavn = CursorUtil.getColumnIndexOrThrow(_cursor, "varenavn");
           final int _cursorIndexOfEnhetspris = CursorUtil.getColumnIndexOrThrow(_cursor, "enhetspris");
           final int _cursorIndexOfAntall = CursorUtil.getColumnIndexOrThrow(_cursor, "antall");
           final List<Varer> _result = new ArrayList<Varer>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final Varer _item_1;
+            final String _tmpListenavn;
+            if (_cursor.isNull(_cursorIndexOfListenavn)) {
+              _tmpListenavn = null;
+            } else {
+              _tmpListenavn = _cursor.getString(_cursorIndexOfListenavn);
+            }
             final String _tmpVarenavn;
             if (_cursor.isNull(_cursorIndexOfVarenavn)) {
               _tmpVarenavn = null;
@@ -254,7 +290,7 @@ public final class VarerDAO_Impl implements VarerDAO {
             } else {
               _tmpAntall = _cursor.getInt(_cursorIndexOfAntall);
             }
-            _item_1 = new Varer(_tmpVarenavn,_tmpEnhetspris,_tmpAntall);
+            _item_1 = new Varer(_tmpListenavn,_tmpVarenavn,_tmpEnhetspris,_tmpAntall);
             _result.add(_item_1);
           }
           return _result;

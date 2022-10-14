@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteData
-import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
+import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
@@ -54,17 +54,18 @@ fun HandlelisteScreen(
 ) {
     var handleModus by rememberSaveable { mutableStateOf(true) }
     val uiState by prisjegerViewModel.uiState.collectAsState()
+    val uiStateNy by prisjegerViewModel.uiStateNy.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-
-    val brukerListe by prisjegerViewModel.allUsers.observeAsState(initial = emptyList())
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
+
 
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {
         HeaderVisning(
+            uiStateNy, // MÅ SENDE STATEVARIABEL FOR REKOMP VED LISTEBYTTE
             uiState.handlelisteData,
-            brukerListe,
+            vareListe,
             prisjegerViewModel,
             iHandleModus = { handleModus = false },
             sum = uiState.handlelisteData?.let {
@@ -83,8 +84,9 @@ fun HandlelisteScreen(
  */
 @Composable
 private fun HeaderVisning(
+    uiStateNy: VarerUiState,
     handlelisteData: HandlelisteData?,
-    brukerListe: List<Bruker>,
+    vareListe: List<Varer>,
     prisjegerViewModel: PrisjegerViewModel,
     iHandleModus: () -> Unit,
     sum: Double?,
@@ -124,21 +126,20 @@ private fun HeaderVisning(
                         prisjegerViewModel.insertVare(testVare)
   */
                     prisjegerViewModel.lagTestliste()
+               //     prisjegerViewModel.currentListenavn = "ttest"
 
                 }
             ) {
-                if (brukerListe.isEmpty()) {
+                if (vareListe.isEmpty()) {
                     Text("")
-                } else Text(brukerListe[0].brukerNavn.toString())
+                } else Text(uiStateNy.listenavn)
              //   Text(prisjegerViewModel.allUsers.observeAsState().value.toString())
               //  Text(prisjegerViewModel.sorterteVarer?.get(0).toString())
              //   if (handlelisteData != null) {
              //       Text(handlelisteData.navn)
             //    }
             }
-            Column(
-
-            ) {
+            Column {
                 if (sum != null) {
                     Text(
                         text = "Total sum : " + (Math.round(sum * 100.00) / 100.0).toString(),
@@ -148,7 +149,10 @@ private fun HeaderVisning(
                 }
             }
             Column {
-                NyVelgButikk()
+                VelgHandleliste(prisjegerViewModel)
+            }
+            Column {
+                VelgButikk()
             }
         }
     }
@@ -172,7 +176,7 @@ private fun HeaderVisning(
  * TODO: bedre tilpasning til bakgrunn, dimensjoner box/ knapp
  */
 @Composable
-fun NyVelgButikk() {
+fun VelgButikk() {
     val valgbare = arrayOf("Rema 1000", "Kiwi", "Meny", "Spar")
     val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf("Rema 1000") }
@@ -214,6 +218,50 @@ fun NyVelgButikk() {
     }
 }
 
+
+@Composable
+fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
+    val valgbare = arrayOf("RoomListe1", "RoomListe2")
+    val valgbareToast = LocalContext.current.applicationContext
+    var tekst by rememberSaveable { mutableStateOf(prisjegerViewModel.currentListenavn) }
+    var aktiv by remember {mutableStateOf(false) }
+
+    Box(
+        contentAlignment = Alignment.Center,
+    ) {
+        // knapp for å åpne nedtrekksmeny
+        Button(
+            onClick = {
+                aktiv = true
+            }
+        ) {  // navnet på listen som vises
+            Text(text = prisjegerViewModel.currentListenavn)
+        }
+        // nedtrekksmeny
+        DropdownMenu(
+            expanded = aktiv,
+            onDismissRequest = {
+                aktiv = false
+            }
+        ) {
+            // legger inn items og viser ved onClick
+            valgbare.forEachIndexed { itemIndex, itemValue ->
+                DropdownMenuItem(
+                    onClick = {
+                        Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
+                            .show()
+                        aktiv = false
+                        tekst = itemValue
+                        // Oppdaterer modellen ved bytte av liste(navn)
+                        prisjegerViewModel.setListeNavn(tekst)
+                    },
+                ) {
+                    Text(text = itemValue)
+                }
+            }
+        }
+    }
+}
 
 
 
@@ -300,6 +348,11 @@ fun ListeVisning(
 ) {
 
     val vareliste = ArrayList<Varer>()
+    for (varer in vareListe) {
+        if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
+            vareliste.add(varer)
+        }
+    }
     var filtrerteVarer: ArrayList<Varer>
     // bygger LazyColumn - filtrerte treff eller hele lista
     LazyColumn(Modifier
@@ -313,26 +366,18 @@ fun ListeVisning(
             val treffListe = ArrayList<Varer>()
             if (handlelisteData != null) {
                 for (varer in vareListe) {
-                    if (varer.varenavn.lowercase().contains(searchedText.lowercase())) {
+                    if (varer.varenavn.lowercase().contains(searchedText.lowercase())
+                        && varer.listenavn.equals(prisjegerViewModel.currentListenavn))
+
+                    {
                         treffListe.add(varer)
                     }
                 }
             }
             treffListe
         }
-        // hvis filter er aktivert vises kun treff
-        if (state.value != TextFieldValue("")) {
-            items(filtrerteVarer) { filtrerte ->
-                VarelisteItem(filtrerte, prisjegerViewModel)
-            }
-        }
-        // om filter er tomt vises hele (handle)listen
-        else {
-            if (handlelisteData != null) {
-                items(vareListe) { vare ->
-                    VarelisteItem(vare, prisjegerViewModel)
-                }
-            }
+        items(filtrerteVarer) { filtrerte ->
+            VarelisteItem(filtrerte, prisjegerViewModel)
         }
     }
 }
@@ -354,10 +399,7 @@ fun VarelisteItem(
     vareListe: Varer,
     prisjegerViewModel: PrisjegerViewModel) {
 
-    // var sumPrVare by rememberSaveable { mutableStateOf(vare.sumPrVare) }
-    // var antall by rememberSaveable { mutableStateOf(vare.antall) }
     var expanded by rememberSaveable { mutableStateOf(false) }
-    // var varenavn = ""
 
     Card(
         backgroundColor = MaterialTheme.colors.primary,
@@ -384,7 +426,7 @@ fun VarelisteItem(
                     .align(Alignment.CenterVertically)
             ) {
                 if (vareListe == null) Text("")
-                else Text(text = vareListe.varenavn)
+                else vareListe.varenavn?.let { Text(text = it) }
                 if (expanded) {
                     Text(text = ("Mer informasjon om vare, " +
                             "bilder av vare?. ").repeat(3),
@@ -404,7 +446,7 @@ fun VarelisteItem(
                     .weight(1f)
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
-            ) { // rotete kode som fungerer, bør utbedres
+            ) { // kontroll for null, utregning av sumPrVare, avrunding 2 desimal
                 if (vareListe.antall == null) Text("")
                 else Text(text = (Math.round((vareListe.enhetspris?.times(vareListe.antall))?.times(
                     100.00
@@ -422,11 +464,13 @@ fun VarelisteItem(
                         contentColor = Color.White
                     ),
                     onClick = {
-
                         if (vareListe.antall!! > 0) {
-                 //           prisjegerViewModel.dekrementer(vareListe)
-                            prisjegerViewModel.oppdaterVare(
-                                vareListe.antall?.minus(1) ?: 0, vareListe.varenavn)
+                            vareListe.antall.let {
+                                vareListe.varenavn.let { it1 ->
+                                    prisjegerViewModel.oppdaterVare(it.minus(1),
+                                        it1, prisjegerViewModel.currentListenavn)
+                                }
+                            }
                             prisjegerViewModel.oppdaterSumFraLD(vareListe)
 
                         }
@@ -448,10 +492,13 @@ fun VarelisteItem(
                         contentColor = Color.White
                     ),
                    onClick = {
-                       prisjegerViewModel.oppdaterVare(
-                           vareListe.antall?.plus(1) ?: 0, vareListe.varenavn)
+                       vareListe.antall?.let {
+                           vareListe.varenavn.let { it1 ->
+                               prisjegerViewModel.oppdaterVare(it.plus(1),
+                                   it1, prisjegerViewModel.currentListenavn)
+                           }
+                       }
                        prisjegerViewModel.oppdaterSumFraLD(vareListe)
-                 //   prisjegerViewModel.inkrementer(vareListe)
 
             }
                 ) {

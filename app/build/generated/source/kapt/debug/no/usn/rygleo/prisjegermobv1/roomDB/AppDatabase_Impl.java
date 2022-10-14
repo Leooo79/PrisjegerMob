@@ -36,13 +36,13 @@ public final class AppDatabase_Impl extends AppDatabase {
 
   @Override
   protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration configuration) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(3) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(6) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("CREATE TABLE IF NOT EXISTS `Bruker` (`brukerId` INTEGER NOT NULL, `brukerNavn` TEXT, `passord` TEXT, PRIMARY KEY(`brukerId`))");
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `Varer` (`varenavn` TEXT NOT NULL, `enhetspris` REAL, `antall` INTEGER, PRIMARY KEY(`varenavn`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `Varer` (`listenavn` TEXT NOT NULL, `varenavn` TEXT NOT NULL, `enhetspris` REAL, `antall` INTEGER, PRIMARY KEY(`listenavn`, `varenavn`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e2f805adc82c7942f6c5c7b34d0fd72f')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '94800c6884205f80cdfd8d180f508629')");
       }
 
       @Override
@@ -100,8 +100,9 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoBruker + "\n"
                   + " Found:\n" + _existingBruker);
         }
-        final HashMap<String, TableInfo.Column> _columnsVarer = new HashMap<String, TableInfo.Column>(3);
-        _columnsVarer.put("varenavn", new TableInfo.Column("varenavn", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashMap<String, TableInfo.Column> _columnsVarer = new HashMap<String, TableInfo.Column>(4);
+        _columnsVarer.put("listenavn", new TableInfo.Column("listenavn", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsVarer.put("varenavn", new TableInfo.Column("varenavn", "TEXT", true, 2, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsVarer.put("enhetspris", new TableInfo.Column("enhetspris", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsVarer.put("antall", new TableInfo.Column("antall", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysVarer = new HashSet<TableInfo.ForeignKey>(0);
@@ -115,7 +116,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "e2f805adc82c7942f6c5c7b34d0fd72f", "b03402f4a9a935c2f74dd4c18e023b8c");
+    }, "94800c6884205f80cdfd8d180f508629", "db7dc277f07c184e0e3f12f1c3362004");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)

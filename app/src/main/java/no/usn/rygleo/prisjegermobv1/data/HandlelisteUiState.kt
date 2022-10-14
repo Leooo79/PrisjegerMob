@@ -2,7 +2,7 @@ package no.usn.rygleo.prisjegermobv1.data
 
 
 data class HandlelisteUiState(
-    val navn: String = "testListe1",
+    val navn: String = "",
     val antall: Int = 0,
     val handleliste: List<HandlelisteItems> = emptyList(),
     val handlelisteData: HandlelisteData? = null,
