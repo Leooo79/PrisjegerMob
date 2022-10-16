@@ -2,7 +2,7 @@ package no.usn.rygleo.prisjegermobv1;
 
 import java.lang.System;
 
-@kotlin.Metadata(mv = {1, 6, 0}, k = 2, d1 = {"\u0000:\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0005\u001a\u001c\u0010\u0000\u001a\u00020\u00012\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u0005H\u0007\u001a4\u0010\u0006\u001a\u00020\u00012\u0006\u0010\u0007\u001a\u00020\b2\f\u0010\t\u001a\b\u0012\u0004\u0012\u00020\u000b0\n2\u0006\u0010\u0002\u001a\u00020\u00032\f\u0010\f\u001a\b\u0012\u0004\u0012\u00020\u00010\rH\u0003\u001a,\u0010\u000e\u001a\u00020\u00012\f\u0010\t\u001a\b\u0012\u0004\u0012\u00020\u000b0\n2\f\u0010\u000f\u001a\b\u0012\u0004\u0012\u00020\u00110\u00102\u0006\u0010\u0002\u001a\u00020\u0003H\u0007\u001a\u0016\u0010\u0012\u001a\u00020\u00012\f\u0010\u000f\u001a\b\u0012\u0004\u0012\u00020\u00110\u0010H\u0007\u001a\u0018\u0010\u0013\u001a\u00020\u00012\u0006\u0010\t\u001a\u00020\u000b2\u0006\u0010\u0002\u001a\u00020\u0003H\u0007\u001a\b\u0010\u0014\u001a\u00020\u0001H\u0007\u001a\u0010\u0010\u0015\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0003H\u0007\u00a8\u0006\u0016"}, d2 = {"HandlelisteScreen", "", "prisjegerViewModel", "Lno/usn/rygleo/prisjegermobv1/ui/PrisjegerViewModel;", "modifier", "Landroidx/compose/ui/Modifier;", "HeaderVisning", "uiStateNy", "Lno/usn/rygleo/prisjegermobv1/data/VarerUiState;", "vareListe", "", "Lno/usn/rygleo/prisjegermobv1/roomDB/Varer;", "iHandleModus", "Lkotlin/Function0;", "ListeVisning", "state", "Landroidx/compose/runtime/MutableState;", "Landroidx/compose/ui/text/input/TextFieldValue;", "Sokefelt", "VarelisteItem", "VelgButikk", "VelgHandleliste", "app_debug"})
+@kotlin.Metadata(mv = {1, 6, 0}, k = 2, d1 = {"\u0000:\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0006\u001a\u001c\u0010\u0000\u001a\u00020\u00012\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u0005H\u0007\u001a4\u0010\u0006\u001a\u00020\u00012\u0006\u0010\u0007\u001a\u00020\b2\f\u0010\t\u001a\b\u0012\u0004\u0012\u00020\u000b0\n2\u0006\u0010\u0002\u001a\u00020\u00032\f\u0010\f\u001a\b\u0012\u0004\u0012\u00020\u00010\rH\u0003\u001a,\u0010\u000e\u001a\u00020\u00012\f\u0010\t\u001a\b\u0012\u0004\u0012\u00020\u000b0\n2\f\u0010\u000f\u001a\b\u0012\u0004\u0012\u00020\u00110\u00102\u0006\u0010\u0002\u001a\u00020\u0003H\u0007\u001a\u0016\u0010\u0012\u001a\u00020\u00012\f\u0010\u000f\u001a\b\u0012\u0004\u0012\u00020\u00110\u0010H\u0007\u001a\u0018\u0010\u0013\u001a\u00020\u00012\u0006\u0010\u0014\u001a\u00020\u000b2\u0006\u0010\u0002\u001a\u00020\u0003H\u0007\u001a\b\u0010\u0015\u001a\u00020\u0001H\u0007\u001a\u0018\u0010\u0016\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u00032\u0006\u0010\u0007\u001a\u00020\bH\u0007\u00a8\u0006\u0017"}, d2 = {"HandlelisteScreen", "", "prisjegerViewModel", "Lno/usn/rygleo/prisjegermobv1/ui/PrisjegerViewModel;", "modifier", "Landroidx/compose/ui/Modifier;", "HeaderVisning", "uiStateNy", "Lno/usn/rygleo/prisjegermobv1/data/VarerUiState;", "vareListe", "", "Lno/usn/rygleo/prisjegermobv1/roomDB/Varer;", "iHandleModus", "Lkotlin/Function0;", "ListeVisning", "state", "Landroidx/compose/runtime/MutableState;", "Landroidx/compose/ui/text/input/TextFieldValue;", "Sokefelt", "VarelisteItem", "vare", "VelgButikk", "VelgHandleliste", "app_debug"})
 public final class HandlelisteScreenKt {
     
     /**
@@ -43,7 +43,8 @@ public final class HandlelisteScreenKt {
     
     @androidx.compose.runtime.Composable()
     public static final void VelgHandleliste(@org.jetbrains.annotations.NotNull()
-    no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel prisjegerViewModel) {
+    no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel prisjegerViewModel, @org.jetbrains.annotations.NotNull()
+    no.usn.rygleo.prisjegermobv1.data.VarerUiState uiStateNy) {
     }
     
     /**
@@ -78,8 +79,9 @@ public final class HandlelisteScreenKt {
      * - Vise detaljer om hver vare -> utvider rad og henter inn tekst (bilde?)
      */
     @androidx.compose.runtime.Composable()
+    @kotlin.OptIn(markerClass = {androidx.compose.material.ExperimentalMaterialApi.class})
     public static final void VarelisteItem(@org.jetbrains.annotations.NotNull()
-    no.usn.rygleo.prisjegermobv1.roomDB.Varer vareListe, @org.jetbrains.annotations.NotNull()
+    no.usn.rygleo.prisjegermobv1.roomDB.Varer vare, @org.jetbrains.annotations.NotNull()
     no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel prisjegerViewModel) {
     }
 }

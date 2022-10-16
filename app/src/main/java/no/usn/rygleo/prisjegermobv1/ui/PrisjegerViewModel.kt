@@ -4,10 +4,7 @@ package no.usn.rygleo.prisjegermobv1.ui
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.data.*
 import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
@@ -26,8 +23,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     private val repoVarer: VarerRepo
 
     // Livedata liste for komposisjon av handlelister fra lokal DB
+
     var alleVarer: LiveData<List<Varer>> // MÅ SETTES SOM VAR MED EGEN SETTER FOR ENDRING LISTENAVN
         private set                      // KAN DEN EVENTUELT LEGGES I VAREUISTATE ??
+
+
 
     // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
@@ -52,8 +52,15 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     init {
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
         repoVarer = VarerRepo(varerDAO)
-        alleVarer = varerDAO.getAlleVarer(currentListenavn)
+        // sortering på listenavn gjøres nå i filteret -
+        //  (@composable HandlelisteScreen.Listevisning()), alle varelinjer emittes fra DB.
+        // Testet svært lenge med LiveData og parameter til getAlleVarer(listenavn) for sortert liste,
+        // men delete skapte problemer da observer ikke fikk korrekte endringer i state.
+        // Påfølgende endring av listenavn klarte da ikke å utløse rekomp som ønsket/ forventet.
+        // Utfordring løst ved å sende alle varelinjer som Flow fra DB og fange med asLiveData()
+        alleVarer = repoVarer.alleVarer.asLiveData() // NYTT: FLOW FRA LOKAL DB!
     }
+
 
 
     /**
@@ -64,10 +71,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun sumPrHandleliste(): Double {
         var sum = 0.0
         alleVarer.value
-            ?.forEach { varer -> sum +=
-            varer.antall?.times(varer.enhetspris!!) ?: 0.0
+            ?.forEach { varer ->
+                if (varer.listenavn.equals(currentListenavn) )
+                    sum += varer.antall?.times(varer.enhetspris!!) ?: 0.0
         }
         return sum
+    }
+
+
+    fun navnHandleliste(): String {
+        return alleVarer.value?.get(0)?.listenavn ?: ""
     }
 
 
@@ -76,24 +89,25 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjonen kalles fra composables for å oppdatere hvilken handleliste
      * som vises. Nytt kall på lokal DB + endrer statevariabel listenavn
      */
-    fun setListeNavn(nyttListeNavn: String) {
+     fun setListeNavn(nyttListeNavn: String) {
         currentListenavn = nyttListeNavn
-        oppdaterListenavn(nyttListeNavn) // for rekomposisjon
-        alleVarer = varerDAO.getAlleVarer(currentListenavn)
+        oppdaterListenavn() // for rekomposisjon
     }
+
 
 
 
     /**
      * Hjelpemetode for å oppdatere state på listenavn -> rekomposisjon
      */
-    private fun oppdaterListenavn(listenavn: String) {
+    private fun oppdaterListenavn() {
         _uiStateNy.update { currentState ->
             currentState.copy(
-                listenavn = listenavn,
+                listenavn = currentListenavn,
             )
         }
     }
+
 
 
 
@@ -123,6 +137,26 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun oppdaterVare(nyAntall: Int, varenavn: String, listenavn: String) = viewModelScope.launch(Dispatchers.IO) {
         repoVarer.update(nyAntall, varenavn, listenavn)
+    }
+
+
+
+    /**
+     * Funksjon for å oppdatere en vare uten parameter
+     * TODO: IKKE I BRUK
+     */
+    fun oppdaterVare2(vare: Varer) = viewModelScope.launch(Dispatchers.IO) {
+        repoVarer.update2(vare)
+    }
+
+
+
+
+    /**
+     * Funksjon for å slette en vare
+     */
+    fun slettVare(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
+        repoVarer.delete(varer)
     }
 
 
@@ -375,6 +409,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 }
+
+
 
 
 
