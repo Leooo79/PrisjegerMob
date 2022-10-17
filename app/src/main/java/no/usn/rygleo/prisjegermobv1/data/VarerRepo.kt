@@ -8,12 +8,14 @@ import kotlinx.coroutines.flow.Flow
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
+import java.util.concurrent.Callable
 
 
 class VarerRepo(private val varerDAO: VarerDAO) {
 
     // sortering på listenavn gjøres i filteret (composable)
     val alleVarer: Flow<List<Varer>> = varerDAO.getAlleVarer2()
+
 
     suspend fun insert(varer: Varer) {
          varerDAO.insertAll(varer)

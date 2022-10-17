@@ -18,10 +18,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
-// Funksjoner:
+// Klasser/ Visninger/ Funksjoner:
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 import no.usn.rygleo.prisjegermobv1.HandlelisteScreen
 import no.usn.rygleo.prisjegermobv1.ui.LoginScreen
+import no.usn.rygleo.prisjegermobv1.ui.OmOss
 
 
 // SKAL VI BENYTTE KLASSE HER? KUN FUNKSJON?
@@ -55,7 +56,7 @@ fun BottomNavigation(navController: NavController) {
         BottomNavItem.Hjem,
         BottomNavItem.Handleliste,
         BottomNavItem.Prissammenligning,
-        BottomNavItem.Notefikasjoner,
+        BottomNavItem.OmOss,
         BottomNavItem.Login
     )
     androidx.compose.material.BottomNavigation(
@@ -118,8 +119,8 @@ fun NavigationGraph(
         }
 
         // PRISSAMMENLINGNING
-        composable(BottomNavItem.Notefikasjoner.screen_route) {
-            NotificationScreen()
+        composable(BottomNavItem.OmOss.screen_route) {
+            OmOss()
         }
 
         // LOGIN

@@ -8,6 +8,9 @@ color teal_200
 color teal_700
 color topBar
 color white
+drawable daniel
+drawable dmitriy
+drawable gaute
 drawable ic_home
 drawable ic_job
 drawable ic_launcher_background
@@ -15,7 +18,9 @@ drawable ic_launcher_foreground
 drawable ic_my_network
 drawable ic_notification
 drawable ic_post
+drawable leonard
 drawable prisjegerlogo
+drawable tore
 mipmap ic_launcher
 mipmap ic_launcher_round
 plurals cupcakes

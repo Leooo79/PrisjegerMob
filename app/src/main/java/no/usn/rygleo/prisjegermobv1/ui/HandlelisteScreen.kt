@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -86,7 +87,7 @@ fun HandlelisteScreen(
  */
 @Composable
 private fun HeaderVisning(
-    uiStateNy: VarerUiState,
+    uiStateNy: VarerUiState, // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
     vareListe: List<Varer>,
     prisjegerViewModel: PrisjegerViewModel,
     iHandleModus: () -> Unit,
@@ -103,36 +104,55 @@ private fun HeaderVisning(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(
-                modifier = Modifier.padding(vertical = 6.dp),
-                onClick = iHandleModus,
-            ) {
-                Text("Nå er vi i handlemodus")
-            }
-            Button(
-                modifier = Modifier.padding(vertical = 6.dp),
-                onClick = {
-                    prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
-                //    prisjegerViewModel.oppfrisk()
+            Row {
+                Button(
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    onClick = iHandleModus,
+                ) {
+                    Text("Nå er vi i handlemodus")
                 }
-            ) {
-                if (vareListe.isEmpty())
-                    Text("")
-                else Text(uiStateNy.listenavn) // EGEN STATEVARIABEL
+                Spacer(Modifier.size(10.dp))
+                Button(
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    onClick = {
+                        prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
+                    //    prisjegerViewModel.oppfrisk()
+                    }
+                ) {
+                    if (vareListe.isEmpty())
+                        Text("")
+                    else Text("Opprett testdata") // EGEN STATEVARIABEL
+                }
             }
-            Column {
+            Row {
                 Text(
-                    text = "Total sum : " + (Math.round(prisjegerViewModel
-                        .sumPrHandleliste() * 100.00) / 100.0).toString(),
+                    text = "Total sum : " + (Math.round(
+                        prisjegerViewModel
+                            .sumPrHandleliste() * 100.00
+                    ) / 100.0).toString(),
                     color = MaterialTheme.colors.primary,
                     fontSize = 18.sp,
                 )
             }
-            Column {
-                VelgHandleliste(prisjegerViewModel, uiStateNy)
-            }
-            Column {
-                VelgButikk()
+            Row {
+                Column {
+                    Button(
+                        onClick = {
+                        prisjegerViewModel.insertEnVare("nyttListeNavn") // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
+                        //    prisjegerViewModel.oppfrisk()
+                        }
+                    ) {
+                        Text("Ny handleliste")
+                    }
+                }
+                Spacer(Modifier.size(10.dp))
+                Column {
+                    VelgHandleliste(prisjegerViewModel)
+                }
+                Spacer(Modifier.size(10.dp))
+                Column {
+                    VelgButikk()
+                }
             }
         }
     }
@@ -147,13 +167,6 @@ private fun HeaderVisning(
  * Events:
  * - Aktivere/ deaktivere meny
  * - Velge butikk -> listen viser priser fra valgt butikk
- * TODO: - Opprette og navngi egne handlelister
- * TODO: - Bytte mellom to ulike visninger: handlemodus / lageHandlelisteModus
- * TODO: - Egen knapp for å legge til flere varer i listen (kanskje ikke nødvendig, må testes)
- *
- * TODO: indirekte kall på API / Datakilde(r) via viewModel for å oppdatere priser
- * TODO: etablere listeinnhold som ressurser (egen tabell?)
- * TODO: bedre tilpasning til bakgrunn, dimensjoner box/ knapp
  */
 @Composable
 fun VelgButikk() {
@@ -197,9 +210,13 @@ fun VelgButikk() {
 }
 
 
+/**
+ * Funksjon for å velge hvilken handleliste som skal vises
+ * Endrer variabel currentListenavn i vM som er grunnlag for sortering av liste fra DB
+ */
 @Composable
-fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel, uiStateNy: VarerUiState) {
-    val valgbare = arrayOf("RoomListe1", "RoomListe2")
+fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
+    val valgbare = arrayOf("RoomListe1", "RoomListe2", "nyttListeNavn")
     val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf(prisjegerViewModel.currentListenavn) }
     var aktiv by remember {mutableStateOf(false) }
@@ -315,7 +332,8 @@ fun Sokefelt(state: MutableState<TextFieldValue>) {
 
 /**
  * Funksjonen bygger opp LazyColumn og viser varer fra filteret (Sokefelt)
- * Dersom filter er deaktivert (tomt, uten tekst) vises hele listen
+ * Dersom filter er deaktivert (tomt, uten tekst) vises hele listen pr listenavn
+ * Filteret sorterer ut varelinjer for hver handleliste(navn)
  */
 @Composable
 fun ListeVisning(
@@ -363,53 +381,36 @@ fun ListeVisning(
 
 /**
  * Funksjonen bygger opp og viser handlelister/ varelister
- * Hver rad pakkes i Card for enkel spacing
- * Kolonner består av datafelt fra HandlelisteItems-objekt.
+ * Kolonner består av datafelt fra Varer objekt/ entitet (lokal DB)
  * Events:
- * - Legge til/ trekke fra antall -> oppdatering av sumPrHandleliste
+ * - Legge til/ trekke fra antall -> oppdatering av DB + sumPrVare + sumPrHandleliste
  * - Vise detaljer om hver vare -> utvider rad og henter inn tekst (bilde?)
- *
+ * - Slette rad med swipe -> varen slettes fra lokal DB + visning oppdateres
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun VarelisteItem(
-    vare: Varer,
-    prisjegerViewModel: PrisjegerViewModel,
-) {
+        vare: Varer,
+        prisjegerViewModel: PrisjegerViewModel,
+    ) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
     var bredKolonne = 2F
     var smalKolonne = 1F
-
     val dismissState = rememberDismissState()
 
     // TODO: Insert av samme vare til samme handleliste etter delete gir utfordinger
     // TODO fordi key huskes av lazycolumn.item (key = varenavn+varelistenavn)
     // TODO Å kjøre kode i LaunchedEffect løser problemet, men gir rar animasjon
     // TODO Alternativ løsning er å opprette egen unik PK for hver rad i E Varer
-    // TODO og benytte denne som Key i Lazycolumn.item
-    /*
-       if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-           prisjegerViewModel.slettVare(vare) // sletter rad fra handleliste
-       }
-     */
-          if (dismissState.currentValue != DismissValue.Default) {
-     //         prisjegerViewModel.oppdaterVare(0,vare.varenavn, vare.listenavn)
+    // TODO og benytte denne som Key i Lazycolumn.item. Er ganske kompliserende og kanskje ikke nødvendig?
 
-       //       prisjegerViewModel.oppfrisk()
-              LaunchedEffect(Unit) { // for suspendert kall
-                  dismissState.reset() // må resette state FØR SLETTING for å kunne vise samme key senere
-                  prisjegerViewModel.slettVare(vare) // sletter rad fra handleliste
-
-
-
-                  // omvendt rekkefølge ser bedre ut, men Key huskes som ikke synlig -
-                  // slik at man ikke får lagt inn identisk key i samme programkjøring
-                  // (key = varenavn+varelistenavn)
-              }
-          }
-
-
+    if (dismissState.currentValue != DismissValue.Default) {
+        LaunchedEffect(Unit) { // for suspendert kall
+            dismissState.reset() // må resette plassering/ state FØR SLETTING for å kunne vise samme key senere
+            prisjegerViewModel.slettVare(vare) // sletter rad fra handleliste
+        }
+    }
 
     // Rader slettes ved venstre-swipe. Visuelt + delete fra lokal DB via vM
     SwipeToDismiss(
@@ -429,7 +430,7 @@ fun VarelisteItem(
             val color by animateColorAsState(
                 when (dismissState.targetValue) {
                     DismissValue.Default -> Color.White
-                    else -> MaterialTheme.colors.secondaryVariant
+                    else -> Color.Red
                 }
             )
             val alignment = Alignment.CenterEnd

@@ -24,10 +24,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     // Livedata liste for komposisjon av handlelister fra lokal DB
 
-    var alleVarer: LiveData<List<Varer>> // MÅ SETTES SOM VAR MED EGEN SETTER FOR ENDRING LISTENAVN
-        private set                      // KAN DEN EVENTUELT LEGGES I VAREUISTATE ??
-
-
+    // TODO: OPPRETTE PRIVATE VAL MED EGET TILGANGSVARIABEL, BØR VÆRE MULIG MED FLOW
+    val alleVarer: LiveData<List<Varer>> // NYTT: ENDRE TIL VAL ETTER ENDRING TIL FLOW, FJERNET SET
 
     // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
@@ -55,9 +53,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         // sortering på listenavn gjøres nå i filteret -
         //  (@composable HandlelisteScreen.Listevisning()), alle varelinjer emittes fra DB.
         // Testet svært lenge med LiveData og parameter til getAlleVarer(listenavn) for sortert liste,
-        // men delete skapte problemer da observer ikke fikk korrekte endringer i state.
+        // men delete skapte problemer, sannsynligvis pga observer og nullPointer.
         // Påfølgende endring av listenavn klarte da ikke å utløse rekomp som ønsket/ forventet.
         // Utfordring løst ved å sende alle varelinjer som Flow fra DB og fange med asLiveData()
+        // Ulemper: (potensielt) kostbar spørring til lokal DB på alle varelinjer i alle lister
+        // Fordeler: raskere respons med alle varerlinjer i memory, det virker endelig :)
         alleVarer = repoVarer.alleVarer.asLiveData() // NYTT: FLOW FRA LOKAL DB!
     }
 
@@ -118,7 +118,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         repoVarer.insert(vare)
     }
 
-
+    fun insertEnVare(nyttListeNavn: String) {
+        // TODO: hvordan opprette handeliste uten vare?
+        var vare = Varer(nyttListeNavn, "", null, null)
+        insertVare(vare)
+    }
 
     /**
      * Lager en testliste og kjører insert mot lokal DB (Room), tabell Vare (handlelister)
