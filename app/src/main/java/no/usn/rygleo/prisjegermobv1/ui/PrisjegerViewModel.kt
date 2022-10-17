@@ -36,7 +36,9 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // Statevariabel for rekomposisjon ved nytt listenavn
     // TODO: Her kan man etablere flere statevariabler, kan virke for hele App Prisjeger. Benytter kopier for å endre state, se under
     private val _uiStateNy = MutableStateFlow(
-        VarerUiState(listenavn = currentListenavn)
+        VarerUiState(
+            listenavn = currentListenavn
+        )
     )
     val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
 

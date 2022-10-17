@@ -2,7 +2,7 @@ package no.usn.rygleo.prisjegermobv1.roomDB;
 
 import java.lang.System;
 
-@androidx.room.Database(entities = {no.usn.rygleo.prisjegermobv1.roomDB.Bruker.class, no.usn.rygleo.prisjegermobv1.roomDB.Varer.class}, version = 8)
+@androidx.room.Database(entities = {no.usn.rygleo.prisjegermobv1.roomDB.Bruker.class, no.usn.rygleo.prisjegermobv1.roomDB.Varer.class}, version = 8, exportSchema = false)
 @kotlin.Metadata(mv = {1, 6, 0}, k = 1, d1 = {"\u0000\u001a\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\b\'\u0018\u0000 \u00072\u00020\u0001:\u0001\u0007B\u0005\u00a2\u0006\u0002\u0010\u0002J\b\u0010\u0003\u001a\u00020\u0004H&J\b\u0010\u0005\u001a\u00020\u0006H&\u00a8\u0006\b"}, d2 = {"Lno/usn/rygleo/prisjegermobv1/roomDB/AppDatabase;", "Landroidx/room/RoomDatabase;", "()V", "brukerDAO", "Lno/usn/rygleo/prisjegermobv1/roomDB/BrukerDAO;", "varerDAO", "Lno/usn/rygleo/prisjegermobv1/roomDB/VarerDAO;", "Companion", "app_debug"})
 public abstract class AppDatabase extends androidx.room.RoomDatabase {
     @org.jetbrains.annotations.NotNull()

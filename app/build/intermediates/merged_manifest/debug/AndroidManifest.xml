@@ -8,6 +8,9 @@
         android:minSdkVersion="21"
         android:targetSdkVersion="32" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -32,11 +35,25 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.chillibits.simplesettings.ui.SimpleSettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/settingsStyle" />
+        <activity
+            android:name="com.mikepenz.aboutlibraries.ui.LibsActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+        <activity
             android:name="androidx.compose.ui.tooling.PreviewActivity"
             android:exported="true" />
         <activity
             android:name="androidx.activity.ComponentActivity"
             android:exported="true" />
+
+        <uses-library
+            android:name="androidx.window.extensions"
+            android:required="false" />
+        <uses-library
+            android:name="androidx.window.sidecar"
+            android:required="false" />
 
         <service
             android:name="androidx.room.MultiInstanceInvalidationService"

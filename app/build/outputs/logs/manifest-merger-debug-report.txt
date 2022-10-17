@@ -1,9 +1,12 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
+MERGED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:3:1-20:12
+MERGED from [com.mikepenz:aboutlibraries:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\c28c3f37bc2f01c853864e28935effdf\transformed\aboutlibraries-8.9.4\AndroidManifest.xml:2:1-13:12
+MERGED from [com.mikepenz:aboutlibraries-core:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\4c713f498f601f701fd9d35bbaf9962d\transformed\aboutlibraries-core-8.9.4\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:17:1-30:12
 MERGED from [androidx.compose.material:material:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\6f428f9524c04aed4fd122bd267309f4\transformed\material-1.1.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.compose.runtime:runtime-livedata:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\3fa00e86454999407b895442a8a2e966\transformed\runtime-livedata-1.1.1\AndroidManifest.xml:17:1-24:12
@@ -26,22 +29,41 @@ MERGED from [androidx.compose.ui:ui-unit:1.1.1] C:\Users\leona\.gradle\caches\tr
 MERGED from [androidx.compose.ui:ui-geometry:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\8bdb4557c1deec2aebd6a95d9237ab6c\transformed\ui-geometry-1.1.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.compose.runtime:runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\96f96291fb7ee450426fb8326ed2a852\transformed\runtime-1.1.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.room:room-ktx:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\7d3682b3a0c73027bb72019269fe8587\transformed\room-ktx-2.4.3\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-fragment-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\4d90223a9704df25e6874865acd2c69c\transformed\navigation-fragment-ktx-2.4.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-ui-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\8c1c6e9e981b107b060e2b73a65f9fb4\transformed\navigation-ui-ktx-2.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\84de886ae6b5ccab4f247163b29cc413\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-fragment:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\91c3ea31127ef9b5df303b6337b5db23\transformed\navigation-fragment-2.4.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.navigation:navigation-ui:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c13f97fbc3e988755362613b00975585\transformed\navigation-ui-2.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\fb409249425e0f95c621e289d9515302\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.github.skydoves:colorpickerpreference:2.0.6] C:\Users\leona\.gradle\caches\transforms-3\985df97be34bb1c663782b8e0798c72b\transformed\colorpickerpreference-2.0.6\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.preference:preference-ktx:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\93e63e01f3fe6178ba4351bcb78f43f4\transformed\preference-ktx-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.preference:preference:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\2827b1436f205422bd6a4495ac75fb28\transformed\preference-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment-ktx:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\cc204fbe4579c3783450436948b118d5\transformed\fragment-ktx-1.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity-ktx:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\573b3dbac52526ab16f33c969693692a\transformed\activity-ktx-1.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-common-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\38669c2ea130d6a3e11dc3a1c9f15d6b\transformed\navigation-common-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.navigation:navigation-common:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\2cef8c6e98c211d73d0671f797fcf007\transformed\navigation-common-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\6a7e9762bc2d4889f231f69be4b28a1e\transformed\lifecycle-viewmodel-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:17:1-30:12
 MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\394ce2d3872be59220855fefa5f09e0a\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.material:material:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\30c44b58d4c34caaf7b121c982cae3af\transformed\material-1.5.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.mikepenz:fastadapter:5.6.0] C:\Users\leona\.gradle\caches\transforms-3\0fbe0fb3fc73a0bad4034e0780d44957\transformed\fastadapter-5.6.0\AndroidManifest.xml:2:1-9:12
+MERGED from [com.github.ibrahimsn98:live-preferences:1.9] C:\Users\leona\.gradle\caches\transforms-3\0c804ccec9a9699370af2c4458f9aa87\transformed\live-preferences-1.9\AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.3] C:\Users\leona\.gradle\caches\transforms-3\2a9c66ded6ae75dea681bc84dccd28c3\transformed\constraintlayout-2.1.3\AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.skydoves:colorpickerview:2.2.3] C:\Users\leona\.gradle\caches\transforms-3\d329be7176dbbd9f3059837fa48270a5\transformed\colorpickerview-2.2.3\AndroidManifest.xml:2:1-10:12
 MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\d3b5a00c8c8d32cf7dccb8ee585ed284\transformed\appcompat-1.5.1\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\leona\.gradle\caches\transforms-3\1bfe36f9164299f7976ba335a93a6ba9\transformed\fragment-1.3.6\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\d818e9c285c81031048e980ab34d2511\transformed\viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\c76f784611638b6d277882aa58894e27\transformed\lifecycle-extensions-2.2.0\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.fragment:fragment:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\08f7c75ec73c557f86af3685aa43b9b2\transformed\fragment-1.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\08ed359655ac8687055e457d474f440e\transformed\activity-1.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\4adb72303402848cecfa4df404d4bc2c\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\fc6080428505b305ae7d8213395316ae\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.loader:loader:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9f29cebd852b3018ff0ae973a4038beb\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\099c7b50d5c6997f84db404278e30350\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\38f7378b3102ae72bc785af1c2062680\transformed\lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\8cae308842b5b2c0dc20c17b0d543350\transformed\lifecycle-runtime-ktx-2.5.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c543ade49acaefc4116c2470b0fd06eb\transformed\lifecycle-livedata-ktx-2.4.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\43dad66e8f75d3515df830a8dd8b250f\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\7031744ebbe4f34ee94f32c6c2ad9848\transformed\core-ktx-1.8.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.room:room-runtime:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\6c6c7c7610a688aa1539cbe318574e19\transformed\room-runtime-2.4.3\AndroidManifest.xml:17:1-31:12
 MERGED from [androidx.compose.ui:ui-util:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\7c6393183074724ea1d7c327055db391\transformed\ui-util-1.1.1\AndroidManifest.xml:17:1-24:12
@@ -49,53 +71,83 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.1] C:\Users\leon
 MERGED from [androidx.savedstate:savedstate-ktx:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\d675fd16f34da305fc8b36f95207523a\transformed\savedstate-ktx-1.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\eb944d955966d410269278d2c4c52cfe\transformed\savedstate-1.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\8d9ba7c47454c7fb2fe046bfd361241f\transformed\autofill-1.0.0\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\69946e90aac9295a769bb3fc727cbb57\transformed\drawerlayout-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\081b86295cd0184517fb67086a9cac89\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\5599effd9ad40bca005e593cdd894a89\transformed\emoji2-1.2.0\AndroidManifest.xml:17:1-35:12
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\23642883c7593f5312431cad83b068bf\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\72c23bc281237ded14d74a34c225d993\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\75a3c18948cfdaba36b78ca0e20d5c00\transformed\drawerlayout-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\b5ccbe2a6bfe5dad48b5cb554b7ea338\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\leona\.gradle\caches\transforms-3\76c4ba64f4a7c77b370a4405dc1896e7\transformed\recyclerview-1.2.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\6db566fb57605dc708a506976c76524c\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.customview:customview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\1d9f4c63e13b04328c65368b7334da91\transformed\customview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\75e89e57d0b4d17a00434e4725a37b54\transformed\customview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\57fa9819c6a69ebce9049d549bff1edc\transformed\transition-1.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:17:1-48:12
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.lifecycle:lifecycle-service:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\f8ac5c1028a74eb345b1dc52766b52da\transformed\lifecycle-service-2.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\c212f43ac60f4030155113d80650484c\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\f9809ec2080ef6562ba4cd987fca9a13\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.sqlite:sqlite-framework:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\9ba52cda55d78e18d1560d2526757344\transformed\sqlite-framework-2.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.sqlite:sqlite:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\5cb22121eee1029d0f148260cddcbd3a\transformed\sqlite-2.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.databinding:viewbinding:7.1.2] C:\Users\leona\.gradle\caches\transforms-3\9ed54e7c39d8dcc39873933f92b846a2\transformed\viewbinding-7.1.2\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\169424ef22b2764469f41a4fa926f240\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\7b437eb651c9b38722f9fc65bfdf4496\transformed\lifecycle-livedata-2.4.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\1688a8e3f91b4524e8c84093f5c44f4e\transformed\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\leona\.gradle\caches\transforms-3\af4c7b4be5dcde7203a695ae1668ea72\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\480346e666ba36302e70fcce1f171922\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9bcfd13e6b946bec3801a597d303f7f2\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\19584def5cd3bd11dbdb2b0b7d449af5\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\2ec81871c152e69f6d0ec15ea56de76c\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\aa66ead9442a65de7cd06b621f065c54\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9e317407a6cf4c48efbc9c8b280c6581\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\7341f734db0e321b6e690cf15510a7ca\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\857e03149483f701a2d3531919e69de5\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
-INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+MERGED from [io.reactivex.rxjava2:rxandroid:2.0.2] C:\Users\leona\.gradle\caches\transforms-3\fcd2737ea07721b707c47c6b85b71998\transformed\rxandroid-2.0.2\AndroidManifest.xml:15:1-21:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
 	package
 		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:4:5-43
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	xmlns:tools
 		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:3:5-51
 	android:versionCode
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-29:12
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:1-32:12
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:6:5-67
+	android:name
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:6:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:7:5-79
+	android:name
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:7:22-76
 application
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:6:5-27:19
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:9:5-30:19
+MERGED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:10:5-18:19
+MERGED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:10:5-18:19
+MERGED from [com.mikepenz:aboutlibraries:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\c28c3f37bc2f01c853864e28935effdf\transformed\aboutlibraries-8.9.4\AndroidManifest.xml:9:5-11:19
+MERGED from [com.mikepenz:aboutlibraries:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\c28c3f37bc2f01c853864e28935effdf\transformed\aboutlibraries-8.9.4\AndroidManifest.xml:9:5-11:19
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:24:5-28:19
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:24:5-28:19
 MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:24:5-28:19
 MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:24:5-28:19
+MERGED from [com.google.android.material:material:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\30c44b58d4c34caaf7b121c982cae3af\transformed\material-1.5.0\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\30c44b58d4c34caaf7b121c982cae3af\transformed\material-1.5.0\AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.3] C:\Users\leona\.gradle\caches\transforms-3\2a9c66ded6ae75dea681bc84dccd28c3\transformed\constraintlayout-2.1.3\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.3] C:\Users\leona\.gradle\caches\transforms-3\2a9c66ded6ae75dea681bc84dccd28c3\transformed\constraintlayout-2.1.3\AndroidManifest.xml:9:5-20
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\c76f784611638b6d277882aa58894e27\transformed\lifecycle-extensions-2.2.0\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\c76f784611638b6d277882aa58894e27\transformed\lifecycle-extensions-2.2.0\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.room:room-runtime:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\6c6c7c7610a688aa1539cbe318574e19\transformed\room-runtime-2.4.3\AndroidManifest.xml:24:5-29:19
 MERGED from [androidx.room:room-runtime:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\6c6c7c7610a688aa1539cbe318574e19\transformed\room-runtime-2.4.3\AndroidManifest.xml:24:5-29:19
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\5599effd9ad40bca005e593cdd894a89\transformed\emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
@@ -113,47 +165,53 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\leona\.gradle\cach
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
 	android:supportsRtl
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:13:9-35
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:16:9-35
 	android:label
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:11:9-41
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:14:9-41
 	android:fullBackupContent
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:9:9-54
-	android:roundIcon
 		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:12:9-54
+	android:roundIcon
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:15:9-54
 	tools:targetApi
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:15:9-29
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:18:9-29
 	android:icon
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:10:9-43
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:13:9-43
 	android:allowBackup
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:7:9-35
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:10:9-35
 	android:theme
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:14:9-52
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:17:9-52
 	android:dataExtractionRules
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:8:9-65
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:11:9-65
 activity#no.usn.rygleo.prisjegermobv1.MainActivity
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:16:9-26:20
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:19:9-29:20
 	android:label
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:19:13-45
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:22:13-45
 	android:exported
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:18:13-36
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:21:13-36
 	android:theme
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:20:13-56
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:23:13-56
 	android:name
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:17:13-41
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:20:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:21:13-25:29
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:24:13-28:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:22:17-69
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:25:17-69
 	android:name
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:22:25-66
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:25:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:24:17-77
+ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:27:17-77
 	android:name
-		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:24:27-74
+		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml:27:27-74
 uses-sdk
 INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+MERGED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:6:5-8:41
+MERGED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:6:5-8:41
+MERGED from [com.mikepenz:aboutlibraries:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\c28c3f37bc2f01c853864e28935effdf\transformed\aboutlibraries-8.9.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.mikepenz:aboutlibraries:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\c28c3f37bc2f01c853864e28935effdf\transformed\aboutlibraries-8.9.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.mikepenz:aboutlibraries-core:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\4c713f498f601f701fd9d35bbaf9962d\transformed\aboutlibraries-core-8.9.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.mikepenz:aboutlibraries-core:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\4c713f498f601f701fd9d35bbaf9962d\transformed\aboutlibraries-core-8.9.4\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.compose.material:material:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\6f428f9524c04aed4fd122bd267309f4\transformed\material-1.1.1\AndroidManifest.xml:20:5-22:41
@@ -198,10 +256,26 @@ MERGED from [androidx.compose.runtime:runtime:1.1.1] C:\Users\leona\.gradle\cach
 MERGED from [androidx.compose.runtime:runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\96f96291fb7ee450426fb8326ed2a852\transformed\runtime-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.room:room-ktx:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\7d3682b3a0c73027bb72019269fe8587\transformed\room-ktx-2.4.3\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.room:room-ktx:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\7d3682b3a0c73027bb72019269fe8587\transformed\room-ktx-2.4.3\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\4d90223a9704df25e6874865acd2c69c\transformed\navigation-fragment-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\4d90223a9704df25e6874865acd2c69c\transformed\navigation-fragment-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\8c1c6e9e981b107b060e2b73a65f9fb4\transformed\navigation-ui-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\8c1c6e9e981b107b060e2b73a65f9fb4\transformed\navigation-ui-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\84de886ae6b5ccab4f247163b29cc413\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\84de886ae6b5ccab4f247163b29cc413\transformed\navigation-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\91c3ea31127ef9b5df303b6337b5db23\transformed\navigation-fragment-2.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-fragment:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\91c3ea31127ef9b5df303b6337b5db23\transformed\navigation-fragment-2.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c13f97fbc3e988755362613b00975585\transformed\navigation-ui-2.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.navigation:navigation-ui:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c13f97fbc3e988755362613b00975585\transformed\navigation-ui-2.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\fb409249425e0f95c621e289d9515302\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-runtime:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\fb409249425e0f95c621e289d9515302\transformed\navigation-runtime-2.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.github.skydoves:colorpickerpreference:2.0.6] C:\Users\leona\.gradle\caches\transforms-3\985df97be34bb1c663782b8e0798c72b\transformed\colorpickerpreference-2.0.6\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.skydoves:colorpickerpreference:2.0.6] C:\Users\leona\.gradle\caches\transforms-3\985df97be34bb1c663782b8e0798c72b\transformed\colorpickerpreference-2.0.6\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.preference:preference-ktx:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\93e63e01f3fe6178ba4351bcb78f43f4\transformed\preference-ktx-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.preference:preference-ktx:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\93e63e01f3fe6178ba4351bcb78f43f4\transformed\preference-ktx-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.preference:preference:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\2827b1436f205422bd6a4495ac75fb28\transformed\preference-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.preference:preference:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\2827b1436f205422bd6a4495ac75fb28\transformed\preference-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment-ktx:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\cc204fbe4579c3783450436948b118d5\transformed\fragment-ktx-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment-ktx:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\cc204fbe4579c3783450436948b118d5\transformed\fragment-ktx-1.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.activity:activity-ktx:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\573b3dbac52526ab16f33c969693692a\transformed\activity-ktx-1.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.activity:activity-ktx:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\573b3dbac52526ab16f33c969693692a\transformed\activity-ktx-1.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.navigation:navigation-common-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\38669c2ea130d6a3e11dc3a1c9f15d6b\transformed\navigation-common-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
@@ -214,12 +288,30 @@ MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\
 MERGED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\394ce2d3872be59220855fefa5f09e0a\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat-resources:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\394ce2d3872be59220855fefa5f09e0a\transformed\appcompat-resources-1.5.1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\30c44b58d4c34caaf7b121c982cae3af\transformed\material-1.5.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.5.0] C:\Users\leona\.gradle\caches\transforms-3\30c44b58d4c34caaf7b121c982cae3af\transformed\material-1.5.0\AndroidManifest.xml:20:5-44
+MERGED from [com.mikepenz:fastadapter:5.6.0] C:\Users\leona\.gradle\caches\transforms-3\0fbe0fb3fc73a0bad4034e0780d44957\transformed\fastadapter-5.6.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.mikepenz:fastadapter:5.6.0] C:\Users\leona\.gradle\caches\transforms-3\0fbe0fb3fc73a0bad4034e0780d44957\transformed\fastadapter-5.6.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.ibrahimsn98:live-preferences:1.9] C:\Users\leona\.gradle\caches\transforms-3\0c804ccec9a9699370af2c4458f9aa87\transformed\live-preferences-1.9\AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.ibrahimsn98:live-preferences:1.9] C:\Users\leona\.gradle\caches\transforms-3\0c804ccec9a9699370af2c4458f9aa87\transformed\live-preferences-1.9\AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.3] C:\Users\leona\.gradle\caches\transforms-3\2a9c66ded6ae75dea681bc84dccd28c3\transformed\constraintlayout-2.1.3\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.3] C:\Users\leona\.gradle\caches\transforms-3\2a9c66ded6ae75dea681bc84dccd28c3\transformed\constraintlayout-2.1.3\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.skydoves:colorpickerview:2.2.3] C:\Users\leona\.gradle\caches\transforms-3\d329be7176dbbd9f3059837fa48270a5\transformed\colorpickerview-2.2.3\AndroidManifest.xml:6:5-8:41
+MERGED from [com.github.skydoves:colorpickerview:2.2.3] C:\Users\leona\.gradle\caches\transforms-3\d329be7176dbbd9f3059837fa48270a5\transformed\colorpickerview-2.2.3\AndroidManifest.xml:6:5-8:41
 MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\d3b5a00c8c8d32cf7dccb8ee585ed284\transformed\appcompat-1.5.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\d3b5a00c8c8d32cf7dccb8ee585ed284\transformed\appcompat-1.5.1\AndroidManifest.xml:20:5-44
-MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\leona\.gradle\caches\transforms-3\1bfe36f9164299f7976ba335a93a6ba9\transformed\fragment-1.3.6\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\leona\.gradle\caches\transforms-3\1bfe36f9164299f7976ba335a93a6ba9\transformed\fragment-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\d818e9c285c81031048e980ab34d2511\transformed\viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\d818e9c285c81031048e980ab34d2511\transformed\viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\c76f784611638b6d277882aa58894e27\transformed\lifecycle-extensions-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-extensions:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\c76f784611638b6d277882aa58894e27\transformed\lifecycle-extensions-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\08f7c75ec73c557f86af3685aa43b9b2\transformed\fragment-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\08f7c75ec73c557f86af3685aa43b9b2\transformed\fragment-1.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.activity:activity:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\08ed359655ac8687055e457d474f440e\transformed\activity-1.5.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.activity:activity:1.5.1] C:\Users\leona\.gradle\caches\transforms-3\08ed359655ac8687055e457d474f440e\transformed\activity-1.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\4adb72303402848cecfa4df404d4bc2c\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\4adb72303402848cecfa4df404d4bc2c\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\fc6080428505b305ae7d8213395316ae\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\fc6080428505b305ae7d8213395316ae\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9f29cebd852b3018ff0ae973a4038beb\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9f29cebd852b3018ff0ae973a4038beb\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\099c7b50d5c6997f84db404278e30350\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:20:5-22:41
@@ -230,6 +322,10 @@ MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.0] C:\Users\leona\.gra
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.5.0] C:\Users\leona\.gradle\caches\transforms-3\8cae308842b5b2c0dc20c17b0d543350\transformed\lifecycle-runtime-ktx-2.5.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c543ade49acaefc4116c2470b0fd06eb\transformed\lifecycle-livedata-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\c543ade49acaefc4116c2470b0fd06eb\transformed\lifecycle-livedata-ktx-2.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\43dad66e8f75d3515df830a8dd8b250f\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\43dad66e8f75d3515df830a8dd8b250f\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\7031744ebbe4f34ee94f32c6c2ad9848\transformed\core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.core:core-ktx:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\7031744ebbe4f34ee94f32c6c2ad9848\transformed\core-ktx-1.8.0\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.room:room-runtime:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\6c6c7c7610a688aa1539cbe318574e19\transformed\room-runtime-2.4.3\AndroidManifest.xml:20:5-22:41
@@ -244,8 +340,6 @@ MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\leona\.gradle\caches
 MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\eb944d955966d410269278d2c4c52cfe\transformed\savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\8d9ba7c47454c7fb2fe046bfd361241f\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\8d9ba7c47454c7fb2fe046bfd361241f\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\69946e90aac9295a769bb3fc727cbb57\transformed\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\69946e90aac9295a769bb3fc727cbb57\transformed\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\081b86295cd0184517fb67086a9cac89\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\081b86295cd0184517fb67086a9cac89\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\leona\.gradle\caches\transforms-3\5599effd9ad40bca005e593cdd894a89\transformed\emoji2-1.2.0\AndroidManifest.xml:21:5-44
@@ -254,16 +348,26 @@ MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\leo
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\23642883c7593f5312431cad83b068bf\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\72c23bc281237ded14d74a34c225d993\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\72c23bc281237ded14d74a34c225d993\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\75a3c18948cfdaba36b78ca0e20d5c00\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\75a3c18948cfdaba36b78ca0e20d5c00\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\b5ccbe2a6bfe5dad48b5cb554b7ea338\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\b5ccbe2a6bfe5dad48b5cb554b7ea338\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\leona\.gradle\caches\transforms-3\76c4ba64f4a7c77b370a4405dc1896e7\transformed\recyclerview-1.2.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.2.1] C:\Users\leona\.gradle\caches\transforms-3\76c4ba64f4a7c77b370a4405dc1896e7\transformed\recyclerview-1.2.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\6db566fb57605dc708a506976c76524c\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\6db566fb57605dc708a506976c76524c\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\1d9f4c63e13b04328c65368b7334da91\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\1d9f4c63e13b04328c65368b7334da91\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\75e89e57d0b4d17a00434e4725a37b54\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\75e89e57d0b4d17a00434e4725a37b54\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\57fa9819c6a69ebce9049d549bff1edc\transformed\transition-1.4.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] C:\Users\leona\.gradle\caches\transforms-3\57fa9819c6a69ebce9049d549bff1edc\transformed\transition-1.4.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.core:core:1.8.0] C:\Users\leona\.gradle\caches\transforms-3\39858a0edda35c9bad4a02052f2a3484\transformed\core-1.8.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.profileinstaller:profileinstaller:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\4e96a6d6a8cdd3c511dc2c875d4a60eb\transformed\profileinstaller-1.1.0\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\b1620bace8a059a8fba1f86b24b9b083\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.lifecycle:lifecycle-service:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\f8ac5c1028a74eb345b1dc52766b52da\transformed\lifecycle-service-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-service:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\f8ac5c1028a74eb345b1dc52766b52da\transformed\lifecycle-service-2.2.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\c212f43ac60f4030155113d80650484c\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\leona\.gradle\caches\transforms-3\c212f43ac60f4030155113d80650484c\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\f9809ec2080ef6562ba4cd987fca9a13\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
@@ -272,6 +376,8 @@ MERGED from [androidx.sqlite:sqlite-framework:2.2.0] C:\Users\leona\.gradle\cach
 MERGED from [androidx.sqlite:sqlite-framework:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\9ba52cda55d78e18d1560d2526757344\transformed\sqlite-framework-2.2.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.sqlite:sqlite:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\5cb22121eee1029d0f148260cddcbd3a\transformed\sqlite-2.2.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.sqlite:sqlite:2.2.0] C:\Users\leona\.gradle\caches\transforms-3\5cb22121eee1029d0f148260cddcbd3a\transformed\sqlite-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.databinding:viewbinding:7.1.2] C:\Users\leona\.gradle\caches\transforms-3\9ed54e7c39d8dcc39873933f92b846a2\transformed\viewbinding-7.1.2\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.databinding:viewbinding:7.1.2] C:\Users\leona\.gradle\caches\transforms-3\9ed54e7c39d8dcc39873933f92b846a2\transformed\viewbinding-7.1.2\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\169424ef22b2764469f41a4fa926f240\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\169424ef22b2764469f41a4fa926f240\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.4.1] C:\Users\leona\.gradle\caches\transforms-3\7b437eb651c9b38722f9fc65bfdf4496\transformed\lifecycle-livedata-2.4.1\AndroidManifest.xml:20:5-22:41
@@ -284,10 +390,20 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\leona\.gradle\cach
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\480346e666ba36302e70fcce1f171922\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9bcfd13e6b946bec3801a597d303f7f2\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9bcfd13e6b946bec3801a597d303f7f2\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\19584def5cd3bd11dbdb2b0b7d449af5\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\19584def5cd3bd11dbdb2b0b7d449af5\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\2ec81871c152e69f6d0ec15ea56de76c\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\2ec81871c152e69f6d0ec15ea56de76c\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\aa66ead9442a65de7cd06b621f065c54\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\aa66ead9442a65de7cd06b621f065c54\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9e317407a6cf4c48efbc9c8b280c6581\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\9e317407a6cf4c48efbc9c8b280c6581\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\7341f734db0e321b6e690cf15510a7ca\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\7341f734db0e321b6e690cf15510a7ca\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\857e03149483f701a2d3531919e69de5\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\leona\.gradle\caches\transforms-3\857e03149483f701a2d3531919e69de5\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [io.reactivex.rxjava2:rxandroid:2.0.2] C:\Users\leona\.gradle\caches\transforms-3\fcd2737ea07721b707c47c6b85b71998\transformed\rxandroid-2.0.2\AndroidManifest.xml:19:5-43
+MERGED from [io.reactivex.rxjava2:rxandroid:2.0.2] C:\Users\leona\.gradle\caches\transforms-3\fcd2737ea07721b707c47c6b85b71998\transformed\rxandroid-2.0.2\AndroidManifest.xml:19:5-43
 INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 	android:targetSdkVersion
@@ -298,6 +414,22 @@ INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 		ADDED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\leona\AndroidStudioProjects\PrisjegerMobMain\PrisjegerMob\app\src\main\AndroidManifest.xml
+activity#com.chillibits.simplesettings.ui.SimpleSettingsActivity
+ADDED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:11:9-14:52
+	android:configChanges
+		ADDED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:13:13-74
+	android:theme
+		ADDED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:14:13-49
+	android:name
+		ADDED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:12:13-83
+activity#com.mikepenz.aboutlibraries.ui.LibsActivity
+ADDED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:15:9-17:84
+MERGED from [com.mikepenz:aboutlibraries:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\c28c3f37bc2f01c853864e28935effdf\transformed\aboutlibraries-8.9.4\AndroidManifest.xml:10:9-80
+MERGED from [com.mikepenz:aboutlibraries:8.9.4] C:\Users\leona\.gradle\caches\transforms-3\c28c3f37bc2f01c853864e28935effdf\transformed\aboutlibraries-8.9.4\AndroidManifest.xml:10:9-80
+	android:theme
+		ADDED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:17:13-81
+	android:name
+		ADDED from [com.chillibits:simplesettings:1.3.4] C:\Users\leona\.gradle\caches\transforms-3\110f78d8c95b7c7bb67b99d38222a997\transformed\simplesettings-1.3.4\AndroidManifest.xml:16:13-71
 activity#androidx.compose.ui.tooling.PreviewActivity
 ADDED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\c27efb7b3f7a310638ecfe18b59e9ce0\transformed\ui-tooling-1.1.1\AndroidManifest.xml:25:9-27:39
 	android:exported
@@ -310,6 +442,18 @@ ADDED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\c
 		ADDED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:27:13-36
 	android:name
 		ADDED from [androidx.compose.ui:ui-test-manifest:1.1.1] C:\Users\leona\.gradle\caches\transforms-3\f2dc2e2fb402baafbc74300274c8c626\transformed\ui-test-manifest-1.1.1\AndroidManifest.xml:26:13-63
+uses-library#androidx.window.extensions
+ADDED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+uses-library#androidx.window.sidecar
+ADDED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0] C:\Users\leona\.gradle\caches\transforms-3\e151097bac6f8d9420c3b2e432c04dbb\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
 service#androidx.room.MultiInstanceInvalidationService
 ADDED from [androidx.room:room-runtime:2.4.3] C:\Users\leona\.gradle\caches\transforms-3\6c6c7c7610a688aa1539cbe318574e19\transformed\room-runtime-2.4.3\AndroidManifest.xml:25:9-28:40
 	android:exported

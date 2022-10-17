@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.mikepenz:aboutlibraries-core:8.9.4@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4c713f498f601f701fd9d35bbaf9962d/transformed/aboutlibraries-core-8.9.4/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4c713f498f601f701fd9d35bbaf9962d/transformed/aboutlibraries-core-8.9.4/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4c713f498f601f701fd9d35bbaf9962d/transformed/aboutlibraries-core-8.9.4/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/aboutlibraries-core/8.9.4/d8d5b8ee8179f8041c20d6a8a58b0c49341a4e09/aboutlibraries-core-8.9.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/aboutlibraries-core/8.9.4/d7ccbe55ede850dfed3ccfe07519f08e462d45bb/aboutlibraries-core-8.9.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

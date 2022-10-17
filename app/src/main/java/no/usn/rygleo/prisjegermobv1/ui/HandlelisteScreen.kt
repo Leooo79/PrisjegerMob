@@ -68,6 +68,7 @@ fun HandlelisteScreen(
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {
+
         HeaderVisning(
             uiStateNy, // MÅ SENDE STATEVARIABEL FOR REKOMP VED LISTEBYTTE
             vareListe,
@@ -113,7 +114,8 @@ private fun HeaderVisning(
                 }
                 Spacer(Modifier.size(10.dp))
                 Button(
-                    modifier = Modifier.padding(vertical = 6.dp),
+                    modifier = Modifier
+                        .padding(vertical = 6.dp),
                     onClick = {
                         prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
                     //    prisjegerViewModel.oppfrisk()
