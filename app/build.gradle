@@ -107,6 +107,7 @@ dependencies {
 // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
+
     // LR: for settings : simplesettings
 
     implementation 'com.chillibits:simplesettings:1.3.4'
@@ -114,5 +115,16 @@ dependencies {
 // Required dependencies
     implementation 'com.google.android.material:material:<latest-version>'
     implementation 'androidx.preference:preference:<latest-version>'
+
+    // Lagt inn av Tore og Leo Retrofit
+    def retrofit_version = "2.9.0"
+// Retrofit- biblioteket
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+// Converter-bibliotek for å lese ren tekst fra API-kallet
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+// Biblioteket Moshi konverterer JSON til Kotlin-/Java-objekter
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
+// ConverterFactory for å lage Converter av Moshi-biblioteket
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
 }

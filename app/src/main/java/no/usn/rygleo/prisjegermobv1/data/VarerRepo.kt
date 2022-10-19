@@ -5,6 +5,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
+import no.usn.rygleo.prisjegermobv1.RestApi
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel

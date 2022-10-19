@@ -9,7 +9,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,10 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -39,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
@@ -63,6 +61,7 @@ fun HandlelisteScreen(
     var handleModus by rememberSaveable { mutableStateOf(true) }
     val uiStateNy by prisjegerViewModel.uiStateNy.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
+    // Lokal DB ROOM
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
 
     Column(Modifier
@@ -119,11 +118,12 @@ private fun HeaderVisning(
                     onClick = {
                         prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
                     //    prisjegerViewModel.oppfrisk()
+                    //    prisjegerViewModel.hentApi()
                     }
                 ) {
                     if (vareListe.isEmpty())
                         Text("")
-                    else Text("Opprett testdata") // EGEN STATEVARIABEL
+                    else Text("legg til varer")// EGEN STATEVARIABEL
                 }
             }
             Row {
@@ -432,7 +432,7 @@ fun VarelisteItem(
             val color by animateColorAsState(
                 when (dismissState.targetValue) {
                     DismissValue.Default -> Color.White
-                    else -> Color.Red
+                    else -> Color(0xFFF44336)
                 }
             )
             val alignment = Alignment.CenterEnd
@@ -523,7 +523,7 @@ fun VarelisteItem(
                     ) {
                         Button( // knapp for å trekke fra
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.secondaryVariant,
+                                backgroundColor = Color(0xFFF44336),
                                 contentColor = Color.White
                             ),
                             onClick = {

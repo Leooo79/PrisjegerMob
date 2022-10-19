@@ -6,12 +6,16 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
+/**
+ * OBS : toppBar definert i values.colors (XML)
+ */
 
 private val DarkColorPalette = darkColors(
     primary = HandlelistePrimaryDark,
     primaryVariant = HandlelistePrimaryDark,
     secondary = HandlelisteSecondaryDark,
-    secondaryVariant = HandlelisteHeader
+    secondaryVariant = HandlelisteHeader,
+    background = HandlelisteSecondaryLight
 // TODO: skal vi ha annen bakgrunn enn hvit?
 )
 
@@ -19,7 +23,8 @@ private val LightColorPalette = lightColors(
     primary = HandlelistePrimaryLight,
     primaryVariant = HandlelistePrimaryDark,
     secondary = HandlelisteSecondaryLight,
-    secondaryVariant = HandlelisteHeader
+    secondaryVariant = HandlelisteHeader,
+    background = HandlelisteSecondaryLight
 
     /* Other default colors to override
     background = Color.White,

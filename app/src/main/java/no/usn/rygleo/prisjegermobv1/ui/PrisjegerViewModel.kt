@@ -2,10 +2,13 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import no.usn.rygleo.prisjegermobv1.API
+import no.usn.rygleo.prisjegermobv1.RestApi
 import no.usn.rygleo.prisjegermobv1.data.*
 import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
@@ -19,6 +22,30 @@ import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
  * Kommuniserer med datakilder : klasser - repo - lokal DB (Room) TODO: API/
  */
 class PrisjegerViewModel(application: Application) : AndroidViewModel(application) {
+
+
+
+  //  private val _status = MutableLiveData<FylkeApiStatus>()
+  //  val status: LiveData<FylkeApiStatus> = _status
+    private val _varerAPI = MutableLiveData<TestAPI>()
+    val varerAPI: LiveData<TestAPI> = _varerAPI
+
+    fun getAPIVarer() {
+        viewModelScope.launch {
+       //     _status.value = FylkeApiStatus.LOADING
+            try {
+                _varerAPI.value = API.retrofitService.getTestAPI()
+             //   _valg.value = varerAPI.value?.type
+                Log.e(null, "Her er verdi: " + _varerAPI)
+        //        _status.value = FylkeApiStatus.DONE
+            } catch (e: Exception) {
+       //         _status.value = FylkeApiStatus.ERROR
+           //     _varerAPI.value = listOf(VarenavnAPI())
+            }
+        }
+    }
+
+
     // Referanse til repo
     private val repoVarer: VarerRepo
 
@@ -50,8 +77,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // Kode som kjøres ved oppstart. Etablere Room database om denne ikke finnes, knytter til repo,
     // og setter livedata til å spørre Room DB etter handlelister
     init {
+        getAPIVarer()
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
+
+
         repoVarer = VarerRepo(varerDAO)
+   //     getAPIVarer()
+
         // sortering på listenavn gjøres nå i filteret -
         //  (@composable HandlelisteScreen.Listevisning()), alle varelinjer emittes fra DB.
         // Testet svært lenge med LiveData og parameter til getAlleVarer(listenavn) for sortert liste,
@@ -61,6 +93,9 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         // Ulemper: (potensielt) kostbar spørring til lokal DB på alle varelinjer i alle lister
         // Fordeler: raskere respons med alle varerlinjer i memory, det virker endelig :)
         alleVarer = repoVarer.alleVarer.asLiveData() // NYTT: FLOW FRA LOKAL DB!
+
+
+
     }
 
 
@@ -143,6 +178,17 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun oppdaterVare(nyAntall: Int, varenavn: String, listenavn: String) = viewModelScope.launch(Dispatchers.IO) {
         repoVarer.update(nyAntall, varenavn, listenavn)
+    }
+
+    /**
+     * Funksjon for å oppdatere en vare (antall)
+     */
+    fun hentApi() = viewModelScope.launch(Dispatchers.IO) {
+        try {
+ //           alleVarer = API.retrofitService.getVareliste().asLiveData()
+        } catch (e: Exception) {
+            print("dette feiler")
+        }
     }
 
 

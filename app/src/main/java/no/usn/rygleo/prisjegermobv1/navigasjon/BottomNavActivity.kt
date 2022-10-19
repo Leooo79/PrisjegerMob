@@ -101,11 +101,12 @@ fun NavigationGraph(
     viewModel: PrisjegerViewModel = viewModel(),
 ) {
 
-    val uiState2 by viewModel.uiState.collectAsState()
+  //  val uiState2 by viewModel.uiState.collectAsState()
 
     NavHost(navController, startDestination = BottomNavItem.Hjem.screen_route) {
         composable(BottomNavItem.Hjem.screen_route) {
-            HomeScreen()
+         //   HomeScreen()
+            visAPI()
         }
 
         // HANDLELISTE
