@@ -8,15 +8,18 @@ import no.usn.rygleo.prisjegermobv1.data.TestAPI
 import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
-// private const val BASE_URL ="http://prisjeger-app.duckdns.org:6969/api/"
- private const val BASE_URL = "https://www.boredapi.com/api/"
+//private const val BASE_URL ="http://prisjeger-app.duckdns.org:6969/api/"
+  private const val BASE_URL = "https://www.boredapi.com/api/"
+//private const val BASE_URL = "http://prisjeger-app.duckdns.org:6969/api/handlelister/tore@mail.com/"
 
 
     private val
@@ -38,12 +41,17 @@ interface RestApi {
     suspend fun getTestAPI(): TestAPI
 
 
+    @GET("Tore1") // se class TestAPI for values
+    suspend fun getTore(): TestAPI
+
+
+
     @GET("historikk")
     suspend fun getAll(): Varer
     @GET("vareliste") //"vareliste"
-    suspend fun getVareliste(): List<VarenavnAPI>
+    suspend fun getVareliste(): List<Object>
     @GET("butikkliste")
-    suspend fun getButikkliste(): Butikk
+    suspend fun getButikkliste(): Response<List<Butikk>>
     @GET("handlelister/{epost}")
     suspend fun getHandlelister(): List<List<HandlelisteItems>>
     //burde det være bruker klasse her? bruker.epost isteden for direkete epost string?

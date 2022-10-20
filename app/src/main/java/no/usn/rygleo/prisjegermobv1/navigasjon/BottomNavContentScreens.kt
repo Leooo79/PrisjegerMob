@@ -25,7 +25,9 @@ import com.chillibits.simplesettings.item.SimpleSwitchPreference
 import no.usn.rygleo.prisjegermobv1.R
 import no.usn.rygleo.prisjegermobv1.data.Butikk
 import no.usn.rygleo.prisjegermobv1.data.TestAPI
+import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
+import retrofit2.Response
 
 @Composable
 fun HomeScreen() {
@@ -48,28 +50,41 @@ fun HomeScreen() {
 
 
 @Composable
-fun visAPI(prisjegerViewModel: PrisjegerViewModel = viewModel()) {
-    val tekst =   // prisjegerViewModel.varerAPI.observeAsState(initial = emptyList<TestAPI>())
-        prisjegerViewModel.varerAPI.value?.type
+fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
+ //   val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = emptyList<TestAPI>())
+    val status = prisjegerViewModel.status.value
+  //  var tekst = prisjegerViewModel.varerAPI.value?.key
+    val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = null)
+  //  prisjegerViewModel.varerAPI.observeAsState(initial = emptyList())
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.primary)
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = tekst.toString(),
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-     //   Button(onClick = { nyTekst = tekst[0].varenavn.toString() }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.primary)
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                tekst?.let {
+                    Text(
+                        //   text = tekst.value?.key ?: "vent",
+                        text = it.key,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp
+                    )
+                }
+                Text(
+                    text = status.toString(),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp
+                )
 
-     //   }
-    }
+            }
+
 }
 
 

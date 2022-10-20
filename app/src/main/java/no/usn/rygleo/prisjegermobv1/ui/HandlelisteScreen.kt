@@ -55,7 +55,7 @@ TODO: legge inn detaljer i utvidet visning ?
  */
 @Composable
 fun HandlelisteScreen(
-    prisjegerViewModel: PrisjegerViewModel = viewModel(),
+    prisjegerViewModel: PrisjegerViewModel,
     modifier: Modifier = Modifier
 ) {
     var handleModus by rememberSaveable { mutableStateOf(true) }

@@ -98,7 +98,7 @@ fun BottomNavigation(navController: NavController) {
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    viewModel: PrisjegerViewModel = viewModel(),
+    prisjegerViewModel: PrisjegerViewModel = viewModel(),
 ) {
 
   //  val uiState2 by viewModel.uiState.collectAsState()
@@ -106,12 +106,14 @@ fun NavigationGraph(
     NavHost(navController, startDestination = BottomNavItem.Hjem.screen_route) {
         composable(BottomNavItem.Hjem.screen_route) {
          //   HomeScreen()
-            visAPI()
+          //  if (prisjegerViewModel.equals("Vellykket, data hentet"))
+
+ visAPI(prisjegerViewModel)
         }
 
         // HANDLELISTE
         composable(BottomNavItem.Handleliste.screen_route) {
-            HandlelisteScreen()
+            HandlelisteScreen(prisjegerViewModel)
         }
 
         // OM OSS

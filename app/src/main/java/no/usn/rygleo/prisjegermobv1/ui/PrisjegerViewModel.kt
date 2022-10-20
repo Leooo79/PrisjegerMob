@@ -5,6 +5,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.API
@@ -14,6 +15,7 @@ import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
+import retrofit2.Response
 
 
 /**
@@ -24,23 +26,19 @@ import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
 class PrisjegerViewModel(application: Application) : AndroidViewModel(application) {
 
 
-
-  //  private val _status = MutableLiveData<FylkeApiStatus>()
-  //  val status: LiveData<FylkeApiStatus> = _status
+    private val _status = MutableLiveData<String>()
+    val status: LiveData<String> = _status
     private val _varerAPI = MutableLiveData<TestAPI>()
     val varerAPI: LiveData<TestAPI> = _varerAPI
 
     fun getAPIVarer() {
         viewModelScope.launch {
-       //     _status.value = FylkeApiStatus.LOADING
+            _status.value = "Prøver å hente data fra API"
             try {
                 _varerAPI.value = API.retrofitService.getTestAPI()
-             //   _valg.value = varerAPI.value?.type
-                Log.e(null, "Her er verdi: " + _varerAPI)
-        //        _status.value = FylkeApiStatus.DONE
+                _status.value =  "Vellykket, data hentet"
             } catch (e: Exception) {
-       //         _status.value = FylkeApiStatus.ERROR
-           //     _varerAPI.value = listOf(VarenavnAPI())
+                _status.value =  "Feil: ${e.message}"
             }
         }
     }
@@ -77,6 +75,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // Kode som kjøres ved oppstart. Etablere Room database om denne ikke finnes, knytter til repo,
     // og setter livedata til å spørre Room DB etter handlelister
     init {
+    // har prøvd å instansiere API uten at det hjelper mot delay fra testAPI:    API
         getAPIVarer()
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
 
