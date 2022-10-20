@@ -51,39 +51,37 @@ fun HomeScreen() {
 
 @Composable
 fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
- //   val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = emptyList<TestAPI>())
+    //   val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = emptyList<TestAPI>())
     val status = prisjegerViewModel.status.value
-  //  var tekst = prisjegerViewModel.varerAPI.value?.key
+    //  var tekst = prisjegerViewModel.varerAPI.value?.key
     val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = null)
-  //  prisjegerViewModel.varerAPI.observeAsState(initial = emptyList())
+    //  prisjegerViewModel.varerAPI.observeAsState(initial = emptyList())
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.primary)
-                    .wrapContentSize(Alignment.Center)
-            ) {
-                tekst?.let {
-                    Text(
-                        //   text = tekst.value?.key ?: "vent",
-                        text = it.key,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp
-                    )
-                }
-                Text(
-                    text = status.toString(),
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp
-                )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.primary)
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(
+            //   text = tekst.value?.key ?: "vent",
+            text = (tekst?.get(99)?.toString() ?: ""),
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
+        Text(
+            text = status.toString(),
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
 
-            }
+    }
 
 }
 

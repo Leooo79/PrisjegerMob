@@ -17,21 +17,21 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
-//private const val BASE_URL ="http://prisjeger-app.duckdns.org:6969/api/"
-  private const val BASE_URL = "https://www.boredapi.com/api/"
+private const val BASE_URL ="http://prisjeger-app.duckdns.org:6969/api/"
+// private const val BASE_URL = "https://www.boredapi.com/api/"
 //private const val BASE_URL = "http://prisjeger-app.duckdns.org:6969/api/handlelister/tore@mail.com/"
 
 
-    private val
+private val
         moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
-    private val
+    .add(KotlinJsonAdapterFactory())
+    .build()
+private val
         retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(
+    .baseUrl(BASE_URL)
+    .addConverterFactory(
         MoshiConverterFactory.create(moshi))
-        .build()
+    .build()
 
 interface RestApi {
     // TODO funksjon for å teste API. Se URL over. Hentes inn av vM og vises i BottomNavConteneScreens.visAPI()
@@ -49,9 +49,9 @@ interface RestApi {
     @GET("historikk")
     suspend fun getAll(): Varer
     @GET("vareliste") //"vareliste"
-    suspend fun getVareliste(): List<Object>
+    suspend fun getVareliste(): Array<String>
     @GET("butikkliste")
-    suspend fun getButikkliste(): Response<List<Butikk>>
+    suspend fun getButikkliste(): Array<String>
     @GET("handlelister/{epost}")
     suspend fun getHandlelister(): List<List<HandlelisteItems>>
     //burde det være bruker klasse her? bruker.epost isteden for direkete epost string?

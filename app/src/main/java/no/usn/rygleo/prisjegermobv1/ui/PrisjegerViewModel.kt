@@ -25,22 +25,37 @@ import retrofit2.Response
  */
 class PrisjegerViewModel(application: Application) : AndroidViewModel(application) {
 
-
+    // VARIABLER FOR STATUSENDRINGER VED OPPKOBLING MOT API
     private val _status = MutableLiveData<String>()
     val status: LiveData<String> = _status
-    private val _varerAPI = MutableLiveData<TestAPI>()
-    val varerAPI: LiveData<TestAPI> = _varerAPI
+
+    // VARIABLER FOR Å LESE INN VARELISTE FRA API
+    private val _varerAPI = MutableLiveData<Array<String>>()
+    val varerAPI: LiveData<Array<String>> = _varerAPI
+
+    // VARIABLER FOR Å LESE INN BUTIKKLISTE FRA API
+    private val _butikkerAPI = MutableLiveData<Array<String>>()
+    val butikkerAPI: LiveData<Array<String>> = _butikkerAPI
 
     fun getAPIVarer() {
         viewModelScope.launch {
             _status.value = "Prøver å hente data fra API"
             try {
-                _varerAPI.value = API.retrofitService.getTestAPI()
+                _varerAPI.value = API.retrofitService.getVareliste()
                 _status.value =  "Vellykket, data hentet"
             } catch (e: Exception) {
                 _status.value =  "Feil: ${e.message}"
             }
         }
+    }
+
+    fun getAPIButikker() {
+        viewModelScope.launch {
+            try {
+                _butikkerAPI.value = API.retrofitService.getButikkliste()
+            } catch (e:Exception) {
+
+            }        }
     }
 
 
@@ -75,13 +90,14 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // Kode som kjøres ved oppstart. Etablere Room database om denne ikke finnes, knytter til repo,
     // og setter livedata til å spørre Room DB etter handlelister
     init {
-    // har prøvd å instansiere API uten at det hjelper mot delay fra testAPI:    API
+        // har prøvd å instansiere API uten at det hjelper mot delay fra testAPI:    API
         getAPIVarer()
+        getAPIButikker()
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
 
 
         repoVarer = VarerRepo(varerDAO)
-   //     getAPIVarer()
+        //     getAPIVarer()
 
         // sortering på listenavn gjøres nå i filteret -
         //  (@composable HandlelisteScreen.Listevisning()), alle varelinjer emittes fra DB.
@@ -110,7 +126,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             ?.forEach { varer ->
                 if (varer.listenavn.equals(currentListenavn) )
                     sum += varer.antall?.times(varer.enhetspris!!) ?: 0.0
-        }
+            }
         return sum
     }
 
@@ -125,7 +141,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjonen kalles fra composables for å oppdatere hvilken handleliste
      * som vises. Nytt kall på lokal DB + endrer statevariabel listenavn
      */
-     fun setListeNavn(nyttListeNavn: String) {
+    fun setListeNavn(nyttListeNavn: String) {
         currentListenavn = nyttListeNavn
         oppdaterListenavn() // for rekomposisjon
     }
@@ -184,7 +200,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun hentApi() = viewModelScope.launch(Dispatchers.IO) {
         try {
- //           alleVarer = API.retrofitService.getVareliste().asLiveData()
+            //           alleVarer = API.retrofitService.getVareliste().asLiveData()
         } catch (e: Exception) {
             print("dette feiler")
         }

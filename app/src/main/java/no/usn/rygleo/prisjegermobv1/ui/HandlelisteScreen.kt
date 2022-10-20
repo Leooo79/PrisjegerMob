@@ -64,6 +64,7 @@ fun HandlelisteScreen(
     // Lokal DB ROOM
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
 
+
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {
@@ -117,8 +118,8 @@ private fun HeaderVisning(
                         .padding(vertical = 6.dp),
                     onClick = {
                         prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
-                    //    prisjegerViewModel.oppfrisk()
-                    //    prisjegerViewModel.hentApi()
+                        //    prisjegerViewModel.oppfrisk()
+                        //    prisjegerViewModel.hentApi()
                     }
                 ) {
                     if (vareListe.isEmpty())
@@ -140,8 +141,8 @@ private fun HeaderVisning(
                 Column {
                     Button(
                         onClick = {
-                        prisjegerViewModel.insertEnVare("nyttListeNavn") // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
-                        //    prisjegerViewModel.oppfrisk()
+                            prisjegerViewModel.insertEnVare("nyttListeNavn") // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
+                            //    prisjegerViewModel.oppfrisk()
                         }
                     ) {
                         Text("Ny handleliste")
@@ -153,7 +154,7 @@ private fun HeaderVisning(
                 }
                 Spacer(Modifier.size(10.dp))
                 Column {
-                    VelgButikk()
+                    VelgButikk(prisjegerViewModel)
                 }
             }
         }
@@ -171,10 +172,11 @@ private fun HeaderVisning(
  * - Velge butikk -> listen viser priser fra valgt butikk
  */
 @Composable
-fun VelgButikk() {
-    val valgbare = arrayOf("Rema 1000", "Kiwi", "Meny", "Spar")
+fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
+    //   val valgbare = arrayOf("Rema 1000", "Kiwi", "Meny", "Spar")
+    val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
     val valgbareToast = LocalContext.current.applicationContext
-    var tekst by rememberSaveable { mutableStateOf("Rema 1000") }
+    var tekst by rememberSaveable { mutableStateOf(valgbare?.get(0) ?: "") }
     var aktiv by remember {mutableStateOf(false)
     }
     Box(
@@ -195,7 +197,7 @@ fun VelgButikk() {
             }
         ) {
             // legger inn items og viser ved onClick
-            valgbare.forEachIndexed { itemIndex, itemValue ->
+            valgbare?.forEachIndexed { itemIndex, itemValue ->
                 DropdownMenuItem(
                     onClick = {
                         Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
@@ -366,7 +368,7 @@ fun ListeVisning(
             for (varer in vareListe) {
                 if (varer.varenavn.lowercase().contains(searchedText.lowercase())
                     && varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
-                        treffListe.add(varer)
+                    treffListe.add(varer)
                 }
             }
             treffListe
@@ -392,9 +394,9 @@ fun ListeVisning(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun VarelisteItem(
-        vare: Varer,
-        prisjegerViewModel: PrisjegerViewModel,
-    ) {
+    vare: Varer,
+    prisjegerViewModel: PrisjegerViewModel,
+) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
     var bredKolonne = 2F
@@ -465,7 +467,7 @@ fun VarelisteItem(
                     else 0.dp
                 ).value,
                 backgroundColor = MaterialTheme.colors.primary,
-             //   modifier = Modifier.padding(vertical = 4.dp, horizontal = 2.dp)
+                //   modifier = Modifier.padding(vertical = 4.dp, horizontal = 2.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -488,12 +490,12 @@ fun VarelisteItem(
                     ) {
                         vare.varenavn.let { Text(text = it) }
                         if (expanded) {
-                        //    bredKolonne = 4F
-                         //   smalKolonne = 0.25F
+                            //    bredKolonne = 4F
+                            //   smalKolonne = 0.25F
                             Text(text = ("Mer informasjon om vare, " +
                                     "bilder av vare?. ").repeat(3),
 
-                            )
+                                )
                         }
                     }
                     Column(
@@ -551,13 +553,13 @@ fun VarelisteItem(
                                 backgroundColor = MaterialTheme.colors.primaryVariant,
                                 contentColor = Color.White
                             ),
-                           onClick = {
-                               vare.antall?.let {
-                                   vare.varenavn.let { it1 ->
-                                       prisjegerViewModel.oppdaterVare(it.plus(1),
-                                           it1, prisjegerViewModel.currentListenavn)
-                                   }
-                               }
+                            onClick = {
+                                vare.antall?.let {
+                                    vare.varenavn.let { it1 ->
+                                        prisjegerViewModel.oppdaterVare(it.plus(1),
+                                            it1, prisjegerViewModel.currentListenavn)
+                                    }
+                                }
                             }
                         ) {
                             Text(vare.antall.toString())
