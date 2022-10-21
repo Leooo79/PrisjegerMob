@@ -11,9 +11,9 @@ import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
 @Entity(primaryKeys = ["listenavn","varenavn"]) // trenger komposittnøkkel
 data class Varer(
   //  @PrimaryKey(autoGenerate = true) val id: Long? = 0,
-    @ColumnInfo(name = "listenavn") val listenavn: String,
-    @ColumnInfo(name = "varenavn") val varenavn: String,
-    @ColumnInfo(name = "enhetspris") val enhetspris: Double?,
-    @ColumnInfo(name = "antall") val antall: Int?,
+    @ColumnInfo(name = "listenavn")     val listenavn: String,
+    @ColumnInfo(name = "varenavn")      val varenavn: String,
+    @ColumnInfo(name = "enhetspris")    val enhetspris: Double?,
+    @ColumnInfo(name = "antall")        val antall: Int?,
 )
 

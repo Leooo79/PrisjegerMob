@@ -54,7 +54,7 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     //   val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = emptyList<TestAPI>())
     val status = prisjegerViewModel.status.value
     //  var tekst = prisjegerViewModel.varerAPI.value?.key
-    val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = null)
+    val tekst by prisjegerViewModel.hentVarerAPI.observeAsState(initial = null)
     //  prisjegerViewModel.varerAPI.observeAsState(initial = emptyList())
 
     Column(
@@ -65,7 +65,7 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     ) {
         Text(
             //   text = tekst.value?.key ?: "vent",
-            text = (tekst?.get(99)?.toString() ?: ""),
+            text = (tekst?.get(0)?.toString() ?: ""),
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),

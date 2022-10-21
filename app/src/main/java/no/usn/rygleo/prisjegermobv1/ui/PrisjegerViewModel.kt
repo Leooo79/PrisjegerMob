@@ -25,13 +25,20 @@ import retrofit2.Response
  */
 class PrisjegerViewModel(application: Application) : AndroidViewModel(application) {
 
+    // VARIABEL FOR Å BYTTE VISNING AV DATA FRA API/ LOCAL
+    var visAPI: Boolean = false
+
     // VARIABLER FOR STATUSENDRINGER VED OPPKOBLING MOT API
     private val _status = MutableLiveData<String>()
     val status: LiveData<String> = _status
 
     // VARIABLER FOR Å LESE INN VARELISTE FRA API
-    private val _varerAPI = MutableLiveData<Array<String>>()
-    val varerAPI: LiveData<Array<String>> = _varerAPI
+    private val _hentVarerAPI = MutableLiveData<Array<String>>()
+    val hentVarerAPI: LiveData<Array<String>> = _hentVarerAPI
+
+    // VARIABLER FOR VAREOBJEKTER BYGGET FRA API-DATA
+    private val _varerAPI = MutableLiveData<Array<Varer>>()
+    val varerAPI: LiveData<Array<Varer>> = _varerAPI
 
     // VARIABLER FOR Å LESE INN BUTIKKLISTE FRA API
     private val _butikkerAPI = MutableLiveData<Array<String>>()
@@ -41,7 +48,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             _status.value = "Prøver å hente data fra API"
             try {
-                _varerAPI.value = API.retrofitService.getVareliste()
+                _hentVarerAPI.value = API.retrofitService.getVareliste()
+    //            _varerAPI.value = varelisteAPI()
                 _status.value =  "Vellykket, data hentet"
             } catch (e: Exception) {
                 _status.value =  "Feil: ${e.message}"
@@ -59,13 +67,40 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
+/*
+    private fun varelisteAPI(): Array<Varer>? {
+        var liste = emptyArray<Varer>()
+        var teller = 0
+        _hentVarerAPI.value?.forEach { it->
+            liste.set(teller, Varer(currentListenavn, it, 0.0, 0))
+            teller++
+        }
+        return liste
+    }
+
+*/
+    fun lagListe() {
+        var teller = 0
+        var vareApi: Varer
+        for (varenavn in _hentVarerAPI.value!!) {
+            vareApi =
+                Varer(currentListenavn, varenavn, 7.7, 0)
+            insertVare(vareApi)
+            teller++
+        }
+      //  alleVarer = liste
+    }
+
+
+
+
     // Referanse til repo
     private val repoVarer: VarerRepo
 
     // Livedata liste for komposisjon av handlelister fra lokal DB
 
     // TODO: OPPRETTE PRIVATE VAL MED EGET TILGANGSVARIABEL, BØR VÆRE MULIG MED FLOW
-    val alleVarer: LiveData<List<Varer>> // NYTT: ENDRE TIL VAL ETTER ENDRING TIL FLOW, FJERNET SET
+    var alleVarer: LiveData<List<Varer>> // NYTT: ENDRE TIL VAL ETTER ENDRING TIL FLOW, FJERNET SET
 
     // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
@@ -83,6 +118,20 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
 
 
+    fun getLokaleVarer() {
+        viewModelScope.launch {
+            _status.value = "Prøver å hente data fra API"
+            try {
+                _hentVarerAPI.value = API.retrofitService.getVareliste()
+                //            _varerAPI.value = varelisteAPI()
+                _status.value =  "Vellykket, data hentet"
+            } catch (e: Exception) {
+                _status.value =  "Feil: ${e.message}"
+            }
+        }
+    }
+
+
     /**
      * "Konstruktør" ved hjelp av init : kode som kjøres ved oppstart (instansiering av vM)
      * Her kan man legge inn initielle kall på API og andre oppstartsrutiner
@@ -94,8 +143,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         getAPIVarer()
         getAPIButikker()
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
-
-
         repoVarer = VarerRepo(varerDAO)
         //     getAPIVarer()
 
@@ -107,8 +154,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         // Utfordring løst ved å sende alle varelinjer som Flow fra DB og fange med asLiveData()
         // Ulemper: (potensielt) kostbar spørring til lokal DB på alle varelinjer i alle lister
         // Fordeler: raskere respons med alle varerlinjer i memory, det virker endelig :)
+
+
         alleVarer = repoVarer.alleVarer.asLiveData() // NYTT: FLOW FRA LOKAL DB!
 
+      //  lagListe() // overfører API til Lokal
+
+        // TODO: hente inn pris pr vare pr butikk fra API og legg til alleVarer
 
 
     }
@@ -129,6 +181,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             }
         return sum
     }
+
+
+
+
 
 
     fun navnHandleliste(): String {
@@ -172,7 +228,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun insertEnVare(nyttListeNavn: String) {
         // TODO: hvordan opprette handeliste uten vare?
-        var vare = Varer(nyttListeNavn, "", null, null)
+        var vare = Varer(nyttListeNavn, "", 0.0, 0)
         insertVare(vare)
     }
 

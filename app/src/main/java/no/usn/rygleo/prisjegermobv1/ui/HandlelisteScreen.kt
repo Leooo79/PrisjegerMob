@@ -35,8 +35,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
@@ -52,6 +50,10 @@ TODO: legge inn detaljer i utvidet visning ?
  * Funksjon for å bygge opp og vise handleliste
  * Benytter en rekke hjelpemetoder
  * Hovekomponenter er header, søkefelt (TF) og listevisning (LazyC)
+ *
+ * NY LOGIKK 21.10.22 : Henter alle varenavn fra server. Legger i default handleliste på lokal disk.
+ * Viser alle varer i default handleliste som livedata. Endringer kjører update mot lokal DB
+ * TODO: update av server via API
  */
 @Composable
 fun HandlelisteScreen(
@@ -63,6 +65,10 @@ fun HandlelisteScreen(
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     // Lokal DB ROOM
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
+    // Lister fra API
+    val listeAPI by prisjegerViewModel.hentVarerAPI.observeAsState(initial = emptyArray())
+
+    //   val listeAPI by prisjegerViewModel.varerAPI.observeAsState(initial = emptyArray())
 
 
     Column(Modifier
@@ -70,13 +76,14 @@ fun HandlelisteScreen(
     ) {
 
         HeaderVisning(
+            listeAPI,
             uiStateNy, // MÅ SENDE STATEVARIABEL FOR REKOMP VED LISTEBYTTE
             vareListe,
             prisjegerViewModel,
-            iHandleModus = { handleModus = false },
-        )
+        ) { handleModus = false }
         Sokefelt(textState)
-        ListeVisning(vareListe, state = textState, prisjegerViewModel)
+        ListeVisning(vareListe, listeAPI, state = textState, prisjegerViewModel) // ORIGINAL: vareListe
+
     }
 }
 
@@ -88,6 +95,7 @@ fun HandlelisteScreen(
  */
 @Composable
 private fun HeaderVisning(
+    listeApi: Array<String>,
     uiStateNy: VarerUiState, // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
     vareListe: List<Varer>,
     prisjegerViewModel: PrisjegerViewModel,
@@ -108,23 +116,31 @@ private fun HeaderVisning(
             Row {
                 Button(
                     modifier = Modifier.padding(vertical = 6.dp),
-                    onClick = iHandleModus,
+                  //  onClick = iHandleModus,
+                onClick = {
+               //     prisjegerViewModel.visAPI = true
+                    prisjegerViewModel.lagListe()
+
+                }
                 ) {
-                    Text("Nå er vi i handlemodus")
+                    Text("Hent API")
                 }
                 Spacer(Modifier.size(10.dp))
                 Button(
                     modifier = Modifier
                         .padding(vertical = 6.dp),
                     onClick = {
-                        prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
+               //         prisjegerViewModel.visAPI = false
+                //       iHandleModus
+                       // prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
                         //    prisjegerViewModel.oppfrisk()
                         //    prisjegerViewModel.hentApi()
+
+                       // prisjegerViewModel.lagListe(listeApi)
                     }
                 ) {
-                    if (vareListe.isEmpty())
-                        Text("")
-                    else Text("legg til varer")// EGEN STATEVARIABEL
+
+                     Text("Hent lokal DB")// EGEN STATEVARIABEL
                 }
             }
             Row {
@@ -141,7 +157,7 @@ private fun HeaderVisning(
                 Column {
                     Button(
                         onClick = {
-                            prisjegerViewModel.insertEnVare("nyttListeNavn") // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
+                         //   prisjegerViewModel.insertEnVare("nyttListeNavn") // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
                             //    prisjegerViewModel.oppfrisk()
                         }
                     ) {
@@ -176,7 +192,7 @@ fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
     //   val valgbare = arrayOf("Rema 1000", "Kiwi", "Meny", "Spar")
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
     val valgbareToast = LocalContext.current.applicationContext
-    var tekst by rememberSaveable { mutableStateOf(valgbare?.get(0) ?: "") }
+    var tekst by rememberSaveable { mutableStateOf("Velg butikk") }
     var aktiv by remember {mutableStateOf(false)
     }
     Box(
@@ -342,17 +358,29 @@ fun Sokefelt(state: MutableState<TextFieldValue>) {
 @Composable
 fun ListeVisning(
     vareListe: List<Varer>,
+    listeApi: Array<String>,
     state: MutableState<TextFieldValue>,
     prisjegerViewModel: PrisjegerViewModel
 ) {
 
+    var visAPI by rememberSaveable { mutableStateOf(prisjegerViewModel.visAPI) }
+
     val vareliste = ArrayList<Varer>()
-    for (varer in vareListe) {
-        // Kun varelinjer tilhørende inneværende liste(navn) vises
-        if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
-            vareliste.add(varer)
+    if (visAPI) {
+        for (varer in listeApi) {
+            // OBS! TILPASSET DATA FRA API. BYGGER VARER-OBJEKT BASERT PÅ VARENAVN
+            vareliste.add(Varer(prisjegerViewModel.currentListenavn, varer, 0.0, 0))
         }
     }
+    else {
+        for (varer in vareListe) {
+            // Kun varelinjer tilhørende inneværende liste(navn) vises
+            if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
+                vareliste.add(varer)
+            }
+        }
+    }
+
     var filtrerteVarer: ArrayList<Varer>
 
     // bygger LazyColumn - filtrerte treff eller hele lista
@@ -363,6 +391,20 @@ fun ListeVisning(
         val searchedText = state.value.text
         filtrerteVarer = if (searchedText.isEmpty()) {
             vareliste
+
+        } else {
+            val treffListe = ArrayList<Varer>()
+            for (varer in vareliste) {
+                if (varer.varenavn.lowercase().contains(searchedText.lowercase())
+                    && varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
+                    treffListe.add(varer)
+                }
+            }
+            treffListe
+            // TODO utmarkert under er tilpasset local DB
+        } // OBS: Må bruke både varenavn og listenavn som key for id av unike
+
+            /*
         } else {
             val treffListe = ArrayList<Varer>()
             for (varer in vareListe) {
@@ -373,6 +415,8 @@ fun ListeVisning(
             }
             treffListe
         } // OBS: Må bruke både varenavn og listenavn som key for id av unike
+
+             */
         items(filtrerteVarer, {filtrerteVarer:Varer->
             filtrerteVarer.varenavn + filtrerteVarer.listenavn}) { filtrerte ->
             VarelisteItem(filtrerte, prisjegerViewModel)
@@ -554,12 +598,17 @@ fun VarelisteItem(
                                 contentColor = Color.White
                             ),
                             onClick = {
+                                // TODO: if (vare ikke finnes i handeliste fra før) -> insert(vare)
+                                // TODO: if (vare finnes fra før) -> update
+                            //    prisjegerViewModel.insertVare(vare)
                                 vare.antall?.let {
                                     vare.varenavn.let { it1 ->
                                         prisjegerViewModel.oppdaterVare(it.plus(1),
                                             it1, prisjegerViewModel.currentListenavn)
                                     }
                                 }
+
+
                             }
                         ) {
                             Text(vare.antall.toString())
