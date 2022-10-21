@@ -2,26 +2,24 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.API
-import no.usn.rygleo.prisjegermobv1.RestApi
 import no.usn.rygleo.prisjegermobv1.data.*
 import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
-import retrofit2.Response
 
 
 /**
  * Klassen inneholder logikk for App Prisjeger
  * Kommuniserer med screens (visningskomponenter)
  * Kommuniserer med datakilder : klasser - repo - lokal DB (Room) TODO: API/
+ * NYTT 21.10.22 : NYE DATA HENTES FRA API VED OPPSTART OG LEGGES I LOKAL DB (CONFLICT = IGNORE)
+ *
  */
 class PrisjegerViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -79,16 +77,30 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 */
+    /**
+     * Funksjonen overfører varenavn fra API og insert Varer til lokal DB
+     */
     fun lagListe() {
         var teller = 0
         var vareApi: Varer
         for (varenavn in _hentVarerAPI.value!!) {
-            vareApi =
-                Varer(currentListenavn, varenavn, 7.7, 0)
+            vareApi = Varer(currentListenavn, varenavn, 7.7, 0)
             insertVare(vareApi)
             teller++
         }
-      //  alleVarer = liste
+    }
+
+    /**
+     * Funksjonen overfører varenavn fra API og insert Varer til lokal DB
+     */
+    fun lagListeMedValgte() {
+        var teller = 0
+        var vareApi: Varer
+        for (varenavn in alleVarer.value!!) {
+            if (varenavn.antall == 0) {
+                // TODO: slett fra alleVarer - må lage kopi først
+            }
+        }
     }
 
 
@@ -139,12 +151,20 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // Kode som kjøres ved oppstart. Etablere Room database om denne ikke finnes, knytter til repo,
     // og setter livedata til å spørre Room DB etter handlelister
     init {
-        // har prøvd å instansiere API uten at det hjelper mot delay fra testAPI:    API
+        // HENTER DATA FRA API:
         getAPIVarer()
         getAPIButikker()
+
+        // ETABLERER LOKAL DB OM DENNE IKKE FINNES
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
         repoVarer = VarerRepo(varerDAO)
-        //     getAPIVarer()
+
+        // SETTER ALLEVARER TIL Å MOTTA DATA FRA LOKAL DB, OPPDATERES VED ENDRINGER
+        alleVarer = repoVarer.alleVarer.asLiveData() // NYTT: FLOW FRA LOKAL DB!
+
+        // TODO: hente inn pris pr vare pr butikk fra API og legg til alleVarer
+        // TODO: knapp for å kun vise valgte varer (antall > 0)
+
 
         // sortering på listenavn gjøres nå i filteret -
         //  (@composable HandlelisteScreen.Listevisning()), alle varelinjer emittes fra DB.
@@ -154,15 +174,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         // Utfordring løst ved å sende alle varelinjer som Flow fra DB og fange med asLiveData()
         // Ulemper: (potensielt) kostbar spørring til lokal DB på alle varelinjer i alle lister
         // Fordeler: raskere respons med alle varerlinjer i memory, det virker endelig :)
-
-
-        alleVarer = repoVarer.alleVarer.asLiveData() // NYTT: FLOW FRA LOKAL DB!
-
-      //  lagListe() // overfører API til Lokal
-
-        // TODO: hente inn pris pr vare pr butikk fra API og legg til alleVarer
-
-
     }
 
 
@@ -181,8 +192,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             }
         return sum
     }
-
-
 
 
 
@@ -226,6 +235,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         repoVarer.insert(vare)
     }
 
+    /*
     fun insertEnVare(nyttListeNavn: String) {
         // TODO: hvordan opprette handeliste uten vare?
         var vare = Varer(nyttListeNavn, "", 0.0, 0)
@@ -243,6 +253,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
+
+     */
 
     /**
      * Funksjon for å oppdatere en vare (antall)
@@ -292,7 +304,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
-
+/*
     /**
      * Funksjon for å opprette en liste av handlelisteItems
      * Skal erstattes av reelle data fra API
@@ -320,6 +332,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         )
         return liste
     }
+
+ */
 
 
     // ALT NEDENFOR ER GAMMELT/ EKSPERIMENTER *********************************************************************************

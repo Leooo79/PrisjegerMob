@@ -40,9 +40,9 @@ import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
 /*
-TODO: sveipe til venstre for å slette rad/ vare fra lista ?
 TODO: overføring mellom lister ?
 TODO: legge inn detaljer i utvidet visning ?
+TODO: trenger en sorteringsfunksjon for å sortere liste etter slett/ hent flere varer
  */
 
 
@@ -53,6 +53,7 @@ TODO: legge inn detaljer i utvidet visning ?
  *
  * NY LOGIKK 21.10.22 : Henter alle varenavn fra server. Legger i default handleliste på lokal disk.
  * Viser alle varer i default handleliste som livedata. Endringer kjører update mot lokal DB
+ * NYTT 21.10.22 : NYE DATA HENTES FRA API VED OPPSTART OG LEGGES I LOKAL DB (CONFLICT = IGNORE)
  * TODO: update av server via API
  */
 @Composable
@@ -66,7 +67,7 @@ fun HandlelisteScreen(
     // Lokal DB ROOM
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
     // Lister fra API
-    val listeAPI by prisjegerViewModel.hentVarerAPI.observeAsState(initial = emptyArray())
+   // val listeAPI by prisjegerViewModel.hentVarerAPI.observeAsState(initial = emptyArray())
 
     //   val listeAPI by prisjegerViewModel.varerAPI.observeAsState(initial = emptyArray())
 
@@ -76,13 +77,12 @@ fun HandlelisteScreen(
     ) {
 
         HeaderVisning(
-            listeAPI,
             uiStateNy, // MÅ SENDE STATEVARIABEL FOR REKOMP VED LISTEBYTTE
             vareListe,
             prisjegerViewModel,
         ) { handleModus = false }
         Sokefelt(textState)
-        ListeVisning(vareListe, listeAPI, state = textState, prisjegerViewModel) // ORIGINAL: vareListe
+        ListeVisning(vareListe, /*listeAPI,*/ state = textState, prisjegerViewModel) // ORIGINAL: vareListe
 
     }
 }
@@ -95,7 +95,6 @@ fun HandlelisteScreen(
  */
 @Composable
 private fun HeaderVisning(
-    listeApi: Array<String>,
     uiStateNy: VarerUiState, // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
     vareListe: List<Varer>,
     prisjegerViewModel: PrisjegerViewModel,
@@ -118,29 +117,20 @@ private fun HeaderVisning(
                     modifier = Modifier.padding(vertical = 6.dp),
                   //  onClick = iHandleModus,
                 onClick = {
-               //     prisjegerViewModel.visAPI = true
-                    prisjegerViewModel.lagListe()
-
+                    prisjegerViewModel.lagListeMedValgte()
                 }
                 ) {
-                    Text("Hent API")
+                    Text("Vis bare valgte")
                 }
                 Spacer(Modifier.size(10.dp))
                 Button(
                     modifier = Modifier
                         .padding(vertical = 6.dp),
                     onClick = {
-               //         prisjegerViewModel.visAPI = false
-                //       iHandleModus
-                       // prisjegerViewModel.lagTestliste() // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
-                        //    prisjegerViewModel.oppfrisk()
-                        //    prisjegerViewModel.hentApi()
-
-                       // prisjegerViewModel.lagListe(listeApi)
+                        prisjegerViewModel.lagListe()
                     }
                 ) {
-
-                     Text("Hent lokal DB")// EGEN STATEVARIABEL
+                     Text("Legg til flere varer")
                 }
             }
             Row {
@@ -157,8 +147,10 @@ private fun HeaderVisning(
                 Column {
                     Button(
                         onClick = {
-                         //   prisjegerViewModel.insertEnVare("nyttListeNavn") // FOR TESTING - OPPRETTER TO HANDLELISTER MED LITT DATA
-                            //    prisjegerViewModel.oppfrisk()
+                            // OPPRETTER NY LISTE MED NAVN FRA BRUKER
+                            prisjegerViewModel.setListeNavn("NavnFraBruker")
+                            // HENTER INN VARELISTE FRA API OG LEGGER INN VARER I LOKAL DB
+                            prisjegerViewModel.lagListe()
                         }
                     ) {
                         Text("Ny handleliste")
@@ -166,10 +158,12 @@ private fun HeaderVisning(
                 }
                 Spacer(Modifier.size(10.dp))
                 Column {
+                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
                     VelgHandleliste(prisjegerViewModel)
                 }
                 Spacer(Modifier.size(10.dp))
                 Column {
+                    // DROPDOWN FOR VALG AV BUTIKK -> VISER AKTUELLE PRISER
                     VelgButikk(prisjegerViewModel)
                 }
             }
@@ -189,7 +183,6 @@ private fun HeaderVisning(
  */
 @Composable
 fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
-    //   val valgbare = arrayOf("Rema 1000", "Kiwi", "Meny", "Spar")
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
     val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf("Velg butikk") }
@@ -236,7 +229,7 @@ fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
  */
 @Composable
 fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
-    val valgbare = arrayOf("RoomListe1", "RoomListe2", "nyttListeNavn")
+    val valgbare = arrayOf(prisjegerViewModel.currentListenavn, "RoomListe2", "RoomListe1", "NavnFraBruker")
     val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf(prisjegerViewModel.currentListenavn) }
     var aktiv by remember {mutableStateOf(false) }
@@ -358,14 +351,15 @@ fun Sokefelt(state: MutableState<TextFieldValue>) {
 @Composable
 fun ListeVisning(
     vareListe: List<Varer>,
-    listeApi: Array<String>,
+ //   listeApi: Array<String>,
     state: MutableState<TextFieldValue>,
     prisjegerViewModel: PrisjegerViewModel
 ) {
 
-    var visAPI by rememberSaveable { mutableStateOf(prisjegerViewModel.visAPI) }
+   // var visAPI by rememberSaveable { mutableStateOf(prisjegerViewModel.visAPI) }
 
     val vareliste = ArrayList<Varer>()
+    /*
     if (visAPI) {
         for (varer in listeApi) {
             // OBS! TILPASSET DATA FRA API. BYGGER VARER-OBJEKT BASERT PÅ VARENAVN
@@ -373,13 +367,15 @@ fun ListeVisning(
         }
     }
     else {
+
+     */
         for (varer in vareListe) {
             // Kun varelinjer tilhørende inneværende liste(navn) vises
             if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
                 vareliste.add(varer)
             }
         }
-    }
+ //   }
 
     var filtrerteVarer: ArrayList<Varer>
 
@@ -401,7 +397,6 @@ fun ListeVisning(
                 }
             }
             treffListe
-            // TODO utmarkert under er tilpasset local DB
         } // OBS: Må bruke både varenavn og listenavn som key for id av unike
 
             /*
@@ -455,6 +450,7 @@ fun VarelisteItem(
 
     if (dismissState.currentValue != DismissValue.Default) {
         LaunchedEffect(Unit) { // for suspendert kall
+            // TODO: enten finne bedre key for lazycolumn eller endre animasjon
             dismissState.reset() // må resette plassering/ state FØR SLETTING for å kunne vise samme key senere
             prisjegerViewModel.slettVare(vare) // sletter rad fra handleliste
         }
@@ -556,8 +552,7 @@ fun VarelisteItem(
                             .padding(2.dp)
                             .align(Alignment.CenterVertically)
                     ) { // kontroll for null, utregning av sumPrVare, avrunding 2 desimal
-                        if (vare.antall == null) Text("")
-                        else Text(text = (Math.round((vare.enhetspris?.times(vare.antall))?.times(
+                        Text(text = (Math.round((vare.antall?.let { vare.enhetspris?.times(it) })?.times(
                             100.00
                         ) ?: 0.0) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
                     }
@@ -582,7 +577,7 @@ fun VarelisteItem(
                                     }
                                 }
                             }
-                        ) {
+                        ) { // viser antall pr vare/ rad
                             Text(vare.antall.toString())
                         }
                     }
@@ -598,19 +593,16 @@ fun VarelisteItem(
                                 contentColor = Color.White
                             ),
                             onClick = {
-                                // TODO: if (vare ikke finnes i handeliste fra før) -> insert(vare)
-                                // TODO: if (vare finnes fra før) -> update
-                            //    prisjegerViewModel.insertVare(vare)
+                                // update mot lokal DB
+                                // TODO: update mot APi
                                 vare.antall?.let {
                                     vare.varenavn.let { it1 ->
                                         prisjegerViewModel.oppdaterVare(it.plus(1),
                                             it1, prisjegerViewModel.currentListenavn)
                                     }
                                 }
-
-
                             }
-                        ) {
+                        ) {  // viser antall pr vare/ rad
                             Text(vare.antall.toString())
                         }
                     }

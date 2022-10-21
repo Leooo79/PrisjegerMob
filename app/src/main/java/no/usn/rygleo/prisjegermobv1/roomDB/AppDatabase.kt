@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
 // satt exportSchema = false - se build.gradle for info og kode for export
-@Database(entities = arrayOf(Bruker::class, Varer::class), version = 8, exportSchema = false)
+@Database(entities = arrayOf(Bruker::class, Varer::class), version = 11, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {   // HUSK Å ENDRE VERSJON VED NYTT SCHEMA
 
     abstract fun brukerDAO(): BrukerDAO

@@ -12,7 +12,7 @@ interface VarerDAO {
 
 
     // sortering på listenavn gjøres i filteret (composable)
-    @Query("SELECT * FROM Varer")
+    @Query("SELECT * FROM Varer ORDER BY varenavn ASC")
     fun getAlleVarer2(): Flow<List<Varer>>
 
 
@@ -24,7 +24,7 @@ interface VarerDAO {
     fun listePrId(alleVarer: IntArray): List<Varer>
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg varer: Varer)
 
 
