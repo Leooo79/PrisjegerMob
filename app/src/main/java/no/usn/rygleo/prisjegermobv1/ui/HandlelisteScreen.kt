@@ -101,6 +101,7 @@ private fun HeaderVisning(
     iHandleModus: () -> Unit,
 ) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
+    var sortert = remember { mutableStateOf(false)}
 
     Card(
         backgroundColor = MaterialTheme.colors.secondary,
@@ -115,22 +116,23 @@ private fun HeaderVisning(
             Row {
                 Button(
                     modifier = Modifier.padding(vertical = 6.dp),
-                  //  onClick = iHandleModus,
-                onClick = {
-                    prisjegerViewModel.lagListeMedValgte()
-                }
+                    onClick = { prisjegerViewModel.getSortertLokaleVarer() }
                 ) {
-                    Text("Vis bare valgte")
+                    Text("Antall > 0")
                 }
                 Spacer(Modifier.size(10.dp))
                 Button(
-                    modifier = Modifier
-                        .padding(vertical = 6.dp),
-                    onClick = {
-                        prisjegerViewModel.lagListe()
-                    }
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    onClick = { prisjegerViewModel.getLokaleVarer() }
                 ) {
-                     Text("Legg til flere varer")
+                    Text("Alle")
+                }
+                Spacer(Modifier.size(10.dp))
+                Button(
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    onClick = { prisjegerViewModel.oppdaterListeFraApi() }
+                ) {
+                     Text("Hent API")
                 }
             }
             Row {
@@ -150,7 +152,7 @@ private fun HeaderVisning(
                             // OPPRETTER NY LISTE MED NAVN FRA BRUKER
                             prisjegerViewModel.setListeNavn("NavnFraBruker")
                             // HENTER INN VARELISTE FRA API OG LEGGER INN VARER I LOKAL DB
-                            prisjegerViewModel.lagListe()
+                            prisjegerViewModel.oppdaterListeFraApi()
                         }
                     ) {
                         Text("Ny handleliste")

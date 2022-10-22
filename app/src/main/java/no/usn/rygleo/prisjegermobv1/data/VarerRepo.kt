@@ -15,7 +15,8 @@ import java.util.concurrent.Callable
 class VarerRepo(private val varerDAO: VarerDAO) {
 
     // sortering på listenavn gjøres i filteret (composable)
-    val alleVarer: Flow<List<Varer>> = varerDAO.getAlleVarer2()
+    //val alleVarer: Flow<List<Varer>> = varerDAO.getAlleVarer2()
+  //  val alleVarerSortert: Flow<List<Varer>> = varerDAO.getAlleVarer()
 
 
     suspend fun insert(varer: Varer) {
@@ -40,8 +41,12 @@ class VarerRepo(private val varerDAO: VarerDAO) {
         varerDAO.delete2(varenavn, listenavn)
     }
 
-    suspend fun getAlleVarer(listenavn: String) {
-        varerDAO.getAlleVarer(listenavn)
+    suspend fun getAlleVarer() : Flow<List<Varer>> {
+        return varerDAO.getAlleVarer()
+    }
+
+    suspend fun getAlleVarer2() : Flow<List<Varer>> {
+        return varerDAO.getAlleVarer()
     }
 
     suspend fun getVare(varenavn: String) {

@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface VarerDAO {
 
-    @Query("SELECT * FROM Varer WHERE listenavn IN (:listenavn)")
-    fun getAlleVarer(listenavn: String): Flow<List<Varer>>
+    @Query("SELECT * FROM Varer WHERE antall > 0 ORDER BY varenavn ASC")
+    fun getAlleVarer(): Flow<List<Varer>>
 
 
     // sortering på listenavn gjøres i filteret (composable)
