@@ -308,6 +308,7 @@ fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
 
 
 
+
 /**
  * Søkefelt for å søke på varenavn.
  * Bygger tabell som grunnlag for items i Lazycolumn
@@ -488,7 +489,7 @@ fun VarelisteItem(
             // TODO: enten finne bedre key for lazycolumn eller endre animasjon
             dismissState.reset() // må dessverre resette plassering/ state FØR SLETTING for å kunne
                                 // vise samme key senere. Skyldes PK = varenavn+listenavn
-            prisjegerViewModel.slettHandleliste(vare) // sletter rad fra handleliste
+            prisjegerViewModel.slettVare(vare) // sletter rad fra handleliste
         }
     }
 
@@ -649,56 +650,6 @@ fun VarelisteItem(
 } // slutt fun VarelisteItem
 
 
-
-
-
-/**
- * IKKE I BRUK. EGEN COMP FOR ALERTDIALOG. SKREVET DIREKTE INN I HEADER
- */
-@Composable
-fun skrivInnListenavn(prisjegerViewModel: PrisjegerViewModel) {
-    val openDialog = remember { mutableStateOf(true) }
-    var text by remember { mutableStateOf("") }
-
-    if (openDialog.value) {
-        AlertDialog(
-            onDismissRequest = {
-                openDialog.value = false
-            },
-            title = {
-                Text(text = "Title")
-            },
-            text = {
-                Column() {
-                    TextField(
-                        value = text,
-                        onValueChange = { text = it }
-                    )
-    //                Text("Custom Text")
-    //                Checkbox(checked = false, onCheckedChange = {})
-                }
-            },
-            buttons = {
-                Row(
-                    modifier = Modifier.padding(all = 8.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            openDialog.value = false
-                            prisjegerViewModel.setListeNavn(text)
-                            prisjegerViewModel.oppdaterListeFraApi()
-                     //       prisjegerViewModel.nyHandleliste(!prisjegerViewModel.visAlertListenavn)
-                        }
-                    ) {
-                        Text("Lagre navn")
-                    }
-                }
-            }
-        )
-    }
-}
 
 
 
