@@ -55,6 +55,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     lateinit var alleVarer: LiveData<List<Varer>>
         private set
 
+    // Variabel for uthenting og lagring av listenavn fra lokal DB
+    // VARIABLER FOR Å LESE INN BUTIKKLISTE FRA API
+    lateinit var alleListenavn: LiveData<Array<String>>
+        private set
+
     // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
 
@@ -98,6 +103,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
         // SETTER ALLEVARER TIL Å MOTTA DATA FRA LOKAL DB, OPPDATERES VED ENDRINGER
         getLokaleVarer()
+
+        // HENTER INN UNIKE LISTENAVN FRA LOKAL DB
+        getAlleListenavn()
+
+        // GAMMEL UTHENTING FRA LOKAL DB
     //    alleVarer = repoVarer.alleVarer.asLiveData() // NYTT: FLOW FRA LOKAL DB!
       //  getLokaleVarer()
 
@@ -174,8 +184,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 vareApi = Varer(currentListenavn, varenavn, 7.7, 0)
                 insertVare(vareApi)
                 teller++
-                _status.value =  "Vellykket, lokal DB oppdatert"
             }
+            _status.value =  "Vellykket, lokal DB oppdatert"
         } catch (e: Exception) {
             _status.value =  "Feil: ${e.message}"
         }
@@ -230,6 +240,27 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
+    /**
+     * Funksjonen etablerer og bytter ut innhold i LiveData -> LazyColumn fra lokal DB
+     * Bytter til varer med antall > 0
+     */
+    fun getAlleListenavn() {
+        viewModelScope.launch {
+            _status.value = "Henter unike listenavn fra lokal DB"
+            try {
+                alleListenavn = varerDAO.getAlleListenavn().asLiveData()
+                _status.value =  "Vellykket, unike listenavn hentet ut"
+       //         setSortert() // rekomposisjon
+            } catch (e: Exception) {
+                _status.value =  "Feil: ${e.message}"
+            }
+        }
+    }
+
+
+
+
+
 
     /**
      * Funksjon for å regne ut sum pr handleliste.
@@ -237,6 +268,26 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Rekomp ikke nødvendig, trigges av endret antall pr varelinje (LiveData)
      */
     fun sumPrHandleliste(): Double {
+        var sum = 0.0
+        alleVarer.value
+            ?.forEach { varer ->
+                if (varer.listenavn.equals(currentListenavn) )
+                    sum += varer.antall?.times(varer.enhetspris!!) ?: 0.0
+            }
+        return sum
+    }
+
+
+
+
+
+
+    /**
+     * Funksjon for å regne ut sum pr handleliste.
+     * Kalles fra composables (HandlelisteScreen.HeaderVisning())
+     * Rekomp ikke nødvendig, trigges av endret antall pr varelinje (LiveData)
+     */
+    fun hentUtListenavn(): Double {
         var sum = 0.0
         alleVarer.value
             ?.forEach { varer ->

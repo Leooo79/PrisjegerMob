@@ -16,6 +16,10 @@ interface VarerDAO {
     fun getAlleVarer2(): Flow<List<Varer>>
 
 
+    @Query("SELECT DISTINCT listenavn FROM Varer ORDER BY listenavn ASC")
+    fun getAlleListenavn(): Flow<Array<String>>
+
+
     @Query("SELECT varenavn FROM Varer WHERE varenavn IN (:varenavn)")
     fun getVare(varenavn: String): String
 

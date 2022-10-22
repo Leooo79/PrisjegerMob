@@ -178,10 +178,8 @@ private fun HeaderVisning(
 
 /**
  * Enkel nedtrekksmeny for å velge butikk
- * Visning med Toast
- * Events:
- * - Aktivere/ deaktivere meny
- * - Velge butikk -> listen viser priser fra valgt butikk
+ * Butikknavn hentes fra backend API ved oppstart
+ * TODO: trenger vi push fra server ved endring/ flere navn?
  */
 @Composable
 fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
@@ -228,10 +226,12 @@ fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
 /**
  * Funksjon for å velge hvilken handleliste som skal vises
  * Endrer variabel currentListenavn i vM som er grunnlag for sortering av liste fra DB
+ * Listenavn hentes fra lokal DB og oppdateres automatisk med LiveData
  */
 @Composable
 fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
-    val valgbare = arrayOf(prisjegerViewModel.currentListenavn, "RoomListe2", "RoomListe1", "NavnFraBruker")
+    val valgbare by prisjegerViewModel.alleListenavn.observeAsState(initial = null)
+   //  val valgbare = arrayOf(prisjegerViewModel.currentListenavn, "RoomListe2", "RoomListe1", "NavnFraBruker")
     val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf(prisjegerViewModel.currentListenavn) }
     var aktiv by remember {mutableStateOf(false) }
@@ -255,7 +255,7 @@ fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
             }
         ) {
             // legger inn items og viser ved onClick
-            valgbare.forEachIndexed { itemIndex, itemValue ->
+            valgbare?.forEachIndexed { itemIndex, itemValue ->
                 DropdownMenuItem(
                     onClick = {
                         Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
