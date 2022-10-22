@@ -57,33 +57,30 @@ TODO: trenger en sorteringsfunksjon for å sortere liste etter slett/ hent flere
  * TODO: update av server via API
  */
 @Composable
-fun HandlelisteScreen(
-    prisjegerViewModel: PrisjegerViewModel,
-    modifier: Modifier = Modifier
-) {
-    var handleModus by rememberSaveable { mutableStateOf(true) }
+fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
+
     val uiStateNy by prisjegerViewModel.uiStateNy.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-    // Lokal DB ROOM
+    // Alle varelinjer/ handlelister lagret i lokal DB (PK = varenavn + listenavn)
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
-    // Lister fra API
-   // val listeAPI by prisjegerViewModel.hentVarerAPI.observeAsState(initial = emptyArray())
 
-    //   val listeAPI by prisjegerViewModel.varerAPI.observeAsState(initial = emptyArray())
-
-
+    // Innhold på denne siden : Header + Søkefelt + Listevisning
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {
-
+        // MÅ SENDE STATEVARIABEL TIL HEADER FOR REKOMP VED LISTEBYTTE
         HeaderVisning(
-            uiStateNy, // MÅ SENDE STATEVARIABEL FOR REKOMP VED LISTEBYTTE
+            uiStateNy,
+            prisjegerViewModel
+        )
+        Sokefelt(
+            textState
+        )
+        ListeVisning(
             vareListe,
-            prisjegerViewModel,
-        ) { handleModus = false }
-        Sokefelt(textState)
-        ListeVisning(vareListe, /*listeAPI,*/ state = textState, prisjegerViewModel) // ORIGINAL: vareListe
-
+            state = textState,
+            prisjegerViewModel
+        )
     }
 }
 
@@ -92,17 +89,52 @@ fun HandlelisteScreen(
 
 /**
  * Funksjon for å bygge opp og vise header med valg og aggregerte data
+ * // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
  */
 @Composable
-private fun HeaderVisning(
-    uiStateNy: VarerUiState, // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
-    vareListe: List<Varer>,
-    prisjegerViewModel: PrisjegerViewModel,
-    iHandleModus: () -> Unit,
-) {
-    val textState = remember { mutableStateOf(TextFieldValue("")) }
-    var sortert = remember { mutableStateOf(false)}
+private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: PrisjegerViewModel) {
 
+    val alertDialog = remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
+
+    // Åpner alertDialog for nytt listenavn fra bruker ved behov
+    if (alertDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                alertDialog.value = false
+            },
+            title = {
+                Text(text = "Title")
+            },
+            text = {
+                Column() {
+                    TextField(
+                        value = text,
+                        onValueChange = { text = it }
+                    )
+                }
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
+                            alertDialog.value = false
+                            prisjegerViewModel.setListeNavn(text) // endrer listenavn
+                            prisjegerViewModel.oppdaterListeFraApi() // henter alle varer
+                        }
+                    ) {
+                        Text("Lagre navn")
+                    }
+                }
+            }
+        )
+    }
+
+    // Innhold i Header
     Card(
         backgroundColor = MaterialTheme.colors.secondary,
     ) {
@@ -149,10 +181,8 @@ private fun HeaderVisning(
                 Column {
                     Button(
                         onClick = {
-                            // OPPRETTER NY LISTE MED NAVN FRA BRUKER
-                            prisjegerViewModel.setListeNavn("NavnFraBruker")
-                            // HENTER INN VARELISTE FRA API OG LEGGER INN VARER I LOKAL DB
-                            prisjegerViewModel.oppdaterListeFraApi()
+                            // Åpner alertDialog for nytt listenavn
+                            alertDialog.value = true
                         }
                     ) {
                         Text("Ny handleliste")
@@ -223,6 +253,9 @@ fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
 }
 
 
+
+
+
 /**
  * Funksjon for å velge hvilken handleliste som skal vises
  * Endrer variabel currentListenavn i vM som er grunnlag for sortering av liste fra DB
@@ -231,9 +264,8 @@ fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
 @Composable
 fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
     val valgbare by prisjegerViewModel.alleListenavn.observeAsState(initial = null)
-   //  val valgbare = arrayOf(prisjegerViewModel.currentListenavn, "RoomListe2", "RoomListe1", "NavnFraBruker")
     val valgbareToast = LocalContext.current.applicationContext
-    var tekst by rememberSaveable { mutableStateOf(prisjegerViewModel.currentListenavn) }
+    var tekst = prisjegerViewModel.currentListenavn // OBS!! DETTE GIR REKOMP
     var aktiv by remember {mutableStateOf(false) }
 
     Box(
@@ -424,6 +456,7 @@ fun ListeVisning(
 
 
 
+
 /**
  * Funksjonen bygger opp og viser handlelister/ varelister
  * Kolonner består av datafelt fra Varer objekt/ entitet (lokal DB)
@@ -453,8 +486,9 @@ fun VarelisteItem(
     if (dismissState.currentValue != DismissValue.Default) {
         LaunchedEffect(Unit) { // for suspendert kall
             // TODO: enten finne bedre key for lazycolumn eller endre animasjon
-            dismissState.reset() // må resette plassering/ state FØR SLETTING for å kunne vise samme key senere
-            prisjegerViewModel.slettVare(vare) // sletter rad fra handleliste
+            dismissState.reset() // må dessverre resette plassering/ state FØR SLETTING for å kunne
+                                // vise samme key senere. Skyldes PK = varenavn+listenavn
+            prisjegerViewModel.slettHandleliste(vare) // sletter rad fra handleliste
         }
     }
 
@@ -613,6 +647,58 @@ fun VarelisteItem(
         } // slutt dismissContent (Card)
     ) // slutt SwipeToDismiss
 } // slutt fun VarelisteItem
+
+
+
+
+
+/**
+ * IKKE I BRUK. EGEN COMP FOR ALERTDIALOG. SKREVET DIREKTE INN I HEADER
+ */
+@Composable
+fun skrivInnListenavn(prisjegerViewModel: PrisjegerViewModel) {
+    val openDialog = remember { mutableStateOf(true) }
+    var text by remember { mutableStateOf("") }
+
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                openDialog.value = false
+            },
+            title = {
+                Text(text = "Title")
+            },
+            text = {
+                Column() {
+                    TextField(
+                        value = text,
+                        onValueChange = { text = it }
+                    )
+    //                Text("Custom Text")
+    //                Checkbox(checked = false, onCheckedChange = {})
+                }
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            openDialog.value = false
+                            prisjegerViewModel.setListeNavn(text)
+                            prisjegerViewModel.oppdaterListeFraApi()
+                     //       prisjegerViewModel.nyHandleliste(!prisjegerViewModel.visAlertListenavn)
+                        }
+                    ) {
+                        Text("Lagre navn")
+                    }
+                }
+            }
+        )
+    }
+}
 
 
 

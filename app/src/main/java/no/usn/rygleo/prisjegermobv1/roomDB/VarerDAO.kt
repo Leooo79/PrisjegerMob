@@ -43,7 +43,6 @@ interface VarerDAO {
     fun delete(varer: Varer)
 
 
-    @Query("DELETE FROM varer WHERE varenavn = :varenavn " +
-            "AND listenavn = :listenavn")
-    fun delete2(varenavn: String, listenavn: String)
+    @Query("DELETE FROM varer WHERE listenavn = :listenavn")
+    fun delete2(listenavn: String)
 }

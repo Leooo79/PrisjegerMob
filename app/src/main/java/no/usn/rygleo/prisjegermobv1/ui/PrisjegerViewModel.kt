@@ -63,6 +63,12 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
 
+    var visAlertListenavn: Boolean = false
+
+
+    private val _currentListenavn2 = MutableLiveData<String>()
+    val currentListenavn2: LiveData<String> = _currentListenavn2
+
     // Referanse til DAO for handlelister
     val varerDAO: VarerDAO
 
@@ -77,13 +83,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     private val _uiStateNy = MutableStateFlow(
         VarerUiState(
             listenavn = currentListenavn,
-            sortert = false
+            sortert = false,
+            nyHandleliste = visAlertListenavn
         )
     )
     val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
-
-
-
 
 
     /**
@@ -93,6 +97,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // Kode som kjøres ved oppstart. Etablere Room database om denne ikke finnes, knytter til repo,
     // og setter livedata til å spørre Room DB etter handlelister
     init {
+        // SETT LISTENAVN
+   //     _currentListenavn.value = "RoomListe1"
         // HENTER DATA FRA API:
         getAPIVarer()
         getAPIButikker()
@@ -315,6 +321,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         oppdaterListenavn() // for rekomposisjon
     }
 
+    fun nyHandleliste(endre: Boolean) {
+        endreStatusHandleliste(endre)
+    }
+
 
 
 
@@ -339,6 +349,19 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         _uiStateNy.update { currentState ->
             currentState.copy(
                 sortert = true,
+            )
+        }
+    }
+
+
+
+    /**
+     * Hjelpemetode for å oppdatere state på listenavn -> rekomposisjon
+     */
+    private fun endreStatusHandleliste(endre: Boolean) {
+        _uiStateNy.update { currentState ->
+            currentState.copy(
+                nyHandleliste = endre,
             )
         }
     }
@@ -406,6 +429,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun slettVare(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
         repoVarer.delete(varer)
+    }
+
+
+
+
+    /**
+     * Funksjon for å slette en vare
+     */
+    fun slettHandleliste(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
+        repoVarer.delete2(varer.listenavn)
     }
 
 
