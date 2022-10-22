@@ -26,9 +26,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Variabler for oppkobling mot backend API
      */
-    // VARIABEL FOR Å BYTTE VISNING AV DATA FRA API/ LOCAL
-    var visAPI: Boolean = false
-
     // VARIABLER FOR STATUSENDRINGER VED OPPKOBLING MOT API
     private val _status = MutableLiveData<String>()
     val status: LiveData<String> = _status
@@ -50,9 +47,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     private val repoVarer: VarerRepo
 
     // Livedata liste for komposisjon av handlelister fra lokal DB
-    // var pga ønske om Flow fra Room lokal DB
+    // var ( ikke val ) pga ønske om Flow fra Room lokal DB
     // Benytter som observerbar liste fra lokal DB til handlelistevisning (Screen)
+    // Alle endringer i alleVarer trigger rekomposisjon, men ny spørring
+    // trigges ved å endre statevariabler i class VarerUiState
+    // _uiStateNy.update() {currentState->currentState.copy()}
     lateinit var alleVarer: LiveData<List<Varer>>
+        private set
 
     // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
@@ -65,7 +66,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     /**
      * Statevariabeler i egen klasse for å ivareta endringer i state utover LiveData
-     * For rekomposisjon
+     * For rekomposisjon, færre variabler i composables
      * TODO: Her kan man etablere flere statevariabler, kan virke for hele App Prisjeger. Benytter kopier for å endre state, se under
      */
     private val _uiStateNy = MutableStateFlow(
@@ -120,7 +121,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Varer som allerede er lagret i lokal DB med identisk listenavn blir ignorert
      *
      */
-    fun getAPIVarer() {
+    private fun getAPIVarer() {
         viewModelScope.launch {
             _status.value = "Prøver å hente varenavn fra API"
             try {
@@ -142,7 +143,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Kjøres ved oppstart og legger alle butikknavn inn i Array
      *
      */
-    fun getAPIButikker() {
+    private fun getAPIButikker() {
         viewModelScope.launch {
             _status.value = "Prøver å hente butikknavn fra API"
             try {
@@ -326,8 +327,9 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjon for å oppdatere Varer-objekt i lokal DB (antall+-1)
      * TODO: burde denne vært private siden update til DB?
      */
-    fun oppdaterVare(nyAntall: Int, varenavn: String, listenavn: String) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.update(nyAntall, varenavn, listenavn)
+    fun oppdaterVare(nyAntall: Int, varenavn: String, listenavn: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repoVarer.update(nyAntall, varenavn, listenavn)
     }
 
 
