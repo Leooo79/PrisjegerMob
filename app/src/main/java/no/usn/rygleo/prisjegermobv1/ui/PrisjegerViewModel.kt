@@ -415,8 +415,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Funksjon for å slette en vare
      */
-    fun slettHandleliste(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.delete2(varer.listenavn)
+    fun slettHandleliste() = viewModelScope.launch(Dispatchers.IO) {
+        repoVarer.delete2(currentListenavn)
     }
 
 

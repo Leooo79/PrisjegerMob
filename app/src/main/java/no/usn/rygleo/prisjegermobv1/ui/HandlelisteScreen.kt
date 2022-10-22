@@ -104,7 +104,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 alertDialog.value = false
             },
             title = {
-                Text(text = "Title")
+                Text(text = "Skriv inn navn på ny liste")
             },
             text = {
                 Column() {
@@ -118,7 +118,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 Row(
                     modifier = Modifier.padding(all = 8.dp),
                     horizontalArrangement = Arrangement.Center
-                ) {
+                ) { // Bekreftelse fra bruker
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
@@ -127,12 +127,66 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                             prisjegerViewModel.oppdaterListeFraApi() // henter alle varer
                         }
                     ) {
-                        Text("Lagre navn")
+                        Text("Lagre ny liste")
                     }
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.getSortertLokaleVarer()
+                        alertDialog.value = false
+                    }
+                ) {
+                    Text("Vis bare valgte")
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.getLokaleVarer()
+                        alertDialog.value = false
+                    }
+                ) {
+                    Text("Vis alle varer")
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.oppdaterListeFraApi()
+                        alertDialog.value = false
+                    }
+                ) {
+                    Text("Oppdater handleliste")
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.slettHandleliste()
+                        alertDialog.value = false
+                    }
+                ) {
+                    Text("Slett handleliste !")
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        alertDialog.value = false
+                    }
+                ) {
+                    Text("Tilbake")
                 }
             }
         )
-    }
+    } // slutt alertDialog
 
     // Innhold i Header
     Card(
@@ -145,28 +199,6 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row {
-                Button(
-                    modifier = Modifier.padding(vertical = 6.dp),
-                    onClick = { prisjegerViewModel.getSortertLokaleVarer() }
-                ) {
-                    Text("Antall > 0")
-                }
-                Spacer(Modifier.size(10.dp))
-                Button(
-                    modifier = Modifier.padding(vertical = 6.dp),
-                    onClick = { prisjegerViewModel.getLokaleVarer() }
-                ) {
-                    Text("Alle")
-                }
-                Spacer(Modifier.size(10.dp))
-                Button(
-                    modifier = Modifier.padding(vertical = 6.dp),
-                    onClick = { prisjegerViewModel.oppdaterListeFraApi() }
-                ) {
-                     Text("Hent API")
-                }
-            }
             Row {
                 Text(
                     text = "Total sum : " + (Math.round(
@@ -185,15 +217,17 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                             alertDialog.value = true
                         }
                     ) {
-                        Text("Ny handleliste")
+                        Text("Valg")
                     }
                 }
-                Spacer(Modifier.size(10.dp))
+                Spacer(Modifier
+                    .size(10.dp))
                 Column {
                     // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
                     VelgHandleliste(prisjegerViewModel)
                 }
-                Spacer(Modifier.size(10.dp))
+                Spacer(Modifier
+                    .size(10.dp))
                 Column {
                     // DROPDOWN FOR VALG AV BUTIKK -> VISER AKTUELLE PRISER
                     VelgButikk(prisjegerViewModel)
@@ -201,7 +235,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
             }
         }
     }
-}
+} // slutt HeaderVisning
 
 
 
@@ -212,9 +246,9 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
  * TODO: trenger vi push fra server ved endring/ flere navn?
  */
 @Composable
-fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
+private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
-    val valgbareToast = LocalContext.current.applicationContext
+ //   val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf("Velg butikk") }
     var aktiv by remember {mutableStateOf(false)
     }
@@ -239,8 +273,8 @@ fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
             valgbare?.forEachIndexed { itemIndex, itemValue ->
                 DropdownMenuItem(
                     onClick = {
-                        Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
-                            .show()
+           //             Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
+           //                 .show()
                         aktiv = false
                         tekst = itemValue
                     },
@@ -262,9 +296,9 @@ fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
  * Listenavn hentes fra lokal DB og oppdateres automatisk med LiveData
  */
 @Composable
-fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
+private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
     val valgbare by prisjegerViewModel.alleListenavn.observeAsState(initial = null)
-    val valgbareToast = LocalContext.current.applicationContext
+   // val valgbareToast = LocalContext.current.applicationContext
     var tekst = prisjegerViewModel.currentListenavn // OBS!! DETTE GIR REKOMP
     var aktiv by remember {mutableStateOf(false) }
 
@@ -290,8 +324,8 @@ fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
             valgbare?.forEachIndexed { itemIndex, itemValue ->
                 DropdownMenuItem(
                     onClick = {
-                        Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
-                            .show()
+                 //       Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
+                //            .show()
                         aktiv = false
                         tekst = itemValue
                         // Nytt DB/ API-kall + oppdatert visning ved bytte av liste(navn)
@@ -317,7 +351,7 @@ fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Sokefelt(state: MutableState<TextFieldValue>) {
+private fun Sokefelt(state: MutableState<TextFieldValue>) {
     // oppretter referanse til keybord
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -384,70 +418,42 @@ fun Sokefelt(state: MutableState<TextFieldValue>) {
  * Filteret sorterer ut varelinjer for hver handleliste(navn)
  */
 @Composable
-fun ListeVisning(
+private fun ListeVisning(
     vareListe: List<Varer>,
  //   listeApi: Array<String>,
     state: MutableState<TextFieldValue>,
     prisjegerViewModel: PrisjegerViewModel
 ) {
 
-   // var visAPI by rememberSaveable { mutableStateOf(prisjegerViewModel.visAPI) }
-
     val vareliste = ArrayList<Varer>()
-    /*
-    if (visAPI) {
-        for (varer in listeApi) {
-            // OBS! TILPASSET DATA FRA API. BYGGER VARER-OBJEKT BASERT PÅ VARENAVN
-            vareliste.add(Varer(prisjegerViewModel.currentListenavn, varer, 0.0, 0))
+    // Kun varelinjer tilhørende inneværende liste(navn) vises
+    for (varer in vareListe) {
+        if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
+            vareliste.add(varer)
         }
     }
-    else {
-
-     */
-        for (varer in vareListe) {
-            // Kun varelinjer tilhørende inneværende liste(navn) vises
-            if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
-                vareliste.add(varer)
-            }
-        }
- //   }
-
     var filtrerteVarer: ArrayList<Varer>
-
     // bygger LazyColumn - filtrerte treff eller hele lista
     LazyColumn(Modifier
         .fillMaxWidth()
     )
     {
-        val searchedText = state.value.text
-        filtrerteVarer = if (searchedText.isEmpty()) {
+        val leterEtter = state.value.text
+        filtrerteVarer = if (leterEtter.isEmpty()) {
             vareliste
-
         } else {
             val treffListe = ArrayList<Varer>()
+            // filter for sammenligning av strenger. Søker på innhold av bokstaver
+            // ved å lytte på søkefelt
             for (varer in vareliste) {
-                if (varer.varenavn.lowercase().contains(searchedText.lowercase())
+                if (varer.varenavn.lowercase().contains(leterEtter.lowercase())
                     && varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
                     treffListe.add(varer)
                 }
             }
             treffListe
         } // OBS: Må bruke både varenavn og listenavn som key for id av unike
-
-            /*
-        } else {
-            val treffListe = ArrayList<Varer>()
-            for (varer in vareListe) {
-                if (varer.varenavn.lowercase().contains(searchedText.lowercase())
-                    && varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
-                    treffListe.add(varer)
-                }
-            }
-            treffListe
-        } // OBS: Må bruke både varenavn og listenavn som key for id av unike
-
-             */
-        items(filtrerteVarer, {filtrerteVarer:Varer->
+        items(filtrerteVarer, {filtrerteVarer: Varer ->
             filtrerteVarer.varenavn + filtrerteVarer.listenavn}) { filtrerte ->
             VarelisteItem(filtrerte, prisjegerViewModel)
         }
@@ -468,7 +474,7 @@ fun ListeVisning(
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun VarelisteItem(
+private fun VarelisteItem(
     vare: Varer,
     prisjegerViewModel: PrisjegerViewModel,
 ) {
@@ -570,9 +576,7 @@ fun VarelisteItem(
                             //    bredKolonne = 4F
                             //   smalKolonne = 0.25F
                             Text(text = ("Mer informasjon om vare, " +
-                                    "bilder av vare?. ").repeat(3),
-
-                                )
+                                    "bilder av vare?. ").repeat(3))
                         }
                     }
                     Column(
@@ -590,8 +594,7 @@ fun VarelisteItem(
                             .align(Alignment.CenterVertically)
                     ) { // kontroll for null, utregning av sumPrVare, avrunding 2 desimal
                         Text(text = (Math.round((vare.antall?.let { vare.enhetspris?.times(it) })?.times(
-                            100.00
-                        ) ?: 0.0) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
+                            100.00) ?: 0.0) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
                     }
                     Column(
                         modifier = Modifier
