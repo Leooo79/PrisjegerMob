@@ -1,6 +1,5 @@
-package no.usn.rygleo.prisjegermobv1
+package no.usn.rygleo.prisjegermobv1.ui
 
-import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -18,7 +17,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -28,7 +26,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -38,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
-import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
 /*
 TODO: overføring mellom lister ?
@@ -105,7 +101,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 alertDialog.value = false
             },
             title = {
-                Text(text = "Skriv inn listenavn")
+                Text(text = "Skriv inn navn på ny handleliste")
             },
             text = {
                 Column() {
@@ -252,8 +248,8 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
  //   val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf("Velg butikk") }
-    var aktiv by remember {mutableStateOf(false)
-    }
+    var aktiv by remember { mutableStateOf(false) }
+
     Box(
         contentAlignment = Alignment.Center,
     ) {
@@ -428,11 +424,11 @@ private fun ListeVisning(
     prisjegerViewModel: PrisjegerViewModel
 ) {
 
-    val vareliste = ArrayList<Varer>()
+    val visRettListe = ArrayList<Varer>()
     // Kun varelinjer tilhørende inneværende liste(navn) vises
     for (varer in vareListe) {
         if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
-            vareliste.add(varer)
+            visRettListe.add(varer)
         }
     }
     var filtrerteVarer: ArrayList<Varer>
@@ -443,14 +439,13 @@ private fun ListeVisning(
     {
         val leterEtter = state.value.text
         filtrerteVarer = if (leterEtter.isEmpty()) {
-            vareliste
+            visRettListe
         } else {
             val treffListe = ArrayList<Varer>()
-            // filter for sammenligning av strenger. Søker på innhold av bokstaver
+            // filter for sammenligning av strenger. Søker på kombinasjoner av char
             // ved å lytte på søkefelt
-            for (varer in vareliste) {
-                if (varer.varenavn.lowercase().contains(leterEtter.lowercase())
-                    && varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
+            for (varer in visRettListe) {
+                if (varer.varenavn.lowercase().contains(leterEtter.lowercase())) {
                     treffListe.add(varer)
                 }
             }

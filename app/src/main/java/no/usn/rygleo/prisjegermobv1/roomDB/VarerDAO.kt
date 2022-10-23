@@ -45,9 +45,9 @@ interface VarerDAO {
     fun oppdaterPris(varenavn: String, listenavn: String, enhetspris: Double)
 
     @Delete
-    fun delete(varer: Varer)
+    fun slettVare(varer: Varer)
 
 
     @Query("DELETE FROM varer WHERE listenavn = :listenavn")
-    fun delete2(listenavn: String)
+    fun slettHandleliste(listenavn: String)
 }

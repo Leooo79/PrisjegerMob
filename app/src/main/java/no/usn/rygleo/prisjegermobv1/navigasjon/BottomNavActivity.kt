@@ -1,11 +1,7 @@
 package no.usn.rygleo.prisjegermobv1.navigasjon
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -20,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 // Klasser/ Visninger/ Funksjoner:
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
-import no.usn.rygleo.prisjegermobv1.HandlelisteScreen
+import no.usn.rygleo.prisjegermobv1.ui.HandlelisteScreen
 import no.usn.rygleo.prisjegermobv1.ui.LoginScreen
 import no.usn.rygleo.prisjegermobv1.ui.OmOss
 

@@ -38,12 +38,12 @@ class VarerRepo(private val varerDAO: VarerDAO) {
     }
 
 
-    suspend fun delete(varer: Varer) {
-        varerDAO.delete(varer)
+    suspend fun slettVare(varer: Varer) {
+        varerDAO.slettVare(varer)
     }
 
-    suspend fun delete2(listenavn: String) {
-        varerDAO.delete2(listenavn)
+    suspend fun slettHandleliste(listenavn: String) {
+        varerDAO.slettHandleliste(listenavn)
     }
 
     suspend fun getAlleVarer() : Flow<List<Varer>> {
