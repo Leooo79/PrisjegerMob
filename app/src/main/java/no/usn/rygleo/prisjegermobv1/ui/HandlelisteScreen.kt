@@ -18,6 +18,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -104,7 +105,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 alertDialog.value = false
             },
             title = {
-                Text(text = "Skriv inn navn på ny liste")
+                Text(text = "Skriv inn listenavn")
             },
             text = {
                 Column() {
@@ -130,7 +131,8 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                         Text("Lagre ny liste")
                     }
                 }
-                Button(
+                //  Ekstra knapper
+                Button( // Knapp for å sortere varer i handleliste. Antall > 0
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
@@ -141,7 +143,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 ) {
                     Text("Vis bare valgte")
                 }
-                Button(
+                Button( // Knapp for å vise alle varer. Inkludert antall == 0
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
@@ -152,7 +154,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 ) {
                     Text("Vis alle varer")
                 }
-                Button(
+                Button( // Knapp for å hente nye varer fra server (komplett liste - IGNORE)
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
@@ -163,7 +165,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 ) {
                     Text("Oppdater handleliste")
                 }
-                Button(
+                Button( // Knapp for å slette handleliste fra lokal DB
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
@@ -174,7 +176,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                 ) {
                     Text("Slett handleliste !")
                 }
-                Button(
+                Button( // Knapp for å gå tilbake/ lukke alert
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),

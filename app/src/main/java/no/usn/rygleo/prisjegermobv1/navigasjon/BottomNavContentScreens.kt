@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chillibits.simplesettings.core.SimpleSettings
 import com.chillibits.simplesettings.item.SimpleSwitchPreference
 import no.usn.rygleo.prisjegermobv1.R
-import no.usn.rygleo.prisjegermobv1.data.Butikk
 import no.usn.rygleo.prisjegermobv1.data.TestAPI
 import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
@@ -54,8 +54,10 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     //   val tekst by prisjegerViewModel.varerAPI.observeAsState(initial = emptyList<TestAPI>())
     val status = prisjegerViewModel.status.value
     //  var tekst = prisjegerViewModel.varerAPI.value?.key
-    val tekst by prisjegerViewModel.hentVarerAPI.observeAsState(initial = null)
+    val tekst by prisjegerViewModel.priserPrButikk.observeAsState(initial = null)
     //  prisjegerViewModel.varerAPI.observeAsState(initial = emptyList())
+    var testHentUtPrisPrVare =
+        prisjegerViewModel.priserPrButikk.value?.varer?.get("Asan trippeldusj, 220 ml")?.get(0)
 
     Column(
         modifier = Modifier
@@ -65,7 +67,8 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     ) {
         Text(
             //   text = tekst.value?.key ?: "vent",
-            text = (tekst?.get(0)?.toString() ?: ""),
+         //   text = (tekst?.get(0)?.toString() ?: ""),
+            text = testHentUtPrisPrVare.toString(),
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),

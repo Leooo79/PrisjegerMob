@@ -2,8 +2,8 @@ package no.usn.rygleo.prisjegermobv1
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import no.usn.rygleo.prisjegermobv1.data.Butikk
 import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
+import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
 import no.usn.rygleo.prisjegermobv1.data.TestAPI
 import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
@@ -44,6 +44,8 @@ interface RestApi {
     @GET("Tore1") // se class TestAPI for values
     suspend fun getTore(): TestAPI
 
+    @GET("siste/")
+    suspend fun getPrisPrButikk(): PriserPrButikk
 
 
     @GET("historikk")

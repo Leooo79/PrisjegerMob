@@ -40,6 +40,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val butikkerAPI: LiveData<Array<String>> = _butikkerAPI
 
 
+    // VARIABLER FOR Å LESE INN BUTIKKLISTE FRA API
+    private val _priserPrButikk = MutableLiveData<PriserPrButikk>()
+    val priserPrButikk: LiveData<PriserPrButikk> = _priserPrButikk
+
+
     /**
      * Variabler for oppkobling mot lokal database (Room)
      */
@@ -62,7 +67,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     // Default liste(navn) som skal vises TODO: siste lagrede??
     var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
-
+    var currentButikk = "Meny" // VARIABEL FOR INNEVÆRENDE BUTIKK
 
     // Referanse til DAO for handlelister
     val varerDAO: VarerDAO
@@ -94,6 +99,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         // HENTER DATA FRA API:
         getAPIVarer()
         getAPIButikker()
+        getAPIPriserPrButikk(currentButikk)
 
         // ETABLERER LOKAL DB OM DENNE IKKE FINNES
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
@@ -167,6 +173,26 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
+    /**
+     * Funksjonen henter inn Array av priser pr vare pr butikk
+     * Kjøres ved oppstart
+     */
+    private fun getAPIPriserPrButikk(butikknavn: String) {
+        viewModelScope.launch {
+            _status.value = "Prøver å hente butikknavn fra API"
+            try {
+                _priserPrButikk.value = API.retrofitService.getPrisPrButikk()
+                _status.value =  "Vellykket, priserPrButikk hentet"
+            } catch (e:Exception) {
+                _status.value =  "Feil: ${e.message}"
+            }
+        }
+    }
+
+
+
+
+
 
     /**
      * Funksjonen overfører varenavn fra API og insert Varer til lokal DB
@@ -175,6 +201,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun oppdaterListeFraApi() {
         var teller = 0
+        var prisPrVare = 0.0
         var vareApi: Varer
         _status.value = "Prøver å oppdatere lokal DB fra API"
         try {
@@ -188,6 +215,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             _status.value =  "Feil: ${e.message}"
         }
     }
+
+
+
+
 
 
 
