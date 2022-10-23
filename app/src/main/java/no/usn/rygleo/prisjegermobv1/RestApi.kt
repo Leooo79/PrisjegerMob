@@ -2,10 +2,8 @@ package no.usn.rygleo.prisjegermobv1
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import no.usn.rygleo.prisjegermobv1.data.HandlelisteItems
 import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
 import no.usn.rygleo.prisjegermobv1.data.TestAPI
-import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import retrofit2.Call
 import retrofit2.Response
@@ -50,21 +48,19 @@ interface RestApi {
 
     @GET("historikk")
     suspend fun getAll(): Varer
+
     @GET("vareliste") //"vareliste"
     suspend fun getVareliste(): Array<String>
+
     @GET("butikkliste")
     suspend fun getButikkliste(): Array<String>
-    @GET("handlelister/{epost}")
-    suspend fun getHandlelister(): List<List<HandlelisteItems>>
+
+//    @GET("handlelister/{epost}")
+//    suspend fun getHandlelister(): List<List<HandlelisteItems>>
+
     //burde det være bruker klasse her? bruker.epost isteden for direkete epost string?
     @POST("handlelister/{epost]/{tittel}/add")
     suspend fun nyHandlelisteAdd(@Body handleliste: Varer)
-
-    @GET("butikkliste")
-    fun searchVolumes(
-        @Query("key") apiKey: String?
-    ): Call<VarenavnAPI?>?
-
 
 }
 

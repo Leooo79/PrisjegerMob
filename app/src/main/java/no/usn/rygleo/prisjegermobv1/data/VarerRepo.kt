@@ -33,6 +33,11 @@ class VarerRepo(private val varerDAO: VarerDAO) {
     }
 
 
+    suspend fun oppdaterPris(varenavn: String, listenavn: String, enhetspris: Double) {
+        varerDAO.oppdaterPris(varenavn, listenavn, enhetspris)
+    }
+
+
     suspend fun delete(varer: Varer) {
         varerDAO.delete(varer)
     }

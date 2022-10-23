@@ -279,6 +279,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
            //                 .show()
                         aktiv = false
                         tekst = itemValue
+                        prisjegerViewModel.oppdaterPriserFraApi(itemValue)
                     },
                 ) {
                     Text(text = itemValue)

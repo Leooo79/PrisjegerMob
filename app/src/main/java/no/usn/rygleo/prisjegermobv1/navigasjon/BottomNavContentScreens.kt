@@ -25,7 +25,6 @@ import com.chillibits.simplesettings.core.SimpleSettings
 import com.chillibits.simplesettings.item.SimpleSwitchPreference
 import no.usn.rygleo.prisjegermobv1.R
 import no.usn.rygleo.prisjegermobv1.data.TestAPI
-import no.usn.rygleo.prisjegermobv1.data.VarenavnAPI
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 import retrofit2.Response
 
