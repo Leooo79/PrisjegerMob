@@ -17,7 +17,7 @@ import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
 /**
  * Klassen inneholder logikk for App Prisjeger
  * Kommuniserer med screens (visningskomponenter)
- * Kommuniserer med datakilder : klasser - repo - lokal DB (Room) TODO: API/
+ * Kommuniserer med datakilder : backend API/ lokal DB (Room)
  * NYTT 21.10.22 : NYE DATA HENTES FRA API VED OPPSTART OG LEGGES I LOKAL DB (CONFLICT = IGNORE)
  *
  */
@@ -237,7 +237,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                                 oppdaterVarePris( // oppdaterer lokal DB med enhetspris pr vare
                                     varer.varenavn,
                                     varer.listenavn,
-                                    it.toDouble() // pris
+                                    it.toDouble() // ny enhetspris
                                 )
                             }
                     }
@@ -297,8 +297,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
-     * Funksjonen etablerer og bytter ut innhold i LiveData -> LazyColumn fra lokal DB
-     * Bytter til varer med antall > 0
+     * Funksjonen henter ut unike listenavn fra lokal DB
+     *
      */
     fun getAlleListenavn() {
         viewModelScope.launch {
@@ -415,7 +415,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     /**
      * Funksjon for å oppdatere Varer-objekt i lokal DB (antall+-1)
-     * TODO: burde denne vært private siden update til DB?
      */
     fun oppdaterVare(nyAntall: Int, varenavn: String, listenavn: String) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -428,8 +427,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
-     * Funksjon for å oppdatere Varer-objekt i lokal DB (antall+-1)
-     * TODO: burde denne vært private siden update til DB?
+     * Funksjon for å oppdatere Varer-objekt pris
+     * TODO: Slå sammen alle update-metoder
      */
     fun oppdaterVarePris(varenavn: String, listenavn: String, enhetspris: Double) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -458,7 +457,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjon for å slette en vare
      */
     fun slettVare(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.delete(varer)
+        repoVarer.slettVare(varer)
     }
 
 
@@ -467,10 +466,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
-     * Funksjon for å slette en vare
+     * Funksjon for å slette en handleliste
      */
     fun slettHandleliste() = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.delete2(currentListenavn)
+        repoVarer.slettHandleliste(currentListenavn)
     }
 
 
