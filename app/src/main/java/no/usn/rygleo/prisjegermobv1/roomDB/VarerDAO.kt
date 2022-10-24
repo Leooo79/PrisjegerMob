@@ -32,12 +32,14 @@ interface VarerDAO {
     fun insertAll(vararg varer: Varer)
 
 
+    @Update // trenger oppdaterte parameter, bruk likegjerne fun update
+    fun update(varer: Varer)
+
+
     @Query("UPDATE varer SET antall=:nyAntall WHERE varenavn = :varenavn " +
             "AND listenavn = :listenavn")
-    fun update(nyAntall: Int, varenavn: String, listenavn: String)
+    fun oppdaterAntall(nyAntall: Int, varenavn: String, listenavn: String)
 
-    @Update // trenger oppdaterte parameter, bruk likegjerne fun update
-    fun update2(varer: Varer)
 
 
     @Query("UPDATE varer SET enhetspris=:enhetspris WHERE varenavn = :varenavn " +

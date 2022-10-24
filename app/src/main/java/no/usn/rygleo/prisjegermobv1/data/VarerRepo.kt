@@ -23,13 +23,13 @@ class VarerRepo(private val varerDAO: VarerDAO) {
          varerDAO.insertAll(varer)
     }
 
-    suspend fun update(nyAntall: Int, varenavn: String, listenavn: String) {
-        varerDAO.update(nyAntall, varenavn, listenavn)
+    suspend fun oppdaterAntall(nyAntall: Int, varenavn: String, listenavn: String) {
+        varerDAO.oppdaterAntall(nyAntall, varenavn, listenavn)
     }
 
 
     suspend fun update2(varer: Varer) {
-        varerDAO.update2(varer)
+        varerDAO.update(varer)
     }
 
 

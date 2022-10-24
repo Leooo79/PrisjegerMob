@@ -609,8 +609,8 @@ private fun VarelisteItem(
                                 if (vare.antall!! > 0) {
                                     vare.antall.let {
                                         vare.varenavn.let { it1 ->
-                                            prisjegerViewModel.oppdaterVare(it.minus(1),
-                                                it1, prisjegerViewModel.currentListenavn)
+                                            prisjegerViewModel.oppdaterVareAntall(it.minus(1),
+                                                it1, prisjegerViewModel.currentListenavn, false)
                                         }
                                     }
                                 }
@@ -635,8 +635,8 @@ private fun VarelisteItem(
                                 // TODO: update mot APi
                                 vare.antall?.let {
                                     vare.varenavn.let { it1 ->
-                                        prisjegerViewModel.oppdaterVare(it.plus(1),
-                                            it1, prisjegerViewModel.currentListenavn)
+                                        prisjegerViewModel.oppdaterVareAntall(it.plus(1),
+                                            it1, prisjegerViewModel.currentListenavn, true)
                                     }
                                 }
                             }

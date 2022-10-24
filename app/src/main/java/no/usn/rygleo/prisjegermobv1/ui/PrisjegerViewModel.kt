@@ -526,12 +526,34 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
-     * Funksjon for å oppdatere Varer-objekt i lokal DB (antall+-1)
+     * Funksjon for å oppdatere Varer-objekt i lokal/ sentral DB
+     * Etter oppdatering av lokal DB forsøkes oppdatering av sentral DB
+     * Parameter faktor: false for minus en, true for pluss en
      */
-    fun oppdaterVare(nyAntall: Int, varenavn: String, listenavn: String) =
+    fun oppdaterVareAntall(nyAntall: Int, varenavn: String,
+                     listenavn: String, faktor: Boolean) =
         viewModelScope.launch(Dispatchers.IO) {
-            repoVarer.update(nyAntall, varenavn, listenavn)
-        }
+            repoVarer.oppdaterAntall(nyAntall, varenavn, listenavn)
+            try {
+                 if (faktor) {
+                     // API oppretter handleliste/ legger til vare/ antall ++
+                        postAPIantallPlussEn(
+                            currentEpost,
+                            listenavn,
+                            varenavn
+                        )
+                 }
+                else {
+                    // API sletter handleliste/ fjerner vare/ antall --
+                     postAPIantallMinusEn(
+                         currentEpost,
+                         listenavn,
+                         varenavn
+                     )
+                }
+            } catch (e: Exception) { }
+    }
+
 
 
 
@@ -539,7 +561,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
-     * Funksjon for å oppdatere Varer-objekt pris
+     * Funksjon for å oppdatere Varer-objekt enhetspris i lokal DB
      * TODO: Slå sammen alle update-metoder
      */
     fun oppdaterVarePris(varenavn: String, listenavn: String, enhetspris: Double) =
