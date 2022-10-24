@@ -45,6 +45,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val priserPrButikk: LiveData<PriserPrButikk> = _priserPrButikk
 
 
+    // VARIABLER FOR Å LESE INN HANDLELISTE FRA API
+    private val _handlelisteAPI = MutableLiveData<Map<String, Int>>()
+    val handlelisteAPI: LiveData<Map<String, Int>> = _handlelisteAPI
+
+
+    // VARIABLER FOR LOGIN API
+    private val _brukerAPI = MutableLiveData<Map<String, String>>()
+    val brukerAPI: LiveData<Map<String, String>> = _brukerAPI
+
+
     /**
      * Variabler for oppkobling mot lokal database (Room)
      */
@@ -66,8 +76,9 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         private set
 
     // Default liste(navn) som skal vises TODO: siste lagrede??
-    var currentListenavn = "RoomListe1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
+    var currentListenavn = "Tore1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
     var currentButikk = "Meny" // VARIABEL FOR INNEVÆRENDE BUTIKK
+    var currentEpost = "tore@mail.com" // VARIABEL FOR INNEVÆRENDE BUTIKK
 
     // Referanse til DAO for handlelister
     val varerDAO: VarerDAO
@@ -99,6 +110,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         getAPIVarer()
         getAPIButikker()
         getAPIPriserPrButikk(currentButikk)
+
+        postAPILogin("tore@mail.com", "passord")
+
+        getAPIHandleliste(currentEpost, currentListenavn)
 
         // ETABLERER LOKAL DB OM DENNE IKKE FINNES
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
@@ -178,6 +193,44 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 _priserPrButikk.value = API.retrofitService.getPrisPrButikk()
                 _status.value = "Vellykket, priserPrButikk hentet"
+            } catch (e: Exception) {
+                _status.value = "Feil: ${e.message}"
+            }
+        }
+    }
+
+
+
+
+
+    /**
+     * Funksjonen henter inn Array av priser pr vare pr butikk (++)
+     * Kjøres ved oppstart
+     */
+    private fun postAPILogin(epost: String, passord: String) {
+        val map = mapOf("epost" to epost, "passord" to passord)
+        viewModelScope.launch {
+            _status.value = "Prøver å hente handleliste fra API"
+            try {
+                _brukerAPI.value = API.retrofitService.login(map)
+                _status.value = "Vellykket, handleliste fra API hentet"
+            } catch (e: Exception) {
+                _status.value = "Feil: ${e.message}"
+            }
+        }
+    }
+
+
+    /**
+     * Funksjonen henter inn Array av priser pr vare pr butikk (++)
+     * Kjøres ved oppstart
+     */
+    private fun getAPIHandleliste(epost: String, listenavn: String) {
+        viewModelScope.launch {
+            _status.value = "Prøver å hente handleliste fra API"
+            try {
+                _handlelisteAPI.value = API.retrofitService.getHandleliste(epost, listenavn)
+                _status.value = "Vellykket, handleliste fra API hentet"
             } catch (e: Exception) {
                 _status.value = "Feil: ${e.message}"
             }

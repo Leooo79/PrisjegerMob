@@ -9,10 +9,7 @@ import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 private const val BASE_URL ="http://prisjeger-app.duckdns.org:6969/api/"
@@ -35,32 +32,41 @@ interface RestApi {
     // TODO funksjon for å teste API. Se URL over. Hentes inn av vM og vises i BottomNavConteneScreens.visAPI()
     // TODO Har automatisk opprettet dataklasse TestAPI som model for JSONdata fra test-API, vi må gjøre tilsvarende
     // TODO for egne JSONdata, men kan bli vanskelig uten Key-Value struktur.
+
+    // Funksjon for å hente data fra testAPI
     @GET("activity") // se class TestAPI for values
     suspend fun getTestAPI(): TestAPI
 
+    // Funksjon for å hente handlelister fra backend API
+    @GET("handlelister/{epost}/{listenavn}")
+    suspend fun getHandleliste(
+        @Path("epost") epost: String,
+        @Path("listenavn") listenavn: String): Map<String, Int>
 
-    @GET("Tore1") // se class TestAPI for values
-    suspend fun getTore(): TestAPI
+    // Funksjonen sender inn epost og passord til server
+    // og logger inn bruker (?)
+    @POST("login")
+    suspend fun login(@Body map: Map<String, String>): Map<String, String>
 
+    // Funksjon for å hente nyeste priser fra backend API
     @GET("siste/")
     suspend fun getPrisPrButikk(): PriserPrButikk
 
-
+    // Funksjon for å hente all historikk, kun for test
     @GET("historikk")
     suspend fun getAll(): Varer
 
+    // Funksjon for å hente/ oppdatere vareliste fra backend API
     @GET("vareliste") //"vareliste"
     suspend fun getVareliste(): Array<String>
 
+    // Funksjon for å hente liste med butikknavn fra backend API
     @GET("butikkliste")
     suspend fun getButikkliste(): Array<String>
 
-//    @GET("handlelister/{epost}")
-//    suspend fun getHandlelister(): List<List<HandlelisteItems>>
-
     //burde det være bruker klasse her? bruker.epost isteden for direkete epost string?
-    @POST("handlelister/{epost]/{tittel}/add")
-    suspend fun nyHandlelisteAdd(@Body handleliste: Varer)
+    @POST("handlelister/{tore@mail.com]/{TestMOBhandleliste}/add")
+    suspend fun addHandleliste(@Body handleliste: Map<String, Int>)
 
 }
 

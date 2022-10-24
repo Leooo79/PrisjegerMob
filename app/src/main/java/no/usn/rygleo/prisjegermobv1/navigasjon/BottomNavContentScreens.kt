@@ -58,6 +58,14 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     var testHentUtPrisPrVare =
         prisjegerViewModel.priserPrButikk.value?.varer?.get("Asan trippeldusj, 220 ml")?.get(0)
 
+    var testHentHandlelisteAPI =
+        prisjegerViewModel.handlelisteAPI.value?.get("Agurk, 1 stk")
+    // {"Agurk, 1 stk":15,"Aromat Krydder, 90 gram":15}
+
+    var testLogin = prisjegerViewModel.brukerAPI.value?.get("melding")
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +75,7 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
         Text(
             //   text = tekst.value?.key ?: "vent",
          //   text = (tekst?.get(0)?.toString() ?: ""),
-            text = testHentUtPrisPrVare.toString(),
+            text = testLogin.toString(),
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),
