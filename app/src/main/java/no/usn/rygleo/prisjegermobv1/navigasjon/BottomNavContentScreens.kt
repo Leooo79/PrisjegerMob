@@ -24,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chillibits.simplesettings.core.SimpleSettings
 import com.chillibits.simplesettings.item.SimpleSwitchPreference
 import no.usn.rygleo.prisjegermobv1.R
-import no.usn.rygleo.prisjegermobv1.data.TestAPI
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 import retrofit2.Response
 
@@ -63,6 +62,7 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     // {"Agurk, 1 stk":15,"Aromat Krydder, 90 gram":15}
 
     var testLogin = prisjegerViewModel.brukerAPI.value?.get("melding")
+
 
 
 

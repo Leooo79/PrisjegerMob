@@ -55,6 +55,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val brukerAPI: LiveData<Map<String, String>> = _brukerAPI
 
 
+
     /**
      * Variabler for oppkobling mot lokal database (Room)
      */
@@ -112,6 +113,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         getAPIPriserPrButikk(currentButikk)
 
         postAPILogin("tore@mail.com", "passord")
+
+        postAPIantallPlussEn(
+            "tore@mail.com",
+            "Leo1",
+            "testVare2" )
 
         getAPIHandleliste(currentEpost, currentListenavn)
 
@@ -219,6 +225,59 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
+
+
+
+
+    /**
+     * Funksjonen øker antall med 1 for aktuell vare i aktuell handleliste
+     * Dersom handleliste ikke finnes opprettes denne
+     * Dersom vare ikke finnes legges den inn i liste
+     */
+    private fun postAPIantallPlussEn(epost: String, tittel: String, vare: String) {
+        val map = mapOf("epost" to epost, "tittel" to tittel, "vare" to vare)
+        viewModelScope.launch {
+            _status.value = "Prøver å hente handleliste fra API"
+            try {
+                API.retrofitService.inkrementerHandleliste(
+                    epost,
+                    tittel,
+                    vare,
+             // IKKE NØDVENDIG HER:      map
+                )
+                _status.value = "Vellykket, handleliste fra API hentet"
+            } catch (e: Exception) {
+                _status.value = "Feil: ${e.message}"
+            }
+        }
+    }
+
+
+
+
+
+    /**
+     * Funksjonen REDUSERER antall med 1 for aktuell vare i aktuell handleliste
+     * Ved antall == 0 fjernes vare fra handleliste
+     */
+    private fun postAPIantallMinusEn(epost: String, tittel: String, vare: String) {
+        viewModelScope.launch {
+            _status.value = "Prøver å hente handleliste fra API"
+            try {
+                API.retrofitService.dekrementerHandleliste(
+                    epost,
+                    tittel,
+                    vare,
+                )
+                _status.value = "Vellykket, handleliste fra API hentet"
+            } catch (e: Exception) {
+                _status.value = "Feil: ${e.message}"
+            }
+        }
+    }
+
+
+
 
 
     /**
