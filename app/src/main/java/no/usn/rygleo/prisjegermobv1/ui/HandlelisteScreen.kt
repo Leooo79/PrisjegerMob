@@ -607,9 +607,8 @@ private fun VarelisteItem(
                                 contentColor = Color.White
                             ),
                             onClick = {
-                                // kontroller faktisk antall
-                                // minimum 0 varer
-                                if (vare.antall > 0 ) { // NEI !!!!
+                                // minimum 0 vare.
+                                if (vare.antall >= 1) {
                                     prisjegerViewModel.oppdaterVareAntall(
                                         -1, // minus en i antall
                                         vare.varenavn,

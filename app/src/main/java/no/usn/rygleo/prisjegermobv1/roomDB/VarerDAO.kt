@@ -60,6 +60,7 @@ interface VarerDAO {
     fun oppdaterAntall(nyAntall: Int, varenavn: String, listenavn: String) : Int
 
 
+
     /**
      * Update av enhetspris pr vare pr liste
      */
