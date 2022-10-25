@@ -86,6 +86,15 @@ interface RestApi {
     )
 
 
+    // Backend sletter vare fra handleliste
+    @POST("handlelister/{epost}/{tittel}/delete/{vare}")
+    suspend fun slettVareIListe(
+        @Path("epost") epost: String,
+        @Path("tittel") tittel: String,
+        @Path("vare") vare: String,
+    )
+
+
     // Backend sletter handleliste
     @POST("handlelister/{epost}/{tittel}/remove")
     suspend fun slettHandleliste(

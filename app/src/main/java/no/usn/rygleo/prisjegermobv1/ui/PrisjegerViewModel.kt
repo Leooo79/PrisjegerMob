@@ -552,6 +552,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun slettVare(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
         // TODO: kall på slett i API fungerer ikke. Utløser kun dekrementering
         varerDAO.slettVare(varer)
+        try {
+            API.retrofitService.slettVareIListe(currentEpost, varer.listenavn, varer.varenavn)
+        } catch (e:Exception) {
+
+        }
     }
 
 
