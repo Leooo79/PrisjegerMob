@@ -12,6 +12,7 @@ import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.roomDB.Bruker
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import no.usn.rygleo.prisjegermobv1.roomDB.VarerDAO
+import kotlin.math.E
 
 
 /**
@@ -60,7 +61,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Variabler for oppkobling mot lokal database (Room)
      */
     // Referanse til repo
-    private val repoVarer: VarerRepo
+  //  private val repoVarer: VarerRepo
 
     // Livedata liste for komposisjon av handlelister fra lokal DB
     // var ( ikke val ) pga ønske om Flow fra Room lokal DB
@@ -114,16 +115,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
         postAPILogin("tore@mail.com", "passord")
 
-        postAPIantallPlussEn(
-            "tore@mail.com",
-            "Leo1",
-            "testVare2" )
-
         getAPIHandleliste(currentEpost, currentListenavn)
 
         // ETABLERER LOKAL DB OM DENNE IKKE FINNES
         varerDAO = AppDatabase.getRoomDb(application).varerDAO()
-        repoVarer = VarerRepo(varerDAO) // initierer repo
+     //   repoVarer = VarerRepo(varerDAO) // initierer repo
 
         // SETTER ALLEVARER TIL Å MOTTA DATA FRA LOKAL DB, OPPDATERES VED ENDRINGER
         getLokaleVarer()
@@ -308,7 +304,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         _status.value = "Prøver å oppdatere lokal DB fra API"
         try {
             for (varenavn in _hentVarerAPI.value!!) {
-                var vareApi = Varer(currentListenavn, varenavn, 0.0, 0)
+                val vareApi = Varer(currentListenavn, varenavn, 0.0, 0)
                 insertVare(vareApi)
             }
             _status.value = "Vellykket, lokal DB oppdatert"
@@ -373,7 +369,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             _status.value = "Henter valgte varer fra lokal DB"
             try {
-                alleVarer = varerDAO.getAlleVarer().asLiveData() // ny spørring lokal DB
+                alleVarer = varerDAO.getAlleValgteVarer().asLiveData() // ny spørring lokal DB
                 _status.value = "Vellykket, sorterte varer hentet"
                 setSortert() // rekomposisjon
             } catch (e: Exception) {
@@ -394,7 +390,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             _status.value = "Henter alle varer fra lokal DB"
             try {
-                alleVarer = varerDAO.getAlleVarer2().asLiveData() // ny spørring lokal DB
+                alleVarer = varerDAO.getAlleVarer().asLiveData() // ny spørring lokal DB
                 _status.value = "Vellykket, alle varer hentet"
                 setUsortert() // rekomposisjon
             } catch (e: Exception) {
@@ -517,11 +513,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Fuksjon for å sette inn ny vare i lokal DB, tabell Vare (handlelister)
      */
     private fun insertVare(vare: Varer) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.insert(vare)
+        varerDAO.insertAll(vare)
     }
 
 
-
+    /**
+     * Fuksjon for å sette inn ny vare i lokal DB, tabell Vare (handlelister)
+     */
+    fun getVareAntall(vare: Varer) = viewModelScope.launch(Dispatchers.IO) {
+        varerDAO.getVareAntall(vare.varenavn, vare.listenavn)
+    }
 
 
 
@@ -530,29 +531,36 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Etter oppdatering av lokal DB forsøkes oppdatering av sentral DB
      * Parameter faktor: false for minus en, true for pluss en
      */
-    fun oppdaterVareAntall(nyAntall: Int, varenavn: String,
-                     listenavn: String, faktor: Boolean) =
+    fun oppdaterVareAntall(nyAntall: Int, varenavn: String, listenavn: String, pluss: Boolean) =
         viewModelScope.launch(Dispatchers.IO) {
-            repoVarer.oppdaterAntall(nyAntall, varenavn, listenavn)
-            try {
-                 if (faktor) {
-                     // API oppretter handleliste/ legger til vare/ antall ++
-                        postAPIantallPlussEn(
+            // Lokal DB redigerer antall for aktuell vare og handleliste (+/-1)
+            // if lokal DB har oppdatert 1 rad
+            if (varerDAO.oppdaterAntall(nyAntall, varenavn, listenavn) == 1) {
+                try {
+                    if (pluss) {
+                        // API oppretter handleliste/ legger til vare/ antall ++
+                        API.retrofitService.inkrementerHandleliste(
                             currentEpost,
                             listenavn,
                             varenavn
                         )
-                 }
-                else {
-                    // API sletter handleliste/ fjerner vare/ antall --
-                     postAPIantallMinusEn(
-                         currentEpost,
-                         listenavn,
-                         varenavn
-                     )
+                    }
+                    else {
+                        // API sletter handleliste/ fjerner vare/ antall --
+                        API.retrofitService.dekrementerHandleliste(
+                            currentEpost,
+                            listenavn,
+                            varenavn
+                        )
+                    }
+                } catch (e: Exception) {
+
                 }
-            } catch (e: Exception) { }
+            } else {
+                throw Exception(E.toString())
+            }
     }
+
 
 
 
@@ -566,7 +574,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun oppdaterVarePris(varenavn: String, listenavn: String, enhetspris: Double) =
         viewModelScope.launch(Dispatchers.IO) {
-            repoVarer.oppdaterPris(varenavn, listenavn, enhetspris)
+            varerDAO.oppdaterPris(varenavn, listenavn, enhetspris)
         }
 
 
@@ -579,7 +587,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * TODO: IKKE I BRUK
      */
     fun oppdaterVare2(vare: Varer) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.update2(vare)
+        varerDAO.update(vare)
     }
 
 
@@ -591,8 +599,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjon for å slette en vare
      */
     fun slettVare(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.slettVare(varer)
+        // TODO: kall på slett i API fungerer ikke. Utløser kun dekrementering
+        varerDAO.slettVare(varer)
     }
+
+
 
 
 
@@ -603,20 +614,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjon for å slette en handleliste
      */
     fun slettHandleliste() = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.slettHandleliste(currentListenavn)
+        // sletter handleliste fra lokal DB
+        varerDAO.slettHandleliste(currentListenavn)
+        // sletter handleliste fra sentral DB
+        API.retrofitService.slettHandleliste(currentEpost, currentListenavn)
     }
 
 
 
 
 
-
-    /**
-     * returnerer ett Varer-objekt fra lokal DB på PK listenavn+varenavn
-     */
-    fun getVare(listenavn: String, varenavn: String) = viewModelScope.launch(Dispatchers.IO) {
-        repoVarer.getVare(varenavn)
-    }
 
 
 

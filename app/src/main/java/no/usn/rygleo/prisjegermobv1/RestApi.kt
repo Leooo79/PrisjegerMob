@@ -65,7 +65,7 @@ interface RestApi {
     ): Map<String, String>
 
 
-    // Funksjonen ØKER antall med en pr vare pr handleliste
+    // Backend ØKER antall med en pr vare pr handleliste
     // Dersom handleliste ikke finnes opprettes listen
     // Dersom varen ikke finnes legges den til i liste (antall = 1)
     @POST("handlelister/{epost}/{tittel}/add/{vare}")
@@ -76,13 +76,21 @@ interface RestApi {
     )
 
 
-    // Funksjonen REDUSERER antall med en pr vare pr handleliste
+    // Backend REDUSERER antall med en pr vare pr handleliste
     // Ved antall == 0 slettes vare fra handleliste
     @POST("handlelister/{epost}/{tittel}/pop/{vare}")
     suspend fun dekrementerHandleliste(
         @Path("epost") epost: String,
         @Path("tittel") tittel: String,
         @Path("vare") vare: String,
+    )
+
+
+    // Backend sletter handleliste
+    @POST("handlelister/{epost}/{tittel}/remove")
+    suspend fun slettHandleliste(
+        @Path("epost") epost: String,
+        @Path("tittel") tittel: String,
     )
 }
 

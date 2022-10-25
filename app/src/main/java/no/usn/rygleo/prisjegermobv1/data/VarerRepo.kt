@@ -46,15 +46,14 @@ class VarerRepo(private val varerDAO: VarerDAO) {
         varerDAO.slettHandleliste(listenavn)
     }
 
+
     suspend fun getAlleVarer() : Flow<List<Varer>> {
         return varerDAO.getAlleVarer()
     }
 
-    suspend fun getAlleVarer2() : Flow<List<Varer>> {
-        return varerDAO.getAlleVarer()
+    suspend fun getAlleValgteVarer() : Flow<List<Varer>> {
+        return varerDAO.getAlleValgteVarer()
     }
 
-    suspend fun getVare(varenavn: String) {
-        varerDAO.getVare(varenavn)
-    }
+
 }

@@ -478,8 +478,8 @@ private fun VarelisteItem(
 ) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var bredKolonne = 2F
-    var smalKolonne = 1F
+    val bredKolonne = 2F
+    val smalKolonne = 1F
     val dismissState = rememberDismissState()
 
     // TODO: Insert av samme vare til samme handleliste etter delete gir utfordinger
@@ -591,8 +591,9 @@ private fun VarelisteItem(
                             .padding(2.dp)
                             .align(Alignment.CenterVertically)
                     ) { // kontroll for null, utregning av sumPrVare, avrunding 2 desimal
-                        Text(text = (Math.round((vare.antall?.let { vare.enhetspris?.times(it) })?.times(
-                            100.00) ?: 0.0) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
+                        Text(text = (Math.round(
+                            (vare.antall.let { vare.enhetspris.times(it) }).times(
+                                100.00) ?: 0.0) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
                     }
                     Column(
                         modifier = Modifier
@@ -606,16 +607,19 @@ private fun VarelisteItem(
                                 contentColor = Color.White
                             ),
                             onClick = {
-                                if (vare.antall!! > 0) {
-                                    vare.antall.let {
-                                        vare.varenavn.let { it1 ->
-                                            prisjegerViewModel.oppdaterVareAntall(it.minus(1),
-                                                it1, prisjegerViewModel.currentListenavn, false)
-                                        }
-                                    }
+                                // kontroller faktisk antall
+                                // minimum 0 varer
+                                if (vare.antall > 0 ) { // NEI !!!!
+                                    prisjegerViewModel.oppdaterVareAntall(
+                                        -1, // minus en i antall
+                                        vare.varenavn,
+                                        vare.listenavn,
+                                        false
+                                    )
+
                                 }
                             }
-                        ) { // viser antall pr vare/ rad
+                        ) { // viser antall pr vare/ liste
                             Text(vare.antall.toString())
                         }
                     }
@@ -631,16 +635,27 @@ private fun VarelisteItem(
                                 contentColor = Color.White
                             ),
                             onClick = {
-                                // update mot lokal DB
-                                // TODO: update mot APi
+                                /*
                                 vare.antall?.let {
-                                    vare.varenavn.let { it1 ->
-                                        prisjegerViewModel.oppdaterVareAntall(it.plus(1),
-                                            it1, prisjegerViewModel.currentListenavn, true)
-                                    }
+                                    prisjegerViewModel.oppdaterVareAntall(
+                                        it.plus(1),
+                                        vare.varenavn,
+                                        prisjegerViewModel.currentListenavn,
+                                        true
+                                    )
                                 }
+                                // kall på lokale DV via vM
+                                    */
+                                prisjegerViewModel.oppdaterVareAntall(
+                                    1, // pluss en i antall
+                                    vare.varenavn,
+                                    vare.listenavn,
+                                    true
+                                )
+
+
                             }
-                        ) {  // viser antall pr vare/ rad
+                        ) {  // viser antall pr vare/ liste
                             Text(vare.antall.toString())
                         }
                     }

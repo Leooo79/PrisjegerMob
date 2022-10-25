@@ -3,53 +3,81 @@ package no.usn.rygleo.prisjegermobv1.roomDB
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import no.usn.rygleo.prisjegermobv1.RestApi
 
 @Dao
 interface VarerDAO {
 
+    /**
+     * Returnerer Flow med alle varlinjer lagret lokalt (alle lister)
+     * Returnerer kun varer med antall > 0
+     */
     @Query("SELECT * FROM Varer WHERE antall > 0 ORDER BY varenavn ASC")
+    fun getAlleValgteVarer(): Flow<List<Varer>>
+
+
+    /**
+     * Returnerer Flow med alle varelinjer lagret lokalt (alle lister)
+     */
+    @Query("SELECT * FROM Varer ORDER BY varenavn ASC")
     fun getAlleVarer(): Flow<List<Varer>>
 
 
-    // sortering på listenavn gjøres i filteret (composable)
-    @Query("SELECT * FROM Varer ORDER BY varenavn ASC")
-    fun getAlleVarer2(): Flow<List<Varer>>
-
-
+    /**
+     * Returnerer Flow med alle unike listenavn lagret lokalt
+     */
     @Query("SELECT DISTINCT listenavn FROM Varer ORDER BY listenavn ASC")
     fun getAlleListenavn(): Flow<Array<String>>
 
 
-    @Query("SELECT varenavn FROM Varer WHERE varenavn IN (:varenavn)")
-    fun getVare(varenavn: String): String
 
+    /**
+     * Returnerer Flow med alle unike listenavn lagret lokalt
+     */
+    @Query("SELECT antall FROM Varer WHERE varenavn=:varenavn " +
+            "AND listenavn=:listenavn")
+    fun getVareAntall(varenavn: String, listenavn: String): Int
 
-    @Query("SELECT * FROM Varer WHERE varenavn IN (:alleVarer)")
-    fun listePrId(alleVarer: IntArray): List<Varer>
-
-
+    /**
+     * Insert av lister med Varer. Allerede eksisterende PK ignoreres
+     */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg varer: Varer)
 
 
-    @Update // trenger oppdaterte parameter, bruk likegjerne fun update
+    /**
+     * Oppdaterer en vare uten parameter
+     */
+    @Update
     fun update(varer: Varer)
 
 
-    @Query("UPDATE varer SET antall=:nyAntall WHERE varenavn = :varenavn " +
-            "AND listenavn = :listenavn")
-    fun oppdaterAntall(nyAntall: Int, varenavn: String, listenavn: String)
+    /**
+     * Update av antall pr vare pr liste (+/-1)
+     */
+    @Query("UPDATE varer SET antall=:nyAntall+antall WHERE varenavn=:varenavn " +
+            "AND listenavn=:listenavn")
+    fun oppdaterAntall(nyAntall: Int, varenavn: String, listenavn: String) : Int
 
 
-
+    /**
+     * Update av enhetspris pr vare pr liste
+     */
     @Query("UPDATE varer SET enhetspris=:enhetspris WHERE varenavn = :varenavn " +
             "AND listenavn = :listenavn")
     fun oppdaterPris(varenavn: String, listenavn: String, enhetspris: Double)
 
+
+    /**
+     * Sletting av en enkelt vare, trenger ikke parameter
+     */
     @Delete
     fun slettVare(varer: Varer)
 
 
+    /**
+     * Sletting av en hel handleliste, alle varer
+     */
     @Query("DELETE FROM varer WHERE listenavn = :listenavn")
     fun slettHandleliste(listenavn: String)
 }
