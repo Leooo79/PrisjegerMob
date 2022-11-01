@@ -311,6 +311,41 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
+    /**
+     * Funksjonen henter ut enhetspris for en enkelt vare
+     */
+    fun finnPris(butikk: String, varenavn: String) : String {
+        var pris = ""
+        var indeksForButikkNavn = 0
+        if (butikk.equals("Kiwi")) indeksForButikkNavn = 0
+        if (butikk.equals("Meny")) indeksForButikkNavn = 1
+        if (butikk.equals("Coop Obs")) indeksForButikkNavn = 2
+        if (butikk.equals("Rema 1000")) indeksForButikkNavn = 3
+        if (butikk.equals("Spar")) indeksForButikkNavn = 4
+        if (butikk.equals("Coop Extra")) indeksForButikkNavn = 5
+
+        _status.value = "Prøver å vise pris pr vare pr butikk (detaljer)"
+
+        try {
+            for (priser in _priserPrButikk.value?.varer!!) {
+                if (priser.key.equals(varenavn)) {
+                    _priserPrButikk.value?.varer?.get(priser.key)
+                        ?.get(indeksForButikkNavn)?.let {
+                            pris = "$it,-" // ny enhetspris
+                }
+            }
+        }
+            _status.value = "Vellykket, enhetspriser i lokal DB oppdatert"
+        } catch (e: Exception) {
+            _status.value = "Feil: ${e.message}"
+            return "Pris mangler"
+        }
+        return pris
+    }
+
+
+
+
 
     /**
      * Funksjonen etablerer og bytter ut innhold i LiveData -> LazyColumn fra lokal DB
@@ -527,8 +562,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch(Dispatchers.IO) {
             varerDAO.oppdaterPris(varenavn, listenavn, enhetspris)
         }
-
-
 
 
 

@@ -60,6 +60,8 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     // Alle varelinjer/ handlelister lagret i lokal DB (PK = varenavn + listenavn)
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
+    // Alle butikker fra server:
+    val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
 
     // Innhold på denne siden : Header + Søkefelt + Listevisning
     Column(Modifier
@@ -68,7 +70,8 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
         // MÅ SENDE STATEVARIABEL TIL HEADER FOR REKOMP VED LISTEBYTTE
         HeaderVisning(
             uiStateNy,
-            prisjegerViewModel
+            prisjegerViewModel,
+            valgbare
         )
         Sokefelt(
             textState
@@ -76,7 +79,8 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
         ListeVisning(
             vareListe,
             state = textState,
-            prisjegerViewModel
+            prisjegerViewModel,
+            valgbare
         )
     }
 }
@@ -89,7 +93,10 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
  * // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
  */
 @Composable
-private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: PrisjegerViewModel) {
+private fun HeaderVisning(
+    uiStateNy: VarerUiState,
+    prisjegerViewModel: PrisjegerViewModel,
+    valgbare: Array<String>) {
 
     val alertDialog = remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
@@ -228,7 +235,7 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
                     .size(10.dp))
                 Column {
                     // DROPDOWN FOR VALG AV BUTIKK -> VISER AKTUELLE PRISER
-                    VelgButikk(prisjegerViewModel)
+                    VelgButikk(prisjegerViewModel, valgbare)
                 }
             }
         }
@@ -244,8 +251,8 @@ private fun HeaderVisning(uiStateNy: VarerUiState, prisjegerViewModel: Prisjeger
  * TODO: trenger vi push fra server ved endring/ flere navn?
  */
 @Composable
-private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
-    val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
+private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<String>) {
+  //  val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
  //   val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf("Velg butikk") }
     var aktiv by remember { mutableStateOf(false) }
@@ -268,11 +275,11 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel) {
             }
         ) {
             // legger inn items og viser ved onClick
-            valgbare?.forEachIndexed { itemIndex, itemValue ->
+            valgbare.forEachIndexed { itemIndex, itemValue ->
                 DropdownMenuItem(
                     onClick = {
-           //             Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
-           //                 .show()
+                        //             Toast.makeText(valgbareToast, itemValue, Toast.LENGTH_SHORT)
+                        //                 .show()
                         aktiv = false
                         tekst = itemValue
                         prisjegerViewModel.oppdaterPriserFraApi(itemValue)
@@ -421,7 +428,8 @@ private fun ListeVisning(
     vareListe: List<Varer>,
  //   listeApi: Array<String>,
     state: MutableState<TextFieldValue>,
-    prisjegerViewModel: PrisjegerViewModel
+    prisjegerViewModel: PrisjegerViewModel,
+    valgbare: Array<String>
 ) {
 
     val visRettListe = ArrayList<Varer>()
@@ -453,7 +461,7 @@ private fun ListeVisning(
         } // OBS: Må bruke både varenavn og listenavn som key for id av unike
         items(filtrerteVarer, {filtrerteVarer: Varer ->
             filtrerteVarer.varenavn + filtrerteVarer.listenavn}) { filtrerte ->
-            VarelisteItem(filtrerte, prisjegerViewModel)
+            VarelisteItem(filtrerte, prisjegerViewModel, valgbare)
         }
     }
 }
@@ -475,9 +483,11 @@ private fun ListeVisning(
 private fun VarelisteItem(
     vare: Varer,
     prisjegerViewModel: PrisjegerViewModel,
+    valgbare: Array<String>
 ) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
     val bredKolonne = 2F
     val smalKolonne = 1F
     val dismissState = rememberDismissState()
@@ -488,6 +498,7 @@ private fun VarelisteItem(
     // TODO Alternativ løsning er å opprette egen unik PK for hver rad i E Varer
     // TODO og benytte denne som Key i Lazycolumn.item. Er ganske kompliserende og kanskje ikke nødvendig?
 
+    // HVIS BRUKER SWIPE LEFT FOR SLETTING AV RAD
     if (dismissState.currentValue != DismissValue.Default) {
         LaunchedEffect(Unit) { // for suspendert kall
             // TODO: enten finne bedre key for lazycolumn eller endre animasjon
@@ -497,7 +508,53 @@ private fun VarelisteItem(
         }
     }
 
-    // Rader slettes ved venstre-swipe. Visuelt + delete fra lokal DB via vM
+    // HVIS BRUKER ØNSKER Å SE FLERE DETALJER OM HVER ENKELT VARE: UTLØSES AV ONCLICK VARETEKST
+    if (expanded) {
+        AlertDialog(
+            onDismissRequest = {
+                expanded = false
+            },
+            title = {
+                Text(text = "Vare: " + vare.varenavn)
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { expanded = false }
+                    ) {
+                        Text("Tilbake")
+                    }
+                }
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Column(
+                        modifier = Modifier.padding(all = 8.dp),
+                    ) {
+                        Text("Butikker")
+                        for (butikker in valgbare) // looper ut butikknavn
+                            Text(butikker)
+                    }
+                    Column(
+                        modifier = Modifier.padding(all = 8.dp),
+                    ) {
+                        Text("Enhetspris")
+                        for (butikker in valgbare) // looper ut enhetspriser
+                            Text(prisjegerViewModel
+                                .finnPris(butikker, vare.varenavn))
+                    }
+                }
+            }
+        )
+    }
+
+
+    // INNHOLD SOM KAN DRAS MOT VENSTRE FOR DELETE. Visuelt + delete fra lokal DB via vM
     SwipeToDismiss(
         state = dismissState,
         modifier = Modifier
@@ -555,12 +612,12 @@ private fun VarelisteItem(
                         .background(MaterialTheme.colors.primary)
                         .padding(vertical = 4.dp, horizontal = 8.dp)
                         .fillMaxWidth()
-                        .animateContentSize(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessLow
-                            )
-                        )
+ //                       .animateContentSize(
+ //                           animationSpec = spring(
+ //                               dampingRatio = Spring.DampingRatioNoBouncy,
+  //                              stiffness = Spring.StiffnessLow
+  //                          )
+  //                      )
                 ) {
                     Column(
                         modifier = Modifier
@@ -569,13 +626,13 @@ private fun VarelisteItem(
                             .align(Alignment.CenterVertically)
                             .clickable(onClick = { expanded = !expanded })
                     ) {
-                        vare.varenavn.let { Text(text = it) }
-                        if (expanded) {
+                        Text(text = vare.varenavn)
+   //                     if (expanded) {
                             //    bredKolonne = 4F
                             //   smalKolonne = 0.25F
-                            Text(text = ("Mer informasjon om vare, " +
-                                    "bilder av vare?. ").repeat(3))
-                        }
+  //                          Text(text = ("Mer informasjon om vare, " +
+  //                                  "bilder av vare?. ").repeat(3))
+  //                      }
                     }
                     Column(
                         modifier = Modifier
@@ -663,6 +720,7 @@ private fun VarelisteItem(
         } // slutt dismissContent (Card)
     ) // slutt SwipeToDismiss
 } // slutt fun VarelisteItem
+
 
 
 
