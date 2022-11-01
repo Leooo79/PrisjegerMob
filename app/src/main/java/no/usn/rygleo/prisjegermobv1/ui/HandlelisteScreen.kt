@@ -231,10 +231,7 @@ private fun HeaderInnhold(
         ) {
             Row {
                 Text(
-                    text = "Total sum : " + (Math.round(
-                        prisjegerViewModel
-                            .sumPrHandleliste() * 100.00
-                    ) / 100.0).toString(),
+                    text = "Total sum : " + prisjegerViewModel.sumPrHandleliste(),
                     color = MaterialTheme.colors.primary,
                     fontSize = 18.sp,
                 )
@@ -633,7 +630,7 @@ private fun VarelisteItem(
                     .align(Alignment.CenterVertically)
                     .clickable(onClick = visDetaljer)
             ) {
-                Text(text = vare.varenavn)
+                Text(vare.varenavn)
             }
 
             Column( // ENHETSPRIS
@@ -642,7 +639,7 @@ private fun VarelisteItem(
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = vare.enhetspris.toString())
+                Text(vare.enhetspris.toString())
             }
 
             Column( // SUM PR VARE
@@ -650,10 +647,8 @@ private fun VarelisteItem(
                     .weight(smalKolonne)
                     .padding(2.dp)
                     .align(Alignment.CenterVertically)
-            ) { // kontroll for null, utregning av sumPrVare, avrunding 2 desimal
-                Text(text = (Math.round(
-                    (vare.antall.let { vare.enhetspris.times(it) }).times(
-                        100.00)) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
+            ) {
+                Text(prisjegerViewModel.sumPrVare(vare))
             }
 
             Column( // KNAPP FOR Å DEKREMENTERE
@@ -673,8 +668,7 @@ private fun VarelisteItem(
                             prisjegerViewModel.oppdaterVareAntall(
                                 -1, // minus en i antall
                                 vare.varenavn,
-                                vare.listenavn,
-                                false
+                                vare.listenavn
                             )
                         }
                     }
@@ -698,8 +692,7 @@ private fun VarelisteItem(
                         prisjegerViewModel.oppdaterVareAntall(
                             1, // pluss en i antall
                             vare.varenavn,
-                            vare.listenavn,
-                            true
+                            vare.listenavn
                         )
                     }
                 ) {  // viser antall pr vare/ liste
