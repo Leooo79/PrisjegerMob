@@ -1,11 +1,7 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -28,6 +24,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
@@ -68,7 +65,7 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
         .background(MaterialTheme.colors.secondary)
     ) {
         // MÅ SENDE STATEVARIABEL TIL HEADER FOR REKOMP VED LISTEBYTTE
-        HeaderVisning(
+        HeaderDialog(
             uiStateNy,
             prisjegerViewModel,
             valgbare
@@ -88,12 +85,19 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
 
 
 
+
+
+
+/**
+ * Funksjon for å bygge opp og vise header med valg og aggregerte data
+ * // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
+ */
 /**
  * Funksjon for å bygge opp og vise header med valg og aggregerte data
  * // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
  */
 @Composable
-private fun HeaderVisning(
+private fun HeaderDialog(
     uiStateNy: VarerUiState,
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>) {
@@ -192,8 +196,29 @@ private fun HeaderVisning(
             }
         )
     } // slutt alertDialog
+    HeaderInnhold(
+        prisjegerViewModel,
+        valgbare,
+        alertDialog = {alertDialog.value = !alertDialog.value}
+    )
+} // slutt HeaderVisning
 
-    // Innhold i Header
+
+
+
+
+
+
+/**
+ * Funksjonen vises innholdet i Header, menyknapp, dropdown for butikk/ handleliste
+ */
+@Composable
+private fun HeaderInnhold(
+    prisjegerViewModel: PrisjegerViewModel,
+    valgbare: Array<String>,
+    alertDialog: () -> Unit
+) {
+
     Card(
         backgroundColor = MaterialTheme.colors.secondary,
     ) {
@@ -217,10 +242,7 @@ private fun HeaderVisning(
             Row {
                 Column {
                     Button(
-                        onClick = {
-                            // Åpner alertDialog for nytt listenavn
-                            alertDialog.value = true
-                        }
+                        onClick = alertDialog
                     ) {
                         Text("Valg")
                     }
@@ -240,7 +262,10 @@ private fun HeaderVisning(
             }
         }
     }
-} // slutt HeaderVisning
+}
+
+
+
 
 
 
@@ -252,6 +277,7 @@ private fun HeaderVisning(
  */
 @Composable
 private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<String>) {
+
   //  val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
  //   val valgbareToast = LocalContext.current.applicationContext
     var tekst by rememberSaveable { mutableStateOf("Velg butikk") }
@@ -303,6 +329,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
  */
 @Composable
 private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
+
     val valgbare by prisjegerViewModel.alleListenavn.observeAsState(initial = null)
    // val valgbareToast = LocalContext.current.applicationContext
     var tekst = prisjegerViewModel.currentListenavn // OBS!! DETTE GIR REKOMP
@@ -344,6 +371,8 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
         }
     }
 }
+
+
 
 
 
@@ -418,6 +447,8 @@ private fun Sokefelt(state: MutableState<TextFieldValue>) {
 
 
 
+
+
 /**
  * Funksjonen bygger opp LazyColumn og viser varer fra filteret (Sokefelt)
  * Dersom filter er deaktivert (tomt, uten tekst) vises hele listen pr listenavn
@@ -426,7 +457,6 @@ private fun Sokefelt(state: MutableState<TextFieldValue>) {
 @Composable
 private fun ListeVisning(
     vareListe: List<Varer>,
- //   listeApi: Array<String>,
     state: MutableState<TextFieldValue>,
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>
@@ -435,7 +465,7 @@ private fun ListeVisning(
     val visRettListe = ArrayList<Varer>()
     // Kun varelinjer tilhørende inneværende liste(navn) vises
     for (varer in vareListe) {
-        if (varer.listenavn.equals(prisjegerViewModel.currentListenavn)) {
+        if (varer.listenavn == prisjegerViewModel.currentListenavn) {
             visRettListe.add(varer)
         }
     }
@@ -461,7 +491,7 @@ private fun ListeVisning(
         } // OBS: Må bruke både varenavn og listenavn som key for id av unike
         items(filtrerteVarer, {filtrerteVarer: Varer ->
             filtrerteVarer.varenavn + filtrerteVarer.listenavn}) { filtrerte ->
-            VarelisteItem(filtrerte, prisjegerViewModel, valgbare)
+            VarelisteDialog(filtrerte, prisjegerViewModel, valgbare)
         }
     }
 }
@@ -480,16 +510,13 @@ private fun ListeVisning(
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun VarelisteItem(
+private fun VarelisteDialog(
     vare: Varer,
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>
 ) {
 
-    var expanded by rememberSaveable { mutableStateOf(false) }
-    var text by remember { mutableStateOf("") }
-    val bredKolonne = 2F
-    val smalKolonne = 1F
+    var visDetaljer by rememberSaveable { mutableStateOf(false) }
     val dismissState = rememberDismissState()
 
     // TODO: Insert av samme vare til samme handleliste etter delete gir utfordinger
@@ -508,51 +535,15 @@ private fun VarelisteItem(
         }
     }
 
-    // HVIS BRUKER ØNSKER Å SE FLERE DETALJER OM HVER ENKELT VARE: UTLØSES AV ONCLICK VARETEKST
-    if (expanded) {
-        AlertDialog(
-            onDismissRequest = {
-                expanded = false
-            },
-            title = {
-                Text(text = "Vare: " + vare.varenavn)
-            },
-            buttons = {
-                Row(
-                    modifier = Modifier.padding(all = 8.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { expanded = false }
-                    ) {
-                        Text("Tilbake")
-                    }
-                }
-                Row(
-                    modifier = Modifier.padding(all = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Column(
-                        modifier = Modifier.padding(all = 8.dp),
-                    ) {
-                        Text("Butikker")
-                        for (butikker in valgbare) // looper ut butikknavn
-                            Text(butikker)
-                    }
-                    Column(
-                        modifier = Modifier.padding(all = 8.dp),
-                    ) {
-                        Text("Enhetspris")
-                        for (butikker in valgbare) // looper ut enhetspriser
-                            Text(prisjegerViewModel
-                                .finnPris(butikker, vare.varenavn))
-                    }
-                }
-            }
+    // HVIS BRUKER ØNSKER Å SE FLERE DETALJER OM HVER ENKELT VARE: UTLØSES AV ONCLICK VARENAVN
+    if (visDetaljer) {
+        visDetaljer(
+            vare,
+            prisjegerViewModel,
+            valgbare,
+            visDetaljer = { visDetaljer = !visDetaljer }
         )
     }
-
 
     // INNHOLD SOM KAN DRAS MOT VENSTRE FOR DELETE. Visuelt + delete fra lokal DB via vM
     SwipeToDismiss(
@@ -598,128 +589,206 @@ private fun VarelisteItem(
             }
         }, // slutt background for swipe
         dismissContent = {
+            VarelisteItem(
+                vare,
+                prisjegerViewModel,
+                visDetaljer = { visDetaljer = !visDetaljer }
+            )
+        } // slutt dismissContent
+    ) // slutt SwipeToDismiss
+} // slutt fun VarelisteItem
 
-            Card(
-                elevation = animateDpAsState(
-                    if (dismissState.dismissDirection != null) 4.dp
-                    else 0.dp
-                ).value,
-                backgroundColor = MaterialTheme.colors.primary,
-                //   modifier = Modifier.padding(vertical = 4.dp, horizontal = 2.dp)
+
+
+
+
+
+
+/**
+ * Funksjonen viser innholdet i listen/ raden
+ */
+@Composable
+private fun VarelisteItem(
+    vare: Varer,
+    prisjegerViewModel: PrisjegerViewModel,
+    visDetaljer: () -> Unit
+) {
+
+    val bredKolonne = 2F
+    val smalKolonne = 1F
+
+    Card(
+        backgroundColor = MaterialTheme.colors.primary,
+    ) {
+        Row(
+            modifier = Modifier
+                .background(MaterialTheme.colors.primary)
+                .padding(vertical = 4.dp, horizontal = 8.dp)
+                .fillMaxWidth()
+        ) {
+            Column( // VARENAVN
+                modifier = Modifier
+                    .weight(bredKolonne)
+                    .padding(2.dp)
+                    .align(Alignment.CenterVertically)
+                    .clickable(onClick = visDetaljer)
             ) {
-                Row(
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.primary)
-                        .padding(vertical = 4.dp, horizontal = 8.dp)
-                        .fillMaxWidth()
- //                       .animateContentSize(
- //                           animationSpec = spring(
- //                               dampingRatio = Spring.DampingRatioNoBouncy,
-  //                              stiffness = Spring.StiffnessLow
-  //                          )
-  //                      )
+                Text(text = vare.varenavn)
+            }
+
+            Column( // ENHETSPRIS
+                modifier = Modifier
+                    .weight(smalKolonne)
+                    .padding(2.dp)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Text(text = vare.enhetspris.toString())
+            }
+
+            Column( // SUM PR VARE
+                modifier = Modifier
+                    .weight(smalKolonne)
+                    .padding(2.dp)
+                    .align(Alignment.CenterVertically)
+            ) { // kontroll for null, utregning av sumPrVare, avrunding 2 desimal
+                Text(text = (Math.round(
+                    (vare.antall.let { vare.enhetspris.times(it) }).times(
+                        100.00)) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
+            }
+
+            Column( // KNAPP FOR Å DEKREMENTERE
+                modifier = Modifier
+                    .weight(smalKolonne)
+                    .padding(2.dp)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Button( // knapp for å trekke fra
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFFF44336),
+                        contentColor = Color.White
+                    ),
+                    onClick = {
+                        // minimum 0 vare.
+                        if (vare.antall >= 1) {
+                            prisjegerViewModel.oppdaterVareAntall(
+                                -1, // minus en i antall
+                                vare.varenavn,
+                                vare.listenavn,
+                                false
+                            )
+                        }
+                    }
+                ) { // viser antall pr vare/ liste
+                    Text(vare.antall.toString())
+                }
+            }
+
+            Column( // KNAPP FOR Å INKREMENTERE
+                modifier = Modifier
+                    .weight(smalKolonne)
+                    .padding(2.dp)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Button( // knapp for å legge til
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primaryVariant,
+                        contentColor = Color.White
+                    ),
+                    onClick = {
+                        prisjegerViewModel.oppdaterVareAntall(
+                            1, // pluss en i antall
+                            vare.varenavn,
+                            vare.listenavn,
+                            true
+                        )
+                    }
+                ) {  // viser antall pr vare/ liste
+                    Text(vare.antall.toString())
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+/**
+ * Funksjonen viser enhetspriser pr vare pr butikk i AlertDialog
+ */
+@Composable
+private fun visDetaljer(
+    vare: Varer,
+    prisjegerViewModel: PrisjegerViewModel,
+    valgbare: Array<String>,
+    visDetaljer: () -> Unit) {
+
+    AlertDialog(
+        onDismissRequest = visDetaljer,
+        title = {
+            Text(
+                text = "Vare: " + vare.varenavn,
+                fontWeight = FontWeight.Bold,
+            )
+        },
+        buttons = {
+            Row(
+                modifier = Modifier.padding(all = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = visDetaljer
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(bredKolonne)
-                            .padding(2.dp)
-                            .align(Alignment.CenterVertically)
-                            .clickable(onClick = { expanded = !expanded })
-                    ) {
-                        Text(text = vare.varenavn)
-   //                     if (expanded) {
-                            //    bredKolonne = 4F
-                            //   smalKolonne = 0.25F
-  //                          Text(text = ("Mer informasjon om vare, " +
-  //                                  "bilder av vare?. ").repeat(3))
-  //                      }
+                    Text("Tilbake")
+                }
+            }
+            Row(
+                modifier = Modifier.padding(all = 8.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(2F)
+                        .padding(2.dp)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(
+                        text = "Butikker",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(Modifier.size(10.dp))
+                    for (butikker in valgbare) {// looper ut butikknavn
+                        Text(butikker)
+                        Spacer(Modifier.size(5.dp))
                     }
-                    Column(
-                        modifier = Modifier
-                            .weight(smalKolonne)
-                            .padding(2.dp)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Text(text = vare.enhetspris.toString())
-                    }
-                    Column( // sumPrVare
-                        modifier = Modifier
-                            .weight(smalKolonne)
-                            .padding(2.dp)
-                            .align(Alignment.CenterVertically)
-                    ) { // kontroll for null, utregning av sumPrVare, avrunding 2 desimal
-                        Text(text = (Math.round(
-                            (vare.antall.let { vare.enhetspris.times(it) }).times(
-                                100.00) ?: 0.0) / 100.0).toString()) // KAN OVERLATES TIL VIEWMODELL, MEN TRENGER INDEKS
-                    }
-                    Column(
-                        modifier = Modifier
-                            .weight(smalKolonne)
-                            .padding(2.dp)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Button( // knapp for å trekke fra
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(0xFFF44336),
-                                contentColor = Color.White
-                            ),
-                            onClick = {
-                                // minimum 0 vare.
-                                if (vare.antall >= 1) {
-                                    prisjegerViewModel.oppdaterVareAntall(
-                                        -1, // minus en i antall
-                                        vare.varenavn,
-                                        vare.listenavn,
-                                        false
-                                    )
-
-                                }
-                            }
-                        ) { // viser antall pr vare/ liste
-                            Text(vare.antall.toString())
-                        }
-                    }
-                    Column(
-                        modifier = Modifier
-                            .weight(smalKolonne)
-                            .padding(2.dp)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Button( // knapp for å legge til
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.primaryVariant,
-                                contentColor = Color.White
-                            ),
-                            onClick = {
-                                /*
-                                vare.antall?.let {
-                                    prisjegerViewModel.oppdaterVareAntall(
-                                        it.plus(1),
-                                        vare.varenavn,
-                                        prisjegerViewModel.currentListenavn,
-                                        true
-                                    )
-                                }
-                                // kall på lokale DV via vM
-                                    */
-                                prisjegerViewModel.oppdaterVareAntall(
-                                    1, // pluss en i antall
-                                    vare.varenavn,
-                                    vare.listenavn,
-                                    true
-                                )
-
-
-                            }
-                        ) {  // viser antall pr vare/ liste
-                            Text(vare.antall.toString())
-                        }
+                }
+                Spacer(Modifier.size(10.dp))
+                Column(
+                    modifier = Modifier
+                        .weight(2F)
+                        .padding(2.dp)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(text = "Enhetspris",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(Modifier.size(10.dp))
+                    for (butikker in valgbare) {// looper ut enhetspriser
+                        Text(
+                            prisjegerViewModel
+                                .finnPris(butikker, vare.varenavn)
+                        )
+                        Spacer(Modifier.size(5.dp))
                     }
                 }
             }
-        } // slutt dismissContent (Card)
-    ) // slutt SwipeToDismiss
-} // slutt fun VarelisteItem
+        }
+    )
+}
+
 
 
 

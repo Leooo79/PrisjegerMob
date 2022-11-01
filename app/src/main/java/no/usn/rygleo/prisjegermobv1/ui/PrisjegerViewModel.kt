@@ -421,8 +421,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         var sum = 0.0
         alleVarer.value
             ?.forEach { varer ->
-                if (varer.listenavn.equals(currentListenavn))
-                    sum += varer.antall?.times(varer.enhetspris!!) ?: 0.0
+                if (varer.listenavn == currentListenavn)
+                    sum += varer.antall.times(varer.enhetspris)
             }
         return sum
     }
@@ -625,7 +625,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Kall på varelinjer fra API gjør denne jobben automatisk
      */
     private fun manuellVareliste(): List<Varer> {
-        var liste = listOf(
+        val liste = listOf(
             Varer("RoomListe1", "AGGGGGGGGGGgurk, 1 stk", 11.11, 5),
             Varer("RoomListe1", "Aromat Krydder, 90 gram", 22.22, 4),
             Varer("RoomListe1", "Avløpsåpner Pulver Plumbo, 600 gr", 33.33, 0),
