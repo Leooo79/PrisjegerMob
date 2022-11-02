@@ -27,6 +27,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -237,7 +238,7 @@ private fun HeaderInnhold(
                 )
             }
             Row {
-                Column {
+                Column(Modifier) {
                     Button(
                         onClick = alertDialog
                     ) {
@@ -620,7 +621,7 @@ private fun VarelisteItem(
         Row(
             modifier = Modifier
                 .background(MaterialTheme.colors.primary)
-                .padding(vertical = 4.dp, horizontal = 8.dp)
+                .padding(vertical = 4.dp, horizontal = 4.dp)
                 .fillMaxWidth()
         ) {
             Column( // VARENAVN
@@ -728,8 +729,8 @@ private fun visDetaljer(
         },
         buttons = {
             Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center
+                modifier = Modifier.padding(all = 28.dp),
+                horizontalArrangement = Arrangement.End
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -738,15 +739,13 @@ private fun visDetaljer(
                     Text("Tilbake")
                 }
             }
-            Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+            Row(modifier = Modifier
+                .padding(all = 8.dp),
             ) {
                 Column(
                     modifier = Modifier
-                        .weight(2F)
-                        .padding(2.dp)
-                        .align(Alignment.CenterVertically)
+                        .weight(3F)
+                        .padding(start = 20.dp)
                 ) {
                     Text(
                         text = "Butikker",
@@ -755,15 +754,14 @@ private fun visDetaljer(
                     Spacer(Modifier.size(10.dp))
                     for (butikker in valgbare) {// looper ut butikknavn
                         Text(butikker)
-                        Spacer(Modifier.size(5.dp))
+                        Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+                        Spacer(Modifier.size(10.dp))
                     }
                 }
-                Spacer(Modifier.size(10.dp))
                 Column(
                     modifier = Modifier
                         .weight(2F)
-                        .padding(2.dp)
-                        .align(Alignment.CenterVertically)
+                        .padding(end = 20.dp)
                 ) {
                     Text(text = "Enhetspris",
                         fontWeight = FontWeight.Bold
@@ -774,8 +772,10 @@ private fun visDetaljer(
                             prisjegerViewModel
                                 .finnPris(butikker, vare.varenavn)
                         )
-                        Spacer(Modifier.size(5.dp))
+                        Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+                        Spacer(Modifier.size(10.dp))
                     }
+                    Spacer(Modifier.size(30.dp))
                 }
             }
         }
