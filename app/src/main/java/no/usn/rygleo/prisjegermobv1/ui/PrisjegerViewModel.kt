@@ -338,13 +338,17 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 }
             }
         }
-            _status.value = "Vellykket, enhetspriser i lokal DB oppdatert"
+            _status.value = "Vellykket, pris pr vare pr butikk vises"
         } catch (e: Exception) {
             _status.value = "Feil: ${e.message}"
             return "Pris mangler"
         }
         return pris
     }
+
+
+
+    
 
 
 
@@ -440,6 +444,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             }
         return (Math.round(sum * 100.00) / 100.0).toString()+",-"
     }
+
 
 
 

@@ -104,7 +104,9 @@ private fun HeaderDialog(
     valgbare: Array<String>) {
 
     val alertDialog = remember { mutableStateOf(false) }
+    val butikkDialog = remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
+    var butikkNavn by rememberSaveable { mutableStateOf("Velg butikk") }
 
     // Åpner alertDialog for nytt listenavn fra bruker ved behov
     if (alertDialog.value) {
@@ -134,6 +136,7 @@ private fun HeaderDialog(
                             alertDialog.value = false
                             prisjegerViewModel.setListeNavn(text) // endrer listenavn
                             prisjegerViewModel.oppdaterListeFraApi() // henter alle varer
+                            // TODO: priser må hentes manuelt. Bør endre logikk for nye lister
                         }
                     ) {
                         Text("Lagre ny liste")
@@ -197,10 +200,73 @@ private fun HeaderDialog(
             }
         )
     } // slutt alertDialog
+
+    // VISER DIALOG MED TOTALSUM PR HANDLELISTE PR BUTIKK
+    if (butikkDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                butikkDialog.value = false
+            },
+            title = {
+                Text(text = "Totalsum pr butikk")
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(all = 28.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {butikkDialog.value = false}
+                    ) {
+                        Text("Tilbake")
+                    }
+                }
+                Row(modifier = Modifier
+                    .padding(all = 8.dp),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(3F)
+                            .padding(start = 20.dp)
+                    ) {
+                        Text(
+                            text = butikkNavn,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.size(10.dp))
+                        for (butikker in valgbare) {// looper ut butikknavn
+                            Text(butikker)
+                            Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+                            Spacer(Modifier.size(10.dp))
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .weight(2F)
+                            .padding(end = 20.dp)
+                    ) {
+                        Text(text = "Totalsum",
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.size(10.dp))
+                        for (butikker in valgbare) {// looper ut enhetspriser
+                            Text(prisjegerViewModel.sumPrHandleliste())
+                            Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+                            Spacer(Modifier.size(10.dp))
+                        }
+                        Spacer(Modifier.size(30.dp))
+                    }
+                }
+            }
+        )
+    } // slutt butikkDialog
+
     HeaderInnhold(
         prisjegerViewModel,
         valgbare,
-        alertDialog = {alertDialog.value = !alertDialog.value}
+        alertDialog = {alertDialog.value = !alertDialog.value},
+        butikkDialog = {butikkDialog.value = !butikkDialog.value}
     )
 } // slutt HeaderVisning
 
@@ -213,11 +279,13 @@ private fun HeaderDialog(
 /**
  * Funksjonen vises innholdet i Header, menyknapp, dropdown for butikk/ handleliste
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun HeaderInnhold(
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>,
-    alertDialog: () -> Unit
+    alertDialog: () -> Unit,
+    butikkDialog: () -> Unit
 ) {
 
     Card(
@@ -230,11 +298,15 @@ private fun HeaderInnhold(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row {
+            Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp),
+            onClick = butikkDialog,
+            ) {
                 Text(
-                    text = "Total sum : " + prisjegerViewModel.sumPrHandleliste(),
-                    color = MaterialTheme.colors.primary,
-                    fontSize = 18.sp,
+                    text = "Total sum : " + prisjegerViewModel
+                        .sumPrHandleliste(),
                 )
             }
             Row {
@@ -249,13 +321,15 @@ private fun HeaderInnhold(
                     .size(10.dp))
                 Column {
                     // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
-                    VelgHandleliste(prisjegerViewModel)
+                    VelgButikk(prisjegerViewModel, valgbare)
+                //    VelgHandleliste(prisjegerViewModel)
                 }
                 Spacer(Modifier
                     .size(10.dp))
                 Column {
-                    // DROPDOWN FOR VALG AV BUTIKK -> VISER AKTUELLE PRISER
-                    VelgButikk(prisjegerViewModel, valgbare)
+           //         VelgButikk(prisjegerViewModel, valgbare)
+                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
+                    VelgHandleliste(prisjegerViewModel)
                 }
             }
         }
@@ -282,7 +356,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
     var aktiv by remember { mutableStateOf(false) }
 
     Box(
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         // knapp for å åpne nedtrekksmeny
         Button(
@@ -781,6 +855,8 @@ private fun visDetaljer(
         }
     )
 }
+
+
 
 
 
