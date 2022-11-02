@@ -34,12 +34,12 @@ import no.usn.rygleo.prisjegermobv1.ui.theme.Purple700
 
 @Composable
 fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
-    var isLoggedIn1 by remember{ mutableStateOf(false)}
-    var isLoggedIn by remember{ mutableStateOf(false)}
-    var brukerNavn by remember{ mutableStateOf("")}
-    var passord by remember{ mutableStateOf("")}
-    val openDialog = remember { mutableStateOf(false)}
-    var text by remember { mutableStateOf("")}
+    var isLoggedIn1 by remember { mutableStateOf(false) }
+    var isLoggedIn by remember { mutableStateOf(false) }
+    var brukerNavn by remember { mutableStateOf("") }
+    var passord by remember { mutableStateOf("") }
+    val openDialog = remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
 
 
     if (openDialog.value) {
@@ -65,33 +65,34 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             }
         )
     }
+    if (!prisjegerViewModel.isLoggedIn.value) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 30.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Card(
-            modifier = Modifier.size(90.dp),
-            shape = CircleShape,
-        )
-        {
-            Image(
-                painterResource(R.drawable.prisjegerlogo),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+            Card(
+                modifier = Modifier.size(90.dp),
+                shape = CircleShape,
             )
+            {
+                Image(
+                    painterResource(R.drawable.prisjegerlogo),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
-    }
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        /*  Text(text = "Login her",
+            /*  Text(text = "Login her",
               style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.ExtraBold),
               modifier = Modifier
                   .fillMaxWidth()
@@ -99,132 +100,146 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
               textAlign = TextAlign.Left,
               color = Color.Red
           )*/
-        OutlinedTextField(
-            value = brukerNavn,
-            onValueChange = { brukerNavn = it },
-            label = { Text("brukernavn") },
-            leadingIcon = {
-                Icon(Icons.Default.Person, contentDescription = "bruker")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp, top = 10.dp)
-        )
-        OutlinedTextField(
-            value = passord,
-            onValueChange = { passord = it },
-            label = { Text("passord") },
-            leadingIcon = {
-                Icon(Icons.Default.Info, contentDescription = "password")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp, top = 10.dp),
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-        )
-        if (isLoggedIn1 == false) {
-            OutlinedButton(
-                onClick = {
-                    if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
-                        prisjegerViewModel.postAPILogin(brukerNavn, passord)
-                        if (prisjegerViewModel.brukerAPI.value?.get("melding")
-                                .equals("innlogget")
-                        ) {
-                            isLoggedIn = true
-                            text="logget inn"
-
-                        }
-                        else
-                        {
-                            isLoggedIn = false
-                            text= "Feil passord eller brukernavn"
-                        }
-                        //HVIS VELLYKKET = RES.JSON("MEDLING": 'INNLOGGET')
-                    }
-                    else{ text= "feil passord eller brukernavn"}
-                    openDialog.value=true   },
+            OutlinedTextField(
+                value = brukerNavn,
+                onValueChange = { brukerNavn = it },
+                label = { Text("brukernavn") },
+                leadingIcon = {
+                    Icon(Icons.Default.Person, contentDescription = "bruker")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp, top = 10.dp),
-                elevation = ButtonDefaults.elevation(100.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Blue,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = "login",
-                    textAlign = TextAlign.Center
-                )
-
-            }
-            Column(
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
-
-
-            ) {
-
-                ClickableText(
-                    text = AnnotatedString("Registrer ny bruker"),
-
-                    onClick = { isLoggedIn1 = true },
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily.Default,
-                        textDecoration = TextDecoration.Underline,
-                        color = Purple700
-                    )
-                )
-            }
-        }
-    else
-        {
-            OutlinedButton(
-                onClick = {
-                    if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
-                        prisjegerViewModel.postAPIRegistrer(brukerNavn, passord)
-                        if (prisjegerViewModel.registrerAPI.value
-                                .equals("brukerEKS")
-                        ) {
-                            text = "bruker eksisterer allerede"
-
-                        }
-                        else {
-                            text = "bruker registrert"
-                        }
-                    }
-                    else text = "brukernavn og passord må ha verdi"
-                    openDialog.value=true
-                    isLoggedIn1 = false
-
+                    .padding(bottom = 10.dp, top = 10.dp)
+            )
+            OutlinedTextField(
+                value = passord,
+                onValueChange = { passord = it },
+                label = { Text("passord") },
+                leadingIcon = {
+                    Icon(Icons.Default.Info, contentDescription = "password")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp, top = 10.dp),
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            )
+
+            if (isLoggedIn1 == false) {
+                OutlinedButton(
+                    onClick = {
+                        if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
+                            prisjegerViewModel.postAPILogin(brukerNavn, passord)
+                            if (prisjegerViewModel.brukerAPI.value?.get("melding")
+                                    .equals("innlogget")
+                            ) {
+                                isLoggedIn = true
+                                text = "logget inn"
+
+                            } else {
+                                isLoggedIn = false
+                                text = "Feil passord eller brukernavn"
+                            }
+                            //HVIS VELLYKKET = RES.JSON("MEDLING": 'INNLOGGET')
+                        } else {
+                            text = "feil passord eller brukernavn"
+                        }
+                        openDialog.value = true
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp, top = 10.dp),
+                    elevation = ButtonDefaults.elevation(100.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Blue,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(
+                        text = "login",
+                        textAlign = TextAlign.Center
+                    )
+
+                }
+                Column(
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+
+                ) {
+
+                    ClickableText(
+                        text = AnnotatedString("Registrer ny bruker"),
+
+                        onClick = { isLoggedIn1 = true },
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontFamily = FontFamily.Default,
+                            textDecoration = TextDecoration.Underline,
+                            color = Purple700
+                        )
+                    )
+                }
+            } else {
+                OutlinedButton(
+                    onClick = {
+                        if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
+                            prisjegerViewModel.postAPIRegistrer(brukerNavn, passord)
+                            if (prisjegerViewModel.registrerAPI.value
+                                    .equals("brukerEKS")
+                            ) {
+                                text = "bruker eksisterer allerede"
+
+                            } else {
+                                text = "bruker registrert"
+                            }
+                        } else text = "brukernavn og passord må ha verdi"
+                        openDialog.value = true
+                        isLoggedIn1 = false
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp, top = 10.dp),
+                    elevation = ButtonDefaults.elevation(100.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Blue,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(
+                        text = "Registrer",
+                        textAlign = TextAlign.Center
+                    )
+
+                }
+
+            }
+        }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            OutlinedButton(
+                onClick = {prisjegerViewModel.postAPILoggout()},
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp, top = 10.dp),
                 elevation = ButtonDefaults.elevation(100.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Blue,
                     contentColor = Color.White
                 )
-            ) {
-                Text(
-                    text = "Registrer",
-                    textAlign = TextAlign.Center
-                )
-
-            }
-
+            ){Text(
+                text = "Logg ut",
+                textAlign = TextAlign.Center
+            ) }
         }
+
+
     }
-
-
-
 }
-@Composable
-fun Registrer(  ){
-
-}
-
 
