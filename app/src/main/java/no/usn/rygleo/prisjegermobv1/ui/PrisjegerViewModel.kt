@@ -280,13 +280,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         // TODO: Kontrollere rekkefølge og referere til indeks direkte.
         // TODO: Det hadde vært bedre med nøkkel for butikknavn fra backend JSON
         // TODO: ENHETSPRISER MÅ IKKE NØDVENDIGVIS LIGGE I LOKAL DB, BØR UANSETT ALLTID OPPDATERES
-        var indeksForButikkNavn = 0
-        if (butikknavn == "Kiwi") indeksForButikkNavn = 0
-        if (butikknavn == "Meny") indeksForButikkNavn = 1
-        if (butikknavn == "Coop Obs") indeksForButikkNavn = 2
-        if (butikknavn == "Rema 1000") indeksForButikkNavn = 3
-        if (butikknavn == "Spar") indeksForButikkNavn = 4
-        if (butikknavn == "Coop Extra") indeksForButikkNavn = 5
+        val indeksForButikkNavn = indeksForButikk(butikknavn)
 
         _status.value = "Prøver å oppdatere lokal DB (enhetspris) fra API"
 
@@ -314,29 +308,24 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
+
+
     /**
      * Funksjonen henter ut enhetspris for en enkelt vare
      * Benyttes i HandlelisteScreen for visning av detaljer pr vare
      * TODO: Nesten lik funksjon som oppdaterPriserFraApi, bør integreres
      */
-    fun finnPris(butikk: String, varenavn: String) : String {
+    fun finnPrisPrVare(butikknavn: String, varenavn: String) : String {
         var pris = ""
-        var indeksForButikkNavn = 0
-        if (butikk == "Kiwi") indeksForButikkNavn = 0
-        if (butikk == "Meny") indeksForButikkNavn = 1
-        if (butikk == "Coop Obs") indeksForButikkNavn = 2
-        if (butikk == "Rema 1000") indeksForButikkNavn = 3
-        if (butikk == "Spar") indeksForButikkNavn = 4
-        if (butikk == "Coop Extra") indeksForButikkNavn = 5
-
+        val indeksForButikkNavn = indeksForButikk(butikknavn)
         _status.value = "Prøver å vise pris pr vare pr butikk (detaljer)"
-
         try {
             for (priser in _priserPrButikk.value?.varer!!) {
                 if (priser.key == varenavn) {
                     _priserPrButikk.value?.varer?.get(priser.key)
                         ?.get(indeksForButikkNavn)?.let {
                             pris = "$it,-" // ny enhetspris
+
                 }
             }
         }
@@ -350,6 +339,54 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
+
+
+
+    /**
+     * Funksjonen henter ut sum pr handleliste pr butikk
+     * Benyttes i HandlelisteScreen
+     * TODO: Nesten lik funksjon som oppdaterPriserFraApi, bør integreres
+     */
+    fun finnSumPrButikk(butikknavn: String) : String {
+        var pris = 0.0
+        val indeksForButikkNavn = indeksForButikk(butikknavn)
+        _status.value = "Prøver å vise pris pr vare pr butikk (detaljer)"
+        try { // looper alle varer i lokal DB og alle priser fra server
+            for (varer in alleVarer.value!!) {
+                for (priser in _priserPrButikk.value?.varer!!) { // hvis rett vare og liste,
+                    if (priser.key == varer.varenavn && varer.listenavn == currentListenavn) {
+                        _priserPrButikk.value?.varer?.get(priser.key)
+                            ?.get(indeksForButikkNavn)?.toDouble().let { // hent rett butikk (indeks)
+                                pris += it?.times(varer.antall) ?: 0.0 // aggregerer antall*pris
+                            }
+                    }
+                }
+            }
+            _status.value = "Vellykket, enhetspriser i lokal DB oppdatert"
+        } catch (e: Exception) {
+            _status.value = "Feil: ${e.message}"
+            return "Finner ikke pris"
+        }
+        return (Math.round(pris * 100.00) / 100.0).toString() // avrunding 2 des.
+    }
+
+
+
+
+
+
+    /**
+     * Hjelpemetode for å kompensere for manglende key fra server (butikknavn)
+     */
+    private fun indeksForButikk(butikk: String) : Int {
+        if (butikk == "Kiwi") return 0
+        if (butikk == "Meny") return 1
+        if (butikk == "Coop Obs") return 2
+        if (butikk == "Rema 1000") return 3
+        if (butikk == "Spar") return 4
+        return if (butikk == "Coop Extra") 5
+        else -1
+    }
 
 
 
@@ -433,6 +470,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
+
     /**
      * Funksjon for å regne ut sum pr handleliste.
      * Kalles fra composables (HandlelisteScreen.HeaderVisning())
@@ -453,6 +491,24 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
+     * Funksjon for å regne ut sum pr handleliste.
+     * Kalles fra composables (HandlelisteScreen.HeaderVisning())
+     */
+    fun sumPrHandlelistePrButikk(butikk: String): String {
+        var sum = 0.0
+        alleVarer.value
+            ?.forEach { varer ->
+                if (varer.listenavn == currentListenavn)
+                    sum += varer.antall.times(varer.enhetspris)
+            }
+        return (Math.round(sum * 100.00) / 100.0).toString()+",-"
+    }
+
+
+
+
+
+    /**
      * Funksjonen kalles fra composables for å oppdatere hvilken handleliste
      * som vises. Nytt kall på lokal DB + endrer statevariabel listenavn
      * for rekomposisjon
@@ -463,6 +519,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
+    /**
+     * Lager kopi av current butikknavn
+     * // TODO: Er denne i bruk?
+     */
     fun setButikknavn(nyttButikknavn: String) {
         currentButikk = nyttButikknavn
         oppdaterButikknavn() // for rekomposisjon
@@ -481,6 +541,12 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+
+
+    /**
+     * Lager kopi av current butikknavn
+     * // TODO: Er denne i bruk?
+     */
     private fun oppdaterButikknavn() {
         _uiStateNy.update { currentState ->
             currentState.copy(

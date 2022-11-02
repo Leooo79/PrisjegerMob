@@ -137,8 +137,7 @@ private fun HeaderDialog(
                             prisjegerViewModel.setListeNavn(text) // endrer listenavn
                             prisjegerViewModel.oppdaterListeFraApi() // henter alle varer
                             alertDialog.value = false
-                            prisjegerViewModel.setButikknavn("Kiwi")
-                            prisjegerViewModel.oppdaterPriserFraApi("Kiwi")
+                            prisjegerViewModel.setButikknavn("Velg butikk")
                             // TODO: priser må hentes manuelt. Bør endre logikk for nye lister
                         }
                     ) {
@@ -254,7 +253,7 @@ private fun HeaderDialog(
                         )
                         Spacer(Modifier.size(10.dp))
                         for (butikker in valgbare) {// looper ut enhetspriser
-                            Text(prisjegerViewModel.sumPrHandleliste())
+                            Text(prisjegerViewModel.finnSumPrButikk(butikker).toString())
                             Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
                             Spacer(Modifier.size(10.dp))
                         }
@@ -355,7 +354,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
 
   //  val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
  //   val valgbareToast = LocalContext.current.applicationContext
-    var tekst = prisjegerViewModel.currentButikk
+    var tekst by remember { mutableStateOf("Velg butikk") }
     var aktiv by remember { mutableStateOf(false) }
 
     Box(
@@ -848,7 +847,7 @@ private fun visDetaljer(
                     for (butikker in valgbare) {// looper ut enhetspriser
                         Text(
                             prisjegerViewModel
-                                .finnPris(butikker, vare.varenavn)
+                                .finnPrisPrVare(butikker, vare.varenavn)
                         )
                         Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
                         Spacer(Modifier.size(10.dp))
