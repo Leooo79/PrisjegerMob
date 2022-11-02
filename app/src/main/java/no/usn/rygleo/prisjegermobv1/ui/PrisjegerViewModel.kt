@@ -54,6 +54,18 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     // VARIABLER FOR LOGIN API
     private val _brukerAPI = MutableLiveData<Map<String, String>>()
     val brukerAPI: LiveData<Map<String, String>> = _brukerAPI
+    
+    //variabel som holder på brukernavn 
+    private val _brukernavn = mutableStateOf("")
+    var brukernavn = _brukernavn
+
+    //variabel for å sjekke om bruker er logget inn 
+    private val  _isLoggedIn = mutableStateOf(false)
+    val isLoggedIn = _isLoggedIn
+    
+    //variabel for regstrerAPI
+    private val _registrerAPI = MutableLiveData<String>()
+    var registrerAPI: LiveData<String> = _registrerAPI
 
 
 
@@ -143,8 +155,27 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         // Fordeler: raskere respons med alle varerlinjer i memory, Compose + Room + LazyColumn fra LiveData = Flow (?)
     }
 
+    
+    //funksjon for å registrere ny bruker  
+     fun postAPIRegistrer(epost: String, passord: String){
+        val map = mapOf("epost" to epost, "passord" to passord)
+        viewModelScope.launch {
+            try {
 
+                _registrerAPI.value = API.retrofitService.registrerBruker(map)
+                registrerAPI = _registrerAPI
+            }
+            catch (e: Exception) {
+                _status.value = "Feil: ${e.message}"
+                 }
 
+            }
+    }
+     //funksjon for å sette et globalt brukernavn 
+    fun settBrukernavn (brukerNavn : String){
+        _brukernavn.value = brukerNavn
+    }
+     
     /**
      * Funksjonen henter inn Array av varenavn (String) fra backend API via interface RestApi
      * Kjøres ved oppstart og legger nye vareobjekter inn i lokal DB
@@ -208,21 +239,23 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     /**
      * Funksjonen sender brukernavn og passord til server som returnerer status
-     * Kjøres ved oppstart
      */
-    private fun postAPILogin(epost: String, passord: String) {
+    fun postAPILogin(epost: String, passord: String) {
         val map = mapOf("epost" to epost, "passord" to passord)
         viewModelScope.launch {
-            _status.value = "Prøver å logge inn bruker"
+            _status.value = "prøver å logge inn bruker"
             try {
                 _brukerAPI.value = API.retrofitService.login(map)
-                _status.value = "Vellykket, bruker innlogget"
+                if(brukerAPI.value?.get("melding").equals("innlogget")){
+                    _isLoggedIn.value = true
+                    _brukernavn.value = brukerAPI.value?.get("bruker").toString()
+                    _status.value = "Vellykket, bruker innlogget"
+                }
             } catch (e: Exception) {
                 _status.value = "Feil: ${e.message}"
             }
         }
     }
-
 
 
 
