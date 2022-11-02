@@ -235,7 +235,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
-
+    //funksjon for å logge ut 
+    fun postAPILoggout(){
+        _isLoggedIn.value=false
+    }
 
 
 
