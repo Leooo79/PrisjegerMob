@@ -57,13 +57,21 @@ interface RestApi {
     suspend fun getButikkliste(): Array<String>
 
 
-    // Funksjonen sender inn epost og passord til server
-    // og logger inn bruker (?)
+    // Funksjonen for å autentisere bruker, og logge inn 
     @POST("login")
     suspend fun login(
         @Body map: Map<String, String>
     ): Map<String, String>
-
+     
+    //Funksjon for å registrere ny bruker
+    @POST("regist")
+    suspend fun registrerBruker(
+        @Body map: Map<String, String>
+    ): String
+     
+    //funksjon for å logge ut bruker
+    @GET("logUt")
+    suspend fun loggUt()
 
     // Backend ØKER antall med en pr vare pr handleliste
     // Dersom handleliste ikke finnes opprettes listen
