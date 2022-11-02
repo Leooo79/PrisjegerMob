@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 
@@ -133,9 +134,11 @@ private fun HeaderDialog(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
-                            alertDialog.value = false
                             prisjegerViewModel.setListeNavn(text) // endrer listenavn
                             prisjegerViewModel.oppdaterListeFraApi() // henter alle varer
+                            alertDialog.value = false
+                            prisjegerViewModel.setButikknavn("Kiwi")
+                            prisjegerViewModel.oppdaterPriserFraApi("Kiwi")
                             // TODO: priser må hentes manuelt. Bør endre logikk for nye lister
                         }
                     ) {
@@ -231,7 +234,7 @@ private fun HeaderDialog(
                             .padding(start = 20.dp)
                     ) {
                         Text(
-                            text = butikkNavn,
+                            text = "Butikker",
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(Modifier.size(10.dp))
@@ -352,7 +355,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
 
   //  val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
  //   val valgbareToast = LocalContext.current.applicationContext
-    var tekst by rememberSaveable { mutableStateOf("Velg butikk") }
+    var tekst = prisjegerViewModel.currentButikk
     var aktiv by remember { mutableStateOf(false) }
 
     Box(
@@ -380,7 +383,8 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
                         //                 .show()
                         aktiv = false
                         tekst = itemValue
-                        prisjegerViewModel.oppdaterPriserFraApi(itemValue)
+                        prisjegerViewModel.setButikknavn(tekst)
+                        prisjegerViewModel.oppdaterPriserFraApi(tekst)
                     },
                 ) {
                     Text(text = itemValue)
@@ -739,11 +743,12 @@ private fun VarelisteItem(
                     ),
                     onClick = {
                         // minimum 0 vare.
+                        // TODO: Klarer ikke alltid å hente med, kontrolleres
+                        // TODO: nå også av lokal DB
                         if (vare.antall >= 1) {
-                            prisjegerViewModel.oppdaterVareAntall(
-                                -1, // minus en i antall
+                            prisjegerViewModel.dekrementerVareAntall(
                                 vare.varenavn,
-                                vare.listenavn
+                                vare.listenavn,
                             )
                         }
                     }
@@ -764,8 +769,7 @@ private fun VarelisteItem(
                         contentColor = Color.White
                     ),
                     onClick = {
-                        prisjegerViewModel.oppdaterVareAntall(
-                            1, // pluss en i antall
+                        prisjegerViewModel.inkementerVareAntall(
                             vare.varenavn,
                             vare.listenavn
                         )

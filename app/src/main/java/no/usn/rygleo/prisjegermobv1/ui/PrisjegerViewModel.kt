@@ -4,6 +4,7 @@ package no.usn.rygleo.prisjegermobv1.ui
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.API
@@ -77,7 +78,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         private set
 
     // Default liste(navn) som skal vises TODO: siste lagrede??
-    var currentListenavn = "Tore1" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
+    var currentListenavn = "Default" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
     var currentButikk = "Meny" // VARIABEL FOR INNEVÆRENDE BUTIKK
     var currentEpost = "tore@mail.com" // VARIABEL FOR INNEVÆRENDE BUTIKK
 
@@ -94,6 +95,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         VarerUiState(
             listenavn = currentListenavn,
             sortert = false,
+            butikknavn = currentButikk
         )
     )
     val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
@@ -348,7 +350,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
-    
+
 
 
 
@@ -461,7 +463,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
-
+    fun setButikknavn(nyttButikknavn: String) {
+        currentButikk = nyttButikknavn
+        oppdaterButikknavn() // for rekomposisjon
+    }
 
 
 
@@ -476,7 +481,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-
+    private fun oppdaterButikknavn() {
+        _uiStateNy.update { currentState ->
+            currentState.copy(
+                butikknavn = currentButikk,
+            )
+        }
+    }
 
 
 
@@ -536,12 +547,57 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
+    /**
+     * Funksjonen øker antall med 1, både lokalt og sentralt
+     */
+    fun inkementerVareAntall(varenavn: String, listenavn: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            if (varerDAO.inkrementerAntall(varenavn, listenavn) == 1) {
+                try {
+                    // API oppretter handleliste/ legger til vare/ antall++
+                    API.retrofitService.inkrementerHandleliste(
+                        currentEpost,
+                        listenavn,
+                        varenavn
+                    )
+                } catch (e: Exception) {
+
+                }
+            } else {
+                // throw Exception(E.toString())
+                // Lokal DB ble ikke oppdatert
+            }
+    }
+
+
+
+
 
     /**
-     * Funksjon for å oppdatere Varer-objekt i lokal/ sentral DB
-     * Etter oppdatering av lokal DB forsøkes oppdatering av sentral DB
-     * endring: -1/+1
+     * Funksjonen reduserer antall med 1, både lokalt og sentralt
      */
+    fun dekrementerVareAntall(varenavn: String, listenavn: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            if (varerDAO.dekrementerAntall(varenavn, listenavn) == 1) {
+                try {
+                    // API oppretter handleliste/ legger til vare/ antall++
+                    API.retrofitService.dekrementerHandleliste(
+                        currentEpost,
+                        listenavn,
+                        varenavn
+                    )
+                } catch (e: Exception) {
+
+                }
+            } else {
+                // throw Exception(E.toString())
+                // Lokal DB ble ikke oppdatert
+            }
+    }
+
+
+
+/*
     fun oppdaterVareAntall(endring: Int, varenavn: String, listenavn: String) =
         viewModelScope.launch(Dispatchers.IO) {
             // Lokal DB redigerer antall for aktuell vare og handleliste (+/-1)
@@ -568,11 +624,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
                 }
             } else {
-                throw Exception(E.toString())
+               // throw Exception(E.toString())
             }
     }
 
 
+
+ */
 
 
 

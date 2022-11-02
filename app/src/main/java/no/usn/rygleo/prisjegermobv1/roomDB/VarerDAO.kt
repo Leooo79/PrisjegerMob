@@ -52,12 +52,30 @@ interface VarerDAO {
     fun update(varer: Varer)
 
 
-    /**
-     * Update av antall pr vare pr liste (+/-1)
-     */
+  /* FUNGERER MULIGENS IKKE, TILFELLER AV ANTALL < 0. EMULATORTRØBBEL?!
     @Query("UPDATE varer SET antall=:nyAntall+antall WHERE varenavn=:varenavn " +
             "AND listenavn=:listenavn")
     fun oppdaterAntall(nyAntall: Int, varenavn: String, listenavn: String) : Int
+
+   */
+
+    /**
+     * Øker antall av vare med 1. Innført egen for inkrement og dekrement
+     * grunnet mulig bug med treg oppdatering av Flow->Livedata
+     */
+    @Query("UPDATE varer SET antall=antall+1 WHERE varenavn=:varenavn " +
+            "AND listenavn=:listenavn")
+    fun inkrementerAntall(varenavn: String, listenavn: String) : Int
+
+
+
+    /**
+     * Reduserer antall av vare med 1. Innført egen for inkrement og dekrement
+     * grunnet mulig bug med treg oppdatering av Flow->Livedata
+     */
+    @Query("UPDATE varer SET antall=antall-1 WHERE varenavn=:varenavn " +
+            "AND listenavn=:listenavn AND antall >= 1")
+    fun dekrementerAntall(varenavn: String, listenavn: String) : Int
 
 
 
