@@ -1,7 +1,12 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import no.usn.rygleo.prisjegermobv1.ui.theme.PrisjegerMobV1Theme
 import no.usn.rygleo.prisjegermobv1.R
-
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 
 
 @Composable
@@ -20,19 +28,17 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
-data class Personer(val name: String, val description: String, val profilePic: Int)
-
+data class Person(val name: String, val description: String, val profilePic: Int)
+val PersonListe = listOf(
+    Person("project", "Dette prosjektet er ment å hjelpe folk å finne gode priser i sjappa", R.drawable.prisjegerlogo),
+    Person("Gaute", "Gaute har store muskler", R.drawable.gaute),
+    Person("Leonard", "Leonard har et stort ordforrÃ¥d", R.drawable.leonard),
+    Person("Dmitriy", "Dmitriy har en stor hjerne", R.drawable.dmitriy),
+    Person("Daniel", "Daniel har et stort hjerte", R.drawable.daniel),
+    Person("Tore", "Tore har en stor du vet hva ;)", R.drawable.tore))
 
 @Composable
 fun OmOss() {
-    val PersonListe = listOf(
-        Personer("Gaute", "Gaute har store muskler", R.drawable.gaute),
-        Personer("Leonard", "Leonard har et stort ordforrÃ¥d", R.drawable.leonard),
-        Personer("Dmitriy", "Dmitriy har en stor hjerne", R.drawable.dmitriy),
-        Personer("Daniel", "Daniel har et stort hjerte", R.drawable.daniel),
-        Personer("Tore", "Tore har en stor du vet hva ;)", R.drawable.tore)
-    )
-
     PrisjegerMobV1Theme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -40,41 +46,57 @@ fun OmOss() {
             color = MaterialTheme.colors.surface
         ) {
             Column(
-
+                modifier = Modifier.padding(bottom = 0.dp)
             ){
-                for(Personer in PersonListe){
-                    makeAbout(name = Personer.name, description = Personer.description, profilePic = Personer.profilePic)
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    items(items = PersonListe){
+                        person -> makeAbout(person)
+                    }
+
                 }
             }
         }
     }
 }
 
+
 @Composable
-private fun makeAbout(name: String, description: String, profilePic: Int ) {
-    val expanded = remember {mutableStateOf(false)}
-    Surface(
-        modifier = Modifier.padding(vertical = 5.dp, horizontal = 2.dp),
-        color = MaterialTheme.colors.primary
+private fun makeAbout(person: Person) {
+    var expanded by remember {mutableStateOf(false)}
+    val extraPadding by animateDpAsState(
+        if (expanded) 40.dp else 10.dp,
+            animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
+
+
+    Column(
+        modifier = Modifier
+            .padding(vertical = 5.dp, horizontal = 2.dp)
+            .clickable(onClick = { expanded = !expanded }),
+
+
+        //color = MaterialTheme.colors.surface
+
     ) {
         Row(
         ) {
             Column(modifier = Modifier
                 .padding(24.dp)
-                .weight(1f)) {
-                Text(text = "About " + name)
-                Text(if (expanded.value) description else "")
-                if (expanded.value) addImage(name = name, profilePic)
+                .padding(bottom = extraPadding)
+                .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally){
+                Text(text = "About " + person.name)
+                Text(if (expanded) person.description else "")
+                if (expanded) addImage(name = person.name, person.profilePic)
+
 
             }
-            OutlinedButton(
-                modifier = Modifier
-                    .padding(24.dp)
-                    .weight(1f),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                onClick = { expanded.value = !expanded.value }) {
-                Text(if (expanded.value) "Vis mindre" else "Vis mer" )
-            }
+
         }
 
     }
