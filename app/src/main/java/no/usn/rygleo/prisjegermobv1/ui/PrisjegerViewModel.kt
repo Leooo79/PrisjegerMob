@@ -520,8 +520,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
-     * Lager kopi av current butikknavn
-     * // TODO: Er denne i bruk?
+     * Tar inn nytt current butikknavn og kaller på oppdatering av state
      */
     fun setButikknavn(nyttButikknavn: String) {
         currentButikk = nyttButikknavn
@@ -545,7 +544,6 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     /**
      * Lager kopi av current butikknavn
-     * // TODO: Er denne i bruk?
      */
     private fun oppdaterButikknavn() {
         _uiStateNy.update { currentState ->

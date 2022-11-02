@@ -55,7 +55,7 @@ TODO: trenger en sorteringsfunksjon for å sortere liste etter slett/ hent flere
 @Composable
 fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
 
-    val uiStateNy by prisjegerViewModel.uiStateNy.collectAsState()
+    val uiState by prisjegerViewModel.uiStateNy.collectAsState()
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     // Alle varelinjer/ handlelister lagret i lokal DB (PK = varenavn + listenavn)
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
@@ -68,7 +68,7 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
     ) {
         // MÅ SENDE STATEVARIABEL TIL HEADER FOR REKOMP VED LISTEBYTTE
         HeaderDialog(
-            uiStateNy,
+            uiState, // kun for rekomp ved oppdatering av state
             prisjegerViewModel,
             valgbare
         )
@@ -91,16 +91,14 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
 
 
 /**
- * Funksjon for å bygge opp og vise header med valg og aggregerte data
- * // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
- */
-/**
- * Funksjon for å bygge opp og vise header med valg og aggregerte data
- * // MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
+ * Funksjonen viser dialogvindu med valg for handleliste
+ * Kaller videre på HeaderInnhold
+ * // OBS: MÅ MOTTA STATEVARIABEL FOR REKOMP VED LISTEBYTTE
+ * TODO: Bør deles i 3
  */
 @Composable
 private fun HeaderDialog(
-    uiStateNy: VarerUiState,
+    uiState: VarerUiState,
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>) {
 
@@ -264,6 +262,7 @@ private fun HeaderDialog(
         )
     } // slutt butikkDialog
 
+    // Kall på innhold i header
     HeaderInnhold(
         prisjegerViewModel,
         valgbare,
@@ -279,7 +278,9 @@ private fun HeaderDialog(
 
 
 /**
- * Funksjonen vises innholdet i Header, menyknapp, dropdown for butikk/ handleliste
+ * Funksjonen vises innholdet i Header, menyknapp,
+ * dropdown for butikk/ handleliste (egne funksjoner)
+ *
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -347,14 +348,14 @@ private fun HeaderInnhold(
 /**
  * Enkel nedtrekksmeny for å velge butikk
  * Butikknavn hentes fra backend API ved oppstart
- * TODO: trenger vi push fra server ved endring/ flere navn?
+ * TODO: oppdaterer seg ikke når ønskelig - ny handleliste - må lytte på currentButikk i vM
  */
 @Composable
 private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<String>) {
 
   //  val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
  //   val valgbareToast = LocalContext.current.applicationContext
-    var tekst by remember { mutableStateOf("Velg butikk") }
+    var tekst = prisjegerViewModel.currentButikk // for rekomp
     var aktiv by remember { mutableStateOf(false) }
 
     Box(
