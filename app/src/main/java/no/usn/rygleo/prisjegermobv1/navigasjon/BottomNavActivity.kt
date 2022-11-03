@@ -112,7 +112,7 @@ fun NavigationGraph(
 
         // HANDLELISTE
           composable(BottomNavItem.Handleliste.screen_route) {
-            if(prisjegerViewModel.isLoggedIn.value)
+              if(prisjegerViewModel.isLoggedIn.value)
             HandlelisteScreen(prisjegerViewModel)
             else if   (!openDialog.value)
 
@@ -146,7 +146,7 @@ fun NavigationGraph(
 
         // OM OSS
         composable(BottomNavItem.Prissammenligning.screen_route) {
-            AddPostScreen()
+            SammenligningScreen(prisjegerViewModel)
         }
 
         // PRISSAMMENLINGNING
@@ -156,7 +156,6 @@ fun NavigationGraph(
 
         // LOGIN
         composable(BottomNavItem.Login.screen_route) {
-            LoginScreen()
         }
     }
 }
