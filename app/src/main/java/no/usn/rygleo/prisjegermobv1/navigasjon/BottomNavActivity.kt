@@ -1,11 +1,17 @@
 package no.usn.rygleo.prisjegermobv1.navigasjon
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -14,11 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import no.usn.rygleo.prisjegermobv1.ui.*
 // Klasser/ Visninger/ Funksjoner:
-import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
-import no.usn.rygleo.prisjegermobv1.ui.HandlelisteScreen
-import no.usn.rygleo.prisjegermobv1.ui.LoginScreen
-import no.usn.rygleo.prisjegermobv1.ui.OmOss
 
 
 // SKAL VI BENYTTE KLASSE HER? KUN FUNKSJON?

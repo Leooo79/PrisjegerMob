@@ -2,6 +2,7 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
