@@ -242,7 +242,8 @@ fun sokliste(
     valgtVare: MutableState<String>)
 {
     Button(modifier = Modifier
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .padding(start = 20.dp, end = 20.dp, top = 0.dp),
         onClick =  {
             updateTextFieldFocus(textFieldFocus)
             valgtVare.value = filtrerte.varenavn
@@ -331,6 +332,5 @@ private fun updateTextFieldFocus(textFieldFocus: MutableState<Boolean>) {
     }
     else if (textFieldFocus.value) {
         textFieldFocus.value = false
-        test("hsduiosajidjasiopdjiasjmdijmasidikasikdasjidjasdasdasdasds")
     }
 }
