@@ -29,12 +29,19 @@ interface RestApi {
 
 
 
-    // Funksjon for å hente handlelister fra backend API
-    @GET("handlelister/{epost}/{listenavn}")
+    // Funksjon for å hente en enkelt handleliste fra backend API
+    @GET("handlelister/{epost}/{tittel}")
     suspend fun getHandleliste(
         @Path("epost") epost: String,
         @Path("tittel") tittel: String
     ): Map<String, Int>
+
+
+    // Funksjon for å hente en ALLE handlelister fra backend API
+    @GET("handlelister/{epost}")
+    suspend fun getHandlelister(
+        @Path("epost") epost: String,
+    ): Map<String, Int> // TODO: hver returnerers egentlig? må fikse metode i backend
 
 
     // Funksjon for å hente nyeste priser fra backend API

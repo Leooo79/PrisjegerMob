@@ -38,6 +38,10 @@ interface VarerDAO {
             "AND listenavn=:listenavn")
     fun getVareAntall(varenavn: String, listenavn: String): Int
 
+
+
+
+
     /**
      * Insert av lister med Varer. Allerede eksisterende PK ignoreres
      */
@@ -45,11 +49,31 @@ interface VarerDAO {
     fun insertAll(vararg varer: Varer)
 
 
+
+
+
+    /**
+     * Insert av lister med Varer. Allerede eksisterende PK ignoreres
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllForce(vararg varer: Varer)
+
+
+
+
     /**
      * Oppdaterer en vare uten parameter
      */
     @Update
     fun update(varer: Varer)
+
+
+    /**
+     * Oppdaterer varer med data fra server
+     */
+    @Query("UPDATE varer SET antall=:antall WHERE varenavn=:varenavn " +
+            "AND listenavn=:listenavn")
+    fun updateVare(antall: Int, listenavn: String, varenavn: String)
 
 
   /* FUNGERER MULIGENS IKKE, TILFELLER AV ANTALL < 0. EMULATORTRØBBEL?!

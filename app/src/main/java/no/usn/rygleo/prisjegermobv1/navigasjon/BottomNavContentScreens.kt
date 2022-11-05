@@ -57,9 +57,7 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     var testHentUtPrisPrVare =
         prisjegerViewModel.priserPrButikk.value?.varer?.get("Asan trippeldusj, 220 ml")?.get(0)
 
-    var testHentHandlelisteAPI =
-        prisjegerViewModel.handlelisteAPI.value?.get("Agurk, 1 stk")
-    // {"Agurk, 1 stk":15,"Aromat Krydder, 90 gram":15}
+
 
     var testLogin = prisjegerViewModel.brukerAPI.value?.get("melding")
 

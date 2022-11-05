@@ -11,9 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,13 +25,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
+
 
 /*
 TODO: overføring mellom lister ?
@@ -63,6 +60,7 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
 
     // Innhold på denne siden : Header + Søkefelt + Listevisning
+
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
     ) {
@@ -75,6 +73,7 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
         Sokefelt(
             textState
         )
+        Overskrift()
         ListeVisning(
             vareListe,
             state = textState,
@@ -84,10 +83,37 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
     }
 }
 
+@Composable
+fun Overskrift() {
+    Card(
+        backgroundColor = MaterialTheme.colors.secondary,
+    ) {
+    Row(
+        modifier = Modifier
+            .padding(start = 20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(3F)
+        ) {
+            Text("Vare")
+        }
+        Column(
+            modifier = Modifier
+                .weight(1F)
+        ) {
+            Text("Pris")
+        }
+        Column(
+            modifier = Modifier
+                .weight(1F)
+        ) {
+            Text("Antall")
+        }
+    }
 
-
-
-
+    }
+}
 
 
 /**
@@ -133,7 +159,7 @@ private fun HeaderDialog(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
                             prisjegerViewModel.setListeNavn(text) // endrer listenavn
-                            prisjegerViewModel.oppdaterListeFraApi() // henter alle varer
+                            prisjegerViewModel.oppdaterVarerFraApi() // henter alle varer
                             alertDialog.value = false
                             prisjegerViewModel.setButikknavn("Velg butikk")
                             // TODO: priser må hentes manuelt. Bør endre logikk for nye lister
@@ -170,7 +196,8 @@ private fun HeaderDialog(
                         .padding(8.dp)
                         .fillMaxWidth(),
                     onClick = {
-                        prisjegerViewModel.oppdaterListeFraApi()
+                        prisjegerViewModel.oppdaterVarerFraApi()
+                     // TODO: ny metode backend   prisjegerViewModel.oppdaterListeFraApi(prisjegerViewModel.currentListenavn) // TODO: ny
                         alertDialog.value = false
                     }
                 ) {
@@ -301,27 +328,31 @@ private fun HeaderInnhold(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(
+            ExtendedFloatingActionButton(
+       //         icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+                text = { Text("Settings") },
+                onClick = alertDialog
+            )
+            OutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp),
             onClick = butikkDialog,
             ) {
                 Text(
-                    text = "Total sum : " + prisjegerViewModel
-                        .sumPrHandleliste(),
+                    text = "Totalsum : "+prisjegerViewModel.sumPrHandleliste()
+                    /*
+                    "Handleliste: "
+                            + prisjegerViewModel.currentListenavn
+                            + "| Butikk: "
+                            + prisjegerViewModel.currentButikk
+                            + "| Totalsum: "
+                            + prisjegerViewModel.sumPrHandleliste()
+                     */
+
                 )
             }
             Row {
-                Column(Modifier) {
-                    Button(
-                        onClick = alertDialog
-                    ) {
-                        Text("Valg")
-                    }
-                }
-                Spacer(Modifier
-                    .size(10.dp))
                 Column {
                     // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
                     VelgButikk(prisjegerViewModel, valgbare)
@@ -358,15 +389,17 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
     var tekst = prisjegerViewModel.currentButikk // for rekomp
     var aktiv by remember { mutableStateOf(false) }
 
+  //  Text("Velg butikk")
     Box(
         contentAlignment = Alignment.Center
     ) {
         // knapp for å åpne nedtrekksmeny
-        Button(
+
+        OutlinedButton(
             onClick = {
                 aktiv = true
             }) {
-            Text(text = tekst)
+            Text(text = "Butikker :     \n\n$tekst")
         }
         // nedtrekksmeny
         DropdownMenu(
@@ -415,12 +448,12 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
         contentAlignment = Alignment.Center,
     ) {
         // knapp for å åpne nedtrekksmeny
-        Button(
+        OutlinedButton(
             onClick = {
                 aktiv = true
             }
         ) {  // navnet på listen som vises
-            Text(text = tekst)
+            Text(text = "Handlelister :\n\n$tekst")
         }
         // nedtrekksmeny
         DropdownMenu(
@@ -438,7 +471,9 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
                         aktiv = false
                         tekst = itemValue
                         // Nytt DB/ API-kall + oppdatert visning ved bytte av liste(navn)
-                        prisjegerViewModel.setListeNavn(tekst)
+                        prisjegerViewModel.setListeNavn(tekst) // oppdaterer listenavn
+                        prisjegerViewModel.oppdaterVarerFraApi() // henter inn eventuelle nye varer
+                   //TODO: ny metode backend     prisjegerViewModel.oppdaterListeFraApi(tekst) // oppdaterer handleliste fra server
                     },
                 ) {
                     Text(text = itemValue)
@@ -547,8 +582,10 @@ private fun ListeVisning(
     }
     var filtrerteVarer: ArrayList<Varer>
     // bygger LazyColumn - filtrerte treff eller hele lista
-    LazyColumn(Modifier
-        .fillMaxWidth()
+    LazyColumn(
+        Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
     )
     {
         val leterEtter = state.value.text
@@ -690,7 +727,7 @@ private fun VarelisteItem(
     visDetaljer: () -> Unit
 ) {
 
-    val bredKolonne = 2F
+    val bredKolonne = 3F
     val smalKolonne = 1F
 
     Card(
@@ -705,22 +742,59 @@ private fun VarelisteItem(
             Column( // VARENAVN
                 modifier = Modifier
                     .weight(bredKolonne)
-                    .padding(2.dp)
-                    .align(Alignment.CenterVertically)
+                    //         .padding(2.dp)
+                    //       .align(Alignment.CenterVertically)
                     .clickable(onClick = visDetaljer)
             ) {
-                Text(vare.varenavn)
+                TextButton(
+                    colors = ButtonDefaults.buttonColors(
+                        //   backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        contentColor = Color.White
+                    ),
+                    onClick = visDetaljer,
+                )
+                {
+                    Text(vare.varenavn)
+                }
             }
 
             Column( // ENHETSPRIS
                 modifier = Modifier
                     .weight(smalKolonne)
-                    .padding(2.dp)
-                    .align(Alignment.CenterVertically)
+                //       .padding(2.dp)
+                //       .align(Alignment.CenterVertically)
             ) {
-                Text(vare.enhetspris.toString())
+                TextButton(
+                    colors = ButtonDefaults.buttonColors(
+                        //   backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        contentColor = Color.White
+                    ),
+                    onClick = {},
+                )
+                {
+                    Text(vare.enhetspris.toString())
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .weight(smalKolonne)
+            ) {
+                TextButton(
+                    colors = ButtonDefaults.buttonColors(
+                        //     backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        contentColor = Color.White
+                    ),
+                    onClick = {},
+                )
+                {
+                    Text(vare.antall.toString())
+                }
             }
 
+
+
+
+/*
             Column( // SUM PR VARE
                 modifier = Modifier
                     .weight(smalKolonne)
@@ -730,12 +804,28 @@ private fun VarelisteItem(
                 Text(prisjegerViewModel.sumPrVare(vare))
             }
 
+
+
             Column( // KNAPP FOR Å DEKREMENTERE
                 modifier = Modifier
                     .weight(smalKolonne)
-                    .padding(2.dp)
+                    // .padding(2.dp)
                     .align(Alignment.CenterVertically)
             ) {
+                Button( // knapp for å legge til
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primaryVariant,
+                        contentColor = Color.White
+                    ),
+                    onClick = {
+                        prisjegerViewModel.inkementerVareAntall(
+                            vare.varenavn,
+                            vare.listenavn
+                        )
+                    }
+                ) {  // viser antall pr vare/ liste
+                    Text(vare.antall.toString())
+                }
                 Button( // knapp for å trekke fra
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(0xFFF44336),
@@ -743,8 +833,6 @@ private fun VarelisteItem(
                     ),
                     onClick = {
                         // minimum 0 vare.
-                        // TODO: Klarer ikke alltid å hente med, kontrolleres
-                        // TODO: nå også av lokal DB
                         if (vare.antall >= 1) {
                             prisjegerViewModel.dekrementerVareAntall(
                                 vare.varenavn,
@@ -778,6 +866,8 @@ private fun VarelisteItem(
                     Text(vare.antall.toString())
                 }
             }
+
+ */
         }
     }
 }
@@ -801,7 +891,7 @@ private fun visDetaljer(
         onDismissRequest = visDetaljer,
         title = {
             Text(
-                text = "Vare: " + vare.varenavn,
+                text = vare.varenavn,
                 fontWeight = FontWeight.Bold,
             )
         },
@@ -822,8 +912,9 @@ private fun visDetaljer(
             ) {
                 Column(
                     modifier = Modifier
-                        .weight(3F)
+                        .weight(2.5F)
                         .padding(start = 20.dp)
+                        .fillMaxWidth()
                 ) {
                     Text(
                         text = "Butikker",
@@ -835,11 +926,40 @@ private fun visDetaljer(
                         Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
                         Spacer(Modifier.size(10.dp))
                     }
+                    Spacer(Modifier.size(10.dp))
+                    Text("Antall i handleliste")
+                    Text("Summert for vare")
+                    Spacer(Modifier.size(10.dp))
+                    Button( // knapp for å trekke fra
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFFF44336),
+                            contentColor = Color.White
+                        ),
+                        onClick = {
+                            // minimum 0 vare.
+                            // TODO: Klarer ikke alltid å hente med, kontrolleres
+                            // TODO: nå også av lokal DB
+                            if (vare.antall >= 1) {
+                                prisjegerViewModel.dekrementerVareAntall(
+                                    vare.varenavn,
+                                    vare.listenavn,
+                                )
+                            }
+                        }
+                    ) { // viser antall pr vare/ liste
+                        Text(vare.antall.toString())
+                    }
                 }
+
+          //      }
                 Column(
                     modifier = Modifier
-                        .weight(2F)
+                        .weight(2.5F)
                         .padding(end = 20.dp)
+                        .fillMaxWidth()
                 ) {
                     Text(text = "Enhetspris",
                         fontWeight = FontWeight.Bold
@@ -853,6 +973,28 @@ private fun visDetaljer(
                         Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
                         Spacer(Modifier.size(10.dp))
                     }
+                    Spacer(Modifier.size(10.dp))
+                    Text(": "+vare.antall)
+                    Text(": "+prisjegerViewModel.sumPrVare(vare))
+                    Spacer(Modifier.size(10.dp))
+                    Button( // knapp for å legge til
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primaryVariant,
+                            contentColor = Color.White
+                        ),
+                        onClick = {
+                            prisjegerViewModel.inkementerVareAntall(
+                                vare.varenavn,
+                                vare.listenavn
+                            )
+                        }
+                    ) {  // viser antall pr vare/ liste
+                        Text(vare.antall.toString())
+                    }
+
                     Spacer(Modifier.size(30.dp))
                 }
             }

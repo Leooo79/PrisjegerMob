@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -260,6 +258,7 @@ fun NavigationGraph(
     prisjegerViewModel: PrisjegerViewModel = viewModel(),
 ) {
 
+    val openDialog = remember { mutableStateOf(false) }
   //  val uiState2 by viewModel.uiState.collectAsState()
 
     NavHost(navController, startDestination = BottomNavItem.Hjem.screen_route) {
@@ -316,7 +315,7 @@ fun NavigationGraph(
 
         // LOGIN
         composable(BottomNavItem.Login.screen_route) {
-            LoginScreen()
+            LoginScreen(prisjegerViewModel)
         }
     }
 }

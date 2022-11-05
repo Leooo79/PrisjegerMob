@@ -108,6 +108,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
 
 
+
     // LR: for settings : simplesettings
 
     implementation 'com.chillibits:simplesettings:1.3.4'
