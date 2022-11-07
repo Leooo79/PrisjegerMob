@@ -41,7 +41,7 @@ interface RestApi {
     @GET("handlelister/{epost}")
     suspend fun getHandlelister(
         @Path("epost") epost: String,
-    ): Map<String, Int> // TODO: hver returnerers egentlig? må fikse metode i backend
+    ): Array<String>
 
 
     // Funksjon for å hente nyeste priser fra backend API

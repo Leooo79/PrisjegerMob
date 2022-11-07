@@ -59,7 +59,9 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
     // Alle butikker fra server:
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
 
+
     // Innhold på denne siden : Header + Søkefelt + Listevisning
+
 
     Column(Modifier
         .background(MaterialTheme.colors.secondary)
@@ -85,33 +87,33 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
 
 @Composable
 fun Overskrift() {
-    Card(
-        backgroundColor = MaterialTheme.colors.secondary,
+    Card(modifier = Modifier
+        .padding(horizontal = 10.dp),
+        backgroundColor = MaterialTheme.colors.primary,
     ) {
-    Row(
-        modifier = Modifier
-            .padding(start = 20.dp)
-    ) {
-        Column(
+        Row(
             modifier = Modifier
-                .weight(3F)
+                .padding(start = 20.dp)
         ) {
-            Text("Vare")
+            Column(
+                modifier = Modifier
+                    .weight(3F)
+            ) {
+                Text("Vare")
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1F)
+            ) {
+                Text("Pris")
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1F)
+            ) {
+                Text("Antall")
+            }
         }
-        Column(
-            modifier = Modifier
-                .weight(1F)
-        ) {
-            Text("Pris")
-        }
-        Column(
-            modifier = Modifier
-                .weight(1F)
-        ) {
-            Text("Antall")
-        }
-    }
-
     }
 }
 
@@ -131,8 +133,16 @@ private fun HeaderDialog(
     val alertDialog = remember { mutableStateOf(false) }
     val butikkDialog = remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
-    var butikkNavn by rememberSaveable { mutableStateOf("Velg butikk") }
+    var tittel by remember { mutableStateOf("Skriv inn navn på ny handleliste")}
+    var vilSlette by rememberSaveable { mutableStateOf(false) }
 
+
+    if (vilSlette) {
+        bekreftelseBruker(
+            prisjegerViewModel,
+            vilSlette = { vilSlette = !vilSlette }
+        )
+    }
     // Åpner alertDialog for nytt listenavn fra bruker ved behov
     if (alertDialog.value) {
         AlertDialog(
@@ -140,7 +150,7 @@ private fun HeaderDialog(
                 alertDialog.value = false
             },
             title = {
-                Text(text = "Skriv inn navn på ny handleliste")
+                Text(tittel)
             },
             text = {
                 Column() {
@@ -158,11 +168,19 @@ private fun HeaderDialog(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
-                            prisjegerViewModel.setListeNavn(text) // endrer listenavn
-                            prisjegerViewModel.oppdaterVarerFraApi() // henter alle varer
-                            alertDialog.value = false
-                            prisjegerViewModel.setButikknavn("Velg butikk")
-                            // TODO: priser må hentes manuelt. Bør endre logikk for nye lister
+                            if (prisjegerViewModel.kontrollerListenavn(text)) {
+                                tittel = "Listen finnes fra før, velg et annet navn"
+                                text = ""
+                            } else if (text.length > 20){ // antall tillate tegn
+                                tittel = "Listenavn kan maksimalt bestå av 20 tegn, " +
+                                        "velg et annet navn"
+                                text = ""
+                            } else {
+                                prisjegerViewModel.setListeNavn(text) // endrer listenavn
+                                prisjegerViewModel.oppdaterVarerFraApi() // henter alle varer
+                                alertDialog.value = false
+                                prisjegerViewModel.setButikknavn("Velg butikk")
+                            }
                         }
                     ) {
                         Text("Lagre ny liste")
@@ -197,7 +215,6 @@ private fun HeaderDialog(
                         .fillMaxWidth(),
                     onClick = {
                         prisjegerViewModel.oppdaterVarerFraApi()
-                     // TODO: ny metode backend   prisjegerViewModel.oppdaterListeFraApi(prisjegerViewModel.currentListenavn) // TODO: ny
                         alertDialog.value = false
                     }
                 ) {
@@ -208,7 +225,10 @@ private fun HeaderDialog(
                         .padding(8.dp)
                         .fillMaxWidth(),
                     onClick = {
-                        prisjegerViewModel.slettHandleliste()
+                        // TODO: bør be bruker om bekreftelse før sletting
+               //         bekreftelseBruker(prisjegerViewModel)
+               //         prisjegerViewModel.slettHandleliste()
+                        vilSlette = true
                         alertDialog.value = false
                     }
                 ) {
@@ -304,6 +324,65 @@ private fun HeaderDialog(
 
 
 
+
+/**
+ * Funksjonen viser AlertDialog hvor bruker må bekrefte sletting av
+ * handleliste
+ */
+@Composable
+fun bekreftelseBruker(
+    prisjegerViewModel: PrisjegerViewModel,
+    vilSlette: () -> Unit
+) {
+
+    var tittel by remember {
+        mutableStateOf(
+            "Vil du virkelig slette handleliste "
+                    +prisjegerViewModel.currentListenavn
+                    +" ?"
+        )
+    }
+    AlertDialog(
+        onDismissRequest = vilSlette,
+        title = {
+            Text(text = tittel)
+        },
+        buttons = {
+            Row(
+                modifier = Modifier.padding(all = 28.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Column() {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = vilSlette
+                    ) {
+                        Text("Tilbake")
+                    }
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            prisjegerViewModel.slettHandleliste()
+                            tittel = "Handleliste "+prisjegerViewModel.currentListenavn+
+                                    " ble slettet"
+                        }
+                    ) {
+                        Text("Slett "+prisjegerViewModel.currentListenavn)
+                    }
+                }
+
+            }
+        }
+    )
+} // slutt bekreftelseBruker
+
+
+
+
+
+
+
+
 /**
  * Funksjonen vises innholdet i Header, menyknapp,
  * dropdown for butikk/ handleliste (egne funksjoner)
@@ -340,7 +419,7 @@ private fun HeaderInnhold(
             onClick = butikkDialog,
             ) {
                 Text(
-                    text = "Totalsum : "+prisjegerViewModel.sumPrHandleliste()
+                    text = "Totalsum : " +prisjegerViewModel.finnSumPrButikk(prisjegerViewModel.currentButikk)
                     /*
                     "Handleliste: "
                             + prisjegerViewModel.currentListenavn
@@ -417,7 +496,6 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
                         aktiv = false
                         tekst = itemValue
                         prisjegerViewModel.setButikknavn(tekst)
-                        prisjegerViewModel.oppdaterPriserFraApi(tekst)
                     },
                 ) {
                     Text(text = itemValue)
@@ -471,9 +549,8 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
                         aktiv = false
                         tekst = itemValue
                         // Nytt DB/ API-kall + oppdatert visning ved bytte av liste(navn)
+                        prisjegerViewModel.oppdaterListeFraApi() // oppdaterer handleliste fra server
                         prisjegerViewModel.setListeNavn(tekst) // oppdaterer listenavn
-                        prisjegerViewModel.oppdaterVarerFraApi() // henter inn eventuelle nye varer
-                   //TODO: ny metode backend     prisjegerViewModel.oppdaterListeFraApi(tekst) // oppdaterer handleliste fra server
                     },
                 ) {
                     Text(text = itemValue)
@@ -506,7 +583,7 @@ private fun Sokefelt(state: MutableState<TextFieldValue>) {
         onValueChange = { value -> state.value = value },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 2.dp),
+            .padding(vertical = 6.dp, horizontal = 10.dp),
         textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
         // søkeikon for å indikere søkefelt
         leadingIcon = {
@@ -718,7 +795,7 @@ private fun VarelisteDialog(
 
 
 /**
- * Funksjonen viser innholdet i listen/ raden
+ * Funksjonen viser innholdet (rader) i handleliste
  */
 @Composable
 private fun VarelisteItem(
@@ -772,7 +849,10 @@ private fun VarelisteItem(
                     onClick = {},
                 )
                 {
-                    Text(vare.enhetspris.toString())
+              //      Text(vare.enhetspris.toString())
+                    Text(prisjegerViewModel
+                        .finnPrisPrVare(prisjegerViewModel
+                            .currentButikk, vare.varenavn)+",-")
                 }
             }
             Column(
@@ -877,8 +957,9 @@ private fun VarelisteItem(
 
 
 
+
 /**
- * Funksjonen viser enhetspriser pr vare pr butikk i AlertDialog
+ * Funksjonen viser detaljer om aktuell vare i AlertDialog
  */
 @Composable
 private fun visDetaljer(
@@ -975,7 +1056,7 @@ private fun visDetaljer(
                     }
                     Spacer(Modifier.size(10.dp))
                     Text(": "+vare.antall)
-                    Text(": "+prisjegerViewModel.sumPrVare(vare))
+                    Text(": "+prisjegerViewModel.sumPrVare(vare)+",-")
                     Spacer(Modifier.size(10.dp))
                     Button( // knapp for å legge til
                         modifier = Modifier

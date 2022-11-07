@@ -106,9 +106,11 @@ interface VarerDAO {
     /**
      * Update av enhetspris pr vare pr liste
      */
-    @Query("UPDATE varer SET enhetspris=:enhetspris WHERE varenavn = :varenavn " +
-            "AND listenavn = :listenavn")
-    fun oppdaterPris(varenavn: String, listenavn: String, enhetspris: Double)
+ //   @Query("UPDATE varer SET enhetspris=:enhetspris WHERE varenavn = :varenavn " +
+ //           "AND listenavn = :listenavn")
+ //   fun oppdaterPris(varenavn: String, listenavn: String, enhetspris: Double)
+
+
 
 
     /**
