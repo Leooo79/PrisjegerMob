@@ -1,5 +1,6 @@
 package no.usn.rygleo.prisjegermobv1.navigasjon
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,12 +74,13 @@ fun MainScreenView(){
 // https://johncodeos.com/how-to-create-a-navigation-drawer-with-jetpack-compose/
 @Composable
 fun MainScreenView(){
+    val prisjegerViewModel: PrisjegerViewModel = viewModel()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(scaffoldState = scaffoldState, scope = scope) },
+        topBar = { TopBar(scaffoldState = scaffoldState, scope = scope, prisjegerViewModel = prisjegerViewModel) },
         drawerBackgroundColor = MaterialTheme.colors.primary,
         drawerContent = {
             DrawerContent(
@@ -87,12 +90,13 @@ fun MainScreenView(){
         }
     ) {
         // Screen content
-        NavigationGraph(navController = navController)
+        NavigationGraph(navController = navController, prisjegerViewModel = prisjegerViewModel)
     }
 }
 
 @Composable
-fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
+fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewModel: PrisjegerViewModel) {
+    var activeNavItem by prisjegerViewModel.activeNavItem // Nåværende visning fra ViewModel
     TopAppBar(
         title = { Text(text = "Prisjeger", fontSize = 18.sp) },
         navigationIcon = {
@@ -104,6 +108,20 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
                 Icon(Icons.Filled.Menu, "")
             }
         },
+        actions = {
+            if (activeNavItem == "Handleliste") {
+                IconButton(onClick = { // Setter verdi i ViewModel slik at innstillinger vises
+                    prisjegerViewModel.alertDialog.value = !prisjegerViewModel.alertDialog.value
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = "HandlelisteInnstillinger",
+                        tint = Color.White
+                    )
+                }
+            }
+        },
+
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.secondary
     )
@@ -255,7 +273,7 @@ fun BottomNavigation(navController: NavController) {
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    prisjegerViewModel: PrisjegerViewModel = viewModel(),
+    prisjegerViewModel: PrisjegerViewModel,
 ) {
 
     val openDialog = remember { mutableStateOf(false) }
@@ -263,6 +281,8 @@ fun NavigationGraph(
 
     NavHost(navController, startDestination = BottomNavItem.Hjem.screen_route) {
         composable(BottomNavItem.Hjem.screen_route) {
+            // Setter som aktiv i ViewModel mtp. TopAppBar
+            prisjegerViewModel.setAktiv("Hjem")
          //   HomeScreen()
           //  if (prisjegerViewModel.equals("Vellykket, data hentet"))
 
@@ -271,8 +291,11 @@ fun NavigationGraph(
 
         // HANDLELISTE
         composable(BottomNavItem.Handleliste.screen_route) {
-            if(prisjegerViewModel.isLoggedIn.value)
-            HandlelisteScreen(prisjegerViewModel)
+            if(prisjegerViewModel.isLoggedIn.value) {
+                // Setter som aktiv i ViewModel mtp. TopAppBar
+                prisjegerViewModel.setAktiv("Handleliste")
+                HandlelisteScreen(prisjegerViewModel)
+            }
             else if   (!openDialog.value)
 
             {
@@ -300,21 +323,31 @@ fun NavigationGraph(
                         }
                     )
                 }
-       else     LoginScreen(prisjegerViewModel)
+       else {
+            // Setter som aktiv i ViewModel mtp. TopAppBar
+            prisjegerViewModel.setAktiv("Login")
+            LoginScreen(prisjegerViewModel)
+            }
         }
 
         // OM OSS
         composable(BottomNavItem.Prissammenligning.screen_route) {
+            // Setter som aktiv i ViewModel mtp. TopAppBar
+            prisjegerViewModel.setAktiv("Post")
             AddPostScreen()
         }
 
         // PRISSAMMENLINGNING
         composable(BottomNavItem.OmOss.screen_route) {
+            // Setter som aktiv i ViewModel mtp. TopAppBar
+            prisjegerViewModel.setAktiv("OmOss")
             OmOss()
         }
 
         // LOGIN
         composable(BottomNavItem.Login.screen_route) {
+            // Setter som aktiv i ViewModel mtp. TopAppBar
+            prisjegerViewModel.setAktiv("Login")
             LoginScreen(prisjegerViewModel)
         }
     }

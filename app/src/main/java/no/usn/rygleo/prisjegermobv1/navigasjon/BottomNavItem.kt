@@ -9,4 +9,5 @@ sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:Stri
     object Prissammenligning: BottomNavItem("Post",R.drawable.ic_post,"add_post")
     object OmOss: BottomNavItem("OmOss",R.drawable.ic_notification,"omoss")
     object Login: BottomNavItem("Login",R.drawable.ic_job,"login")
+
 }

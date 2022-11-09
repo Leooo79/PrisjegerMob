@@ -59,6 +59,9 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
     // Alle butikker fra server:
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
 
+    // Setter som aktiv i ViewModel mtp. TopAppBar
+    prisjegerViewModel.setAktiv("Handleliste")
+
 
     // Innhold på denne siden : Header + Søkefelt + Listevisning
 
@@ -130,7 +133,7 @@ private fun HeaderDialog(
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>) {
 
-    val alertDialog = remember { mutableStateOf(false) }
+    val alertDialog = remember { prisjegerViewModel.alertDialog }
     val butikkDialog = remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
     var tittel by remember { mutableStateOf("Skriv inn navn på ny handleliste")}
@@ -407,11 +410,6 @@ private fun HeaderInnhold(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ExtendedFloatingActionButton(
-       //         icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
-                text = { Text("Settings") },
-                onClick = alertDialog
-            )
             OutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()

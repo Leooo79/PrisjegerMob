@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.API
 import no.usn.rygleo.prisjegermobv1.data.*
+import no.usn.rygleo.prisjegermobv1.navigasjon.BottomNavItem
 import no.usn.rygleo.prisjegermobv1.roomDB.*
 
 
@@ -111,7 +112,17 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val uiStateNy: StateFlow<VarerUiState> = _uiStateNy.asStateFlow()
 
 
-
+    /**
+     * Statevariabler for at TopAppBar skal kunne vise betinget innhold.
+     * Disse benyttes for å holde oversikt over hvilken visning som er i bruk
+     * slik at de rette elementene kan vises.
+     */
+    var activeNavItem = mutableStateOf("")
+    fun setAktiv(newActiveNavItem: String) {
+        activeNavItem.value = newActiveNavItem
+    }
+    // Boolean som benyttes for å vise innstillinger for handleliste
+    val alertDialog = mutableStateOf(false)
 
 
     /**
