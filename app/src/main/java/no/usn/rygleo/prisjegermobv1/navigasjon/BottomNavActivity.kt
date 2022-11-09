@@ -98,7 +98,7 @@ fun MainScreenView(){
 fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewModel: PrisjegerViewModel) {
     var activeNavItem by prisjegerViewModel.activeNavItem // Nåværende visning fra ViewModel
     TopAppBar(
-        title = { Text(text = "Prisjeger", fontSize = 18.sp) },
+        title = { Text(text = prisjegerViewModel.activeNavItem.value, fontSize = 18.sp) },
         navigationIcon = {
             IconButton(onClick = {
                 scope.launch {
