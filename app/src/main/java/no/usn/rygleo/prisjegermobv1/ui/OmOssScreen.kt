@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 
 
 @Composable
@@ -28,14 +29,14 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
-data class Person(val name: String, val description: String, val profilePic: Int)
+data class Person(val name: Int, val description: Int, val profilePic: Int)
 val PersonListe = listOf(
-    Person("project", "Dette prosjektet er ment å hjelpe folk å finne gode priser i sjappa", R.drawable.prisjegerlogo),
-    Person("Gaute", "Gaute har store muskler", R.drawable.gaute),
-    Person("Leonard", "Leonard har et stort ordforrÃ¥d", R.drawable.leonard),
-    Person("Dmitriy", "Dmitriy har en stor hjerne", R.drawable.dmitriy),
-    Person("Daniel", "Daniel har et stort hjerte", R.drawable.daniel),
-    Person("Tore", "Tore har en stor du vet hva ;)", R.drawable.tore))
+    Person(R.string.project, R.string.aboutProject , R.drawable.prisjegerlogo),
+    Person(R.string.Gaute, R.string.aboutGaute, R.drawable.gaute),
+    Person(R.string.Leonard, R.string.aboutLeonard, R.drawable.leonard),
+    Person(R.string.Dmitriy, R.string.aboutDmitriy, R.drawable.dmitriy),
+    Person(R.string.Daniel, R.string.aboutDaniel, R.drawable.daniel),
+    Person(R.string.Tore, R.string.aboutTore, R.drawable.tore))
 
 @Composable
 fun OmOss() {
@@ -54,13 +55,33 @@ fun OmOss() {
                     items(items = PersonListe){
                         person -> makeAbout(person)
                     }
-
                 }
             }
         }
     }
 }
 
+@Composable
+private fun makeAboutProject(content: @Composable () -> Unit = {}) {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 5.dp, horizontal = 2.dp)
+    ) {
+        Row(
+        ) {
+            Column(modifier = Modifier
+                .padding(24.dp)
+                .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally){
+                Text(text = stringResource(id = R.string.about))
+                Text(text = stringResource(id = R.string.aboutProject))
+                addImage(name = "logo", profilePic = R.drawable.prisjegerlogo)
+            }
+
+        }
+
+    }
+}
 
 @Composable
 private fun makeAbout(person: Person) {
@@ -90,13 +111,10 @@ private fun makeAbout(person: Person) {
                 .padding(bottom = extraPadding)
                 .weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally){
-                Text(text = "About " + person.name)
-                Text(if (expanded) person.description else "")
-                if (expanded) addImage(name = person.name, person.profilePic)
-
-
+                Text(text = stringResource(id = R.string.about) + " " + stringResource(id = person.name))
+                Text(if (expanded) stringResource(person.description) else "")
+                if (expanded) addImage(name = stringResource(id = person.name), person.profilePic)
             }
-
         }
 
     }
@@ -107,28 +125,9 @@ private fun makeAbout(person: Person) {
 
 @Composable
 fun addImage(name: String, profilePic: Int) {
-
-    //Last fra resource
-
     Image(painter = painterResource(id = profilePic),
         contentDescription = "Profile picture for $name"
     )
-}
-
-@Composable
-fun makeCard(name: String, description: String) {
-    /*Column(
-        Modifier
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(10.dp)
-    ) */
-    Text(
-        text = name
-    )
-    Text(
-        text = description
-    )
-
 }
 
 @Preview(showBackground = true, widthDp = 300, heightDp = 300)

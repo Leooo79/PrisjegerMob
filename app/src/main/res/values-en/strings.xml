@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="NAVBAR"></string>
+    <string name="home">Home</string>
+    <string name="shoppingList">Shopping list</string>
+    <string name="post">Post</string>
+    <string name="aboutUs">About us</string>
+    <string name="login">Log in</string>
+
+    <string name="ABOUTUS"></string>
+    <string name="about">About</string>
+    <string name="project">project</string>
+    <string name="aboutProject">This project is intended to help people find good prices in the shop</string>
+    <string name="Gaute">Gaute</string>
+    <string name="Leonard">Leonard</string>
+    <string name="Dmitriy">Dmitriy</string>
+    <string name="Daniel">Daniel</string>
+    <string name="Tore">Tore</string>
+    <string name="aboutGaute">Gaute has big muscles</string>
+    <string name="aboutLeonard">Leo has a large vocabulary</string>
+    <string name="aboutDmitriy">Dmitriy has a ginormous brain</string>
+    <string name="aboutDaniel">Daniel has a great heart</string>
+    <string name="aboutTore">Tore has a huge you know what ;)</string>
+    <string name="price">price</string>
+    <string name="showDetailsButton">Vis detaljer</string>
+</resources>
