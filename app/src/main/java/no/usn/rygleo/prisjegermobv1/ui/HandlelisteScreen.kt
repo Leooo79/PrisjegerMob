@@ -1,7 +1,10 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -703,7 +707,6 @@ private fun VarelisteDialog(
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>
 ) {
-
     var visDetaljer by rememberSaveable { mutableStateOf(false) }
     val dismissState = rememberDismissState()
 
@@ -777,11 +780,7 @@ private fun VarelisteDialog(
             }
         }, // slutt background for swipe
         dismissContent = {
-            VarelisteItem(
-                vare,
-                prisjegerViewModel,
-                visDetaljer = { visDetaljer = !visDetaljer }
-            )
+            VarelisteItem(vare, prisjegerViewModel, visDetaljer = { visDetaljer = !visDetaljer })
         } // slutt dismissContent
     ) // slutt SwipeToDismiss
 } // slutt fun VarelisteItem
@@ -795,18 +794,28 @@ private fun VarelisteDialog(
 /**
  * Funksjonen viser innholdet (rader) i handleliste
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun VarelisteItem(
     vare: Varer,
     prisjegerViewModel: PrisjegerViewModel,
     visDetaljer: () -> Unit
-) {
-
+)
+{
+    var expandedState by remember { mutableStateOf(false) }
     val bredKolonne = 3F
     val smalKolonne = 1F
 
-    Card(
+    Card(modifier = Modifier
+        .animateContentSize(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = LinearOutSlowInEasing
+            )),
         backgroundColor = MaterialTheme.colors.primary,
+        onClick = {
+            expandedState = !expandedState
+        }
     ) {
         Row(
             modifier = Modifier
@@ -819,17 +828,21 @@ private fun VarelisteItem(
                     .weight(bredKolonne)
                     //         .padding(2.dp)
                     //       .align(Alignment.CenterVertically)
-                    .clickable(onClick = visDetaljer)
             ) {
-                TextButton(
-                    colors = ButtonDefaults.buttonColors(
-                        //   backgroundColor = MaterialTheme.colors.secondaryVariant,
-                        contentColor = Color.White
-                    ),
-                    onClick = visDetaljer,
-                )
-                {
-                    Text(vare.varenavn)
+                Text(modifier = Modifier
+                    .padding(13.dp),
+                    text = vare.varenavn)
+                if (expandedState) {
+                    Button(modifier = Modifier
+                        .padding(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.secondaryVariant,
+                            contentColor = Color.White
+                        ),
+                        onClick = visDetaljer,
+                    ) {
+                        Text("Vis detaljer")
+                    }
                 }
             }
 
@@ -852,6 +865,30 @@ private fun VarelisteItem(
                         .finnPrisPrVare(prisjegerViewModel
                             .currentButikk, vare.varenavn)+",-")
                 }
+                if (expandedState) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button( // knapp for å trekke fra
+                        modifier = Modifier
+                            .padding(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFFF44336),
+                            contentColor = Color.White
+                        ),
+                        onClick = {
+                            // minimum 0 vare.
+                            // TODO: Klarer ikke alltid å hente med, kontrolleres
+                            // TODO: nå også av lokal DB
+                            if (vare.antall >= 1) {
+                                prisjegerViewModel.dekrementerVareAntall(
+                                    vare.varenavn,
+                                    vare.listenavn,
+                                )
+                            }
+                        }
+                    ) { // viser antall pr vare/ liste
+                        Text(vare.antall.toString())
+                    }
+                }
             }
             Column(
                 modifier = Modifier
@@ -866,6 +903,24 @@ private fun VarelisteItem(
                 )
                 {
                     Text(vare.antall.toString())
+                }
+                if (expandedState) {
+                    Button( // knapp for å legge til
+                        modifier = Modifier
+                            .padding(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primaryVariant,
+                            contentColor = Color.White
+                        ),
+                        onClick = {
+                            prisjegerViewModel.inkementerVareAntall(
+                                vare.varenavn,
+                                vare.listenavn
+                            )
+                        }
+                    ) {  // viser antall pr vare/ liste
+                        Text(vare.antall.toString())
+                    }
                 }
             }
 
@@ -949,12 +1004,6 @@ private fun VarelisteItem(
         }
     }
 }
-
-
-
-
-
-
 
 /**
  * Funksjonen viser detaljer om aktuell vare i AlertDialog

@@ -4,4 +4,11 @@
     <style name="Theme.PrisjegerMobV1" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/topBar</item>
     </style>
+    <style name="Theme.PrisjegerMobV1.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.PrisjegerMobV1.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.PrisjegerMobV1.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

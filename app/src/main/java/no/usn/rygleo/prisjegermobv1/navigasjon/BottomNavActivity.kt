@@ -32,11 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.R
+import no.usn.rygleo.prisjegermobv1.ui.*
 // Klasser/ Visninger/ Funksjoner:
-import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
-import no.usn.rygleo.prisjegermobv1.ui.HandlelisteScreen
-import no.usn.rygleo.prisjegermobv1.ui.LoginScreen
-import no.usn.rygleo.prisjegermobv1.ui.OmOss
 
 
 // SKAL VI BENYTTE KLASSE HER? KUN FUNKSJON?
@@ -303,12 +300,12 @@ fun NavigationGraph(
                 prisjegerViewModel.setAktiv("Handleliste")
                 HandlelisteScreen(prisjegerViewModel)
             }
-            else if   (!openDialog.value)
+            else if   (!prisjegerViewModel.isLoggedIn.value)
 
             {
                     AlertDialog(
                         onDismissRequest = {
-                            openDialog.value = false
+                            prisjegerViewModel.isLoggedIn.value = false
                         },
                         title = {
                             Text(text = "må logge inn først")
@@ -321,7 +318,7 @@ fun NavigationGraph(
                                 Button(
                                     modifier = Modifier.fillMaxWidth(),
                                     onClick = {
-                                        openDialog.value = true
+                                        prisjegerViewModel.isLoggedIn.value = true
                                     }
                                 ) {
                                     Text("ok")
@@ -341,7 +338,7 @@ fun NavigationGraph(
         composable(BottomNavItem.Prissammenligning.screen_route) {
             // Setter som aktiv i ViewModel mtp. TopAppBar
             prisjegerViewModel.setAktiv("Post")
-            AddPostScreen()
+            SammenligningScreen(prisjegerViewModel)
         }
 
         // PRISSAMMENLINGNING
