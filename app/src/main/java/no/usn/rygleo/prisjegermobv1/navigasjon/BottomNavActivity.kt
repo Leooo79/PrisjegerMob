@@ -87,11 +87,19 @@ fun MainScreenView(){
                 scaffoldState = scaffoldState,
                 scope = scope,
                 navController = navController)
-        }
+        },
+        drawerGesturesEnabled = shouldDrawerSwipe(prisjegerViewModel = prisjegerViewModel)
     ) {
         // Screen content
         NavigationGraph(navController = navController, prisjegerViewModel = prisjegerViewModel)
     }
+}
+
+// Metode som kontrollerer hvilke visninger som skal skru av gestikulasjoner for skuff.
+// Husk at tilhørende streng i prisjegerViewModel.activeNavItem må eksistere og bli satt
+// fun NavigationGraph()
+fun shouldDrawerSwipe(prisjegerViewModel: PrisjegerViewModel): Boolean {
+    return prisjegerViewModel.activeNavItem.value != "DinVisningHer"
 }
 
 @Composable
@@ -110,7 +118,7 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
         },
         actions = {
             if (activeNavItem == "Handleliste") {
-                IconButton(onClick = { // Setter verdi i ViewModel slik at innstillinger vises
+                IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
                     prisjegerViewModel.alertDialog.value = !prisjegerViewModel.alertDialog.value
                 }) {
                     Icon(
@@ -121,7 +129,6 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
                 }
             }
         },
-
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.secondary
     )
