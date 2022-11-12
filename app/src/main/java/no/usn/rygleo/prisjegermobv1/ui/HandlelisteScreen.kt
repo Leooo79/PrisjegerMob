@@ -162,8 +162,8 @@ private fun HeaderDialog(
     HeaderInnhold(
         prisjegerViewModel,
         valgbare,
-        alertDialog = {prisjegerViewModel.valgDialog.value = !prisjegerViewModel.valgDialog.value},
-        butikkDialog = {prisjegerViewModel.butikkDialog.value = !prisjegerViewModel.butikkDialog.value}
+    //    alertDialog = {prisjegerViewModel.valgDialog.value = !prisjegerViewModel.valgDialog.value},
+    //    butikkDialog = {prisjegerViewModel.butikkDialog.value = !prisjegerViewModel.butikkDialog.value}
     )
 } // slutt HeaderVisning
 
@@ -436,8 +436,8 @@ fun BekreftelseBruker(
 private fun HeaderInnhold(
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>,
-    alertDialog: () -> Unit,
-    butikkDialog: () -> Unit
+ //   alertDialog: () -> Unit,
+ //   butikkDialog: () -> Unit
 ) {
 
     Card(
@@ -447,19 +447,45 @@ private fun HeaderInnhold(
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedButton(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp, end = 30.dp),
-                onClick = butikkDialog,
+                .align(Alignment.CenterHorizontally)
+                .padding(start = 10.dp, end = 10.dp),
             ) {
-                Text(
-                    text = "Totalsum : "
-                            +prisjegerViewModel.finnSumPrButikk(prisjegerViewModel.currentButikk)
-                    /*
+                Column(Modifier
+                    .weight(3F)) {
+                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
+                    VelgButikk(prisjegerViewModel, valgbare)
+                    //    VelgHandleliste(prisjegerViewModel)
+                }
+                Spacer(modifier = Modifier.weight(0.1F))
+                Column(Modifier
+                    .weight(4F)) {
+                    //         VelgButikk(prisjegerViewModel, valgbare)
+                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
+                    VelgHandleliste(prisjegerViewModel)
+                }
+                Spacer(modifier = Modifier.weight(0.1F))
+                Column(modifier = Modifier
+                    .background(MaterialTheme.colors.primary)
+                    //    .width(120.dp)
+                    .padding(10.dp)
+                    .weight(3F)
+                    .fillMaxWidth()
+                    .clickable {
+                        prisjegerViewModel.butikkDialog.value =
+                            !prisjegerViewModel.butikkDialog.value
+                    },
+                ) {
+                    Text(modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                        color = Color.White,
+                        text =
+                        prisjegerViewModel.finnSumPrButikk(prisjegerViewModel.currentButikk)
+                        /*
                     "Handleliste: "
                             + prisjegerViewModel.currentListenavn
                             + "| Butikk: "
@@ -468,20 +494,7 @@ private fun HeaderInnhold(
                             + prisjegerViewModel.sumPrHandleliste()
                      */
 
-                )
-            }
-            Row {
-                Column {
-                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
-                    VelgButikk(prisjegerViewModel, valgbare)
-                    //    VelgHandleliste(prisjegerViewModel)
-                }
-                Spacer(Modifier
-                    .size(10.dp))
-                Column {
-                    //         VelgButikk(prisjegerViewModel, valgbare)
-                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
-                    VelgHandleliste(prisjegerViewModel)
+                    )
                 }
             }
         }
@@ -508,17 +521,20 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
     var aktiv by remember { mutableStateOf(false) }
 
     //  Text("Velg butikk")
-    Box(
-        contentAlignment = Alignment.Center
+    Column(modifier = Modifier
+        .background(MaterialTheme.colors.primary)
+        //   .width(120.dp)
+        .fillMaxWidth()
+        .padding(10.dp)
+        .clickable { aktiv = !aktiv },
+      //  contentAlignment = Alignment.Center,
     ) {
         // knapp for å åpne nedtrekksmeny
-
-        OutlinedButton(
-            onClick = {
-                aktiv = true
-            }) {
-            Text(text = "Butikker :     \n\n$tekst")
-        }
+            Text(modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+                color = Color.White,
+                text = tekst
+            )
         // nedtrekksmeny
         DropdownMenu(
             expanded = aktiv,
@@ -564,24 +580,25 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
     var tekst = prisjegerViewModel.currentListenavn // OBS!! DETTE GIR REKOMP
     var aktiv by remember {mutableStateOf(false) }
 
-    Box(
-        contentAlignment = Alignment.Center,
-    ) {
-        // knapp for å åpne nedtrekksmeny
-        OutlinedButton(
-            onClick = {
-                aktiv = true
-            }
+    Column(modifier = Modifier
+        .background(MaterialTheme.colors.primary)
+        //   .width(120.dp)
+        .fillMaxWidth()
+        .padding(10.dp)
+        .clickable { aktiv = !aktiv },
         ) {  // navnet på listen som vises
-            Text(text = "Handlelister :\n\n$tekst")
-        }
-        // nedtrekksmeny
-        DropdownMenu(
-            expanded = aktiv,
-            onDismissRequest = {
-                aktiv = false
-            }
-        ) {
+            Text(modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+                color = Color.White,
+                text = tekst
+            )
+            // nedtrekksmeny
+            DropdownMenu(
+                expanded = aktiv,
+                onDismissRequest = {
+                    aktiv = false
+                }
+            ) {
             // legger inn items og viser ved onClick
             valgbare?.forEachIndexed { itemIndex, itemValue ->
                 DropdownMenuItem(

@@ -427,7 +427,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             _status.value = "Vellykket, viser sum pr handleliste pr butikk"
         } catch (e: Exception) {
             _status.value = "Feil finnSumPrButikk: ${e.message}"
-            return "Velg butikk"
+            return "0.0"
         }
         return (Math.round(pris * 100.00) / 100.0).toString()+",-" // avrunding 2 des.
     }
