@@ -12,6 +12,7 @@ class BrukerRepo(private val brukerDAO: BrukerDAO) {
         brukerDAO.insert(bruker)
     }
 
+    /*
     suspend fun getBruker(brukerId: Int)  {
          brukerDAO.getBruker(brukerId)
     }
@@ -19,4 +20,6 @@ class BrukerRepo(private val brukerDAO: BrukerDAO) {
     suspend fun getBrukerNavn(brukerId: Int)  {
         brukerDAO.getBruker(brukerId)
     }
+
+     */
 }

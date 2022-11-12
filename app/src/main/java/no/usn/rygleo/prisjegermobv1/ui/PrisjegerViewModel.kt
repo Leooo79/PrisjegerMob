@@ -85,6 +85,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     // Referanse (companion-objekt) til DAO for handlelister (Varer) i lokal database
     val varerDAO: VarerDAO
+    val brukerDAO: BrukerDAO // for bruker
 
 
 
@@ -132,14 +133,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      *
      */
     init {
-        // ETABLERER DATA I LOKAL DB, VISER LIVEDATA FRA LOKAL DB:
-        varerDAO = AppDatabase.getRoomDb(application).varerDAO() // etablerer lokal DB om ikke finnes
-        // HENTER ALLE DATA FRA SERVER
-        oppdaterAlleDataFraApi()
+        varerDAO = AppDatabase
+            .getRoomDb(application).varerDAO() // etablerer lokal DB om ikke finnes
+        brukerDAO = AppDatabase
+            .getRoomDb(application).brukerDAO() // etablerer lokal DB om ikke finnes
+        oppdaterAlleDataFraApi() // henter alle data fra server
+        kontrollerForBruker() // kontrollerer om bruker er lagret i lokal DB
     }
-
-
-
 
 
 
@@ -273,7 +273,9 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                     // TODO: endret verdi for oppdatering av brukernavn:
                 //    _brukernavn.value = brukerAPI.value?.get("bruker").toString()
                     _brukernavn.value = epost
-                    _status.value = "Vellykket, bruker innlogget"
+                    // TODO: lagrer bruker i lokal DB
+                    brukerDAO.insert(Bruker(epost)) // insert av ny bruker til lokal DB
+                    _status.value = "Vellykket, bruker innlogget og lagret" // vellykket
                 }
             } catch (e: Exception) {
                 _status.value = "Feil postAPILogin: ${e.message}"
@@ -537,6 +539,25 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
+     * Hjelpefunksjon som sjekker om bruker er lagret i lokal DB
+     * Slik at bruker slipper å logge inn på nytt
+     */
+    private fun kontrollerForBruker() {
+        try {
+            if (!brukerDAO.getBruker().brukerNavn.isEmpty()) {
+                _isLoggedIn.value = true
+                _brukernavn.value = brukerDAO.getBruker().brukerNavn
+            }
+        } catch (e:Exception) {
+            // det er ikke opprettet bruker i databasen
+            println("Bruker ikke opprettet")
+        }
+    }
+
+
+
+
+    /**
      * Funksjonen etablerer og bytter ut innhold i LiveData -> LazyColumn fra lokal DB
      * Bytter til varer med antall > 0
      */
@@ -743,6 +764,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /** HJELPEMETODER *****************************************************************************/
+
 
 
 
