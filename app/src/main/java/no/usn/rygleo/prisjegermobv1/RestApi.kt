@@ -1,5 +1,6 @@
 package no.usn.rygleo.prisjegermobv1
 
+
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
@@ -15,6 +16,7 @@ private val
         moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
+
 private val
         retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
@@ -37,7 +39,9 @@ interface RestApi {
     ): Map<String, Int>
 
 
-    // Funksjon for å hente en ALLE handlelister fra backend API
+
+
+    // Funksjon for å hente array med alle handlelistenavn fra backend API
     @GET("handlelister/{epost}")
     suspend fun getHandlelister(
         @Path("epost") epost: String,

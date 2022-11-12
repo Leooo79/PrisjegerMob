@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -79,7 +81,9 @@ fun MainScreenView(){
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(scaffoldState = scaffoldState, scope = scope, prisjegerViewModel = prisjegerViewModel) },
-        drawerBackgroundColor = MaterialTheme.colors.primary,
+        drawerBackgroundColor = Color.Transparent,
+        //    drawerContainerColor = Color.Transparent,
+
         drawerContent = {
             DrawerContent(
                 scaffoldState = scaffoldState,
@@ -117,7 +121,7 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
         actions = {
             if (activeNavItem == "Handleliste") {
                 IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
-                    prisjegerViewModel.alertDialog.value = !prisjegerViewModel.alertDialog.value
+                    prisjegerViewModel.valgDialog.value = !prisjegerViewModel.valgDialog.value
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Settings,
@@ -144,18 +148,14 @@ fun DrawerContent(
         BottomNavItem.OmOss,
         BottomNavItem.Login
     )
+
     Column(
-        modifier = Modifier.background(MaterialTheme.colors.primary)
+        modifier = Modifier
+       .background(Color.Transparent),
+        horizontalAlignment = Alignment.Start
     ) {
         // Header
-        Image(
-            painter = painterResource(id = R.drawable.gaute),
-            contentDescription = "Bilde av Gaute",
-            modifier = Modifier
-                .height(100.dp)
-                .fillMaxWidth()
-                .padding(10.dp)
-        )
+
         // Spacing
         Spacer(
             modifier = Modifier
@@ -189,14 +189,23 @@ fun DrawerContent(
             })
         }
         Spacer(modifier = Modifier.weight(1f))
+        Image(
+            painter = painterResource(id = R.drawable.gaute),
+            contentDescription = "Bilde av Gaute",
+            modifier = Modifier
+                .height(100.dp)
+                //   .fillMaxWidth()
+                .padding(10.dp)
+            //  .align(Alignment.Start)
+        )
         Text(
             text = "Prisjeger",
             color = Color.White,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Start,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .padding(12.dp)
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.Start)
         )
     }
 }
@@ -206,10 +215,11 @@ fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavIt
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .fillMaxWidth()
+            .background(color = Color.Gray, shape = RoundedCornerShape(20.dp))
+            .width(200.dp)
             .clickable(onClick = { onItemClick(item) })
             .height(45.dp)
-            .background(MaterialTheme.colors.primary)
+            //        .background(MaterialTheme.colors.primary)
             .padding(start = 10.dp)
     ) {
         Image(
@@ -281,7 +291,7 @@ fun NavigationGraph(
     prisjegerViewModel: PrisjegerViewModel,
 ) {
 
-    val openDialog = remember { mutableStateOf(false) }
+    val openDialog = remember { mutableStateOf(true) }
   //  val uiState2 by viewModel.uiState.collectAsState()
 
     NavHost(navController, startDestination = BottomNavItem.Hjem.screen_route) {
@@ -296,44 +306,52 @@ fun NavigationGraph(
 
         // HANDLELISTE
         composable(BottomNavItem.Handleliste.screen_route) {
-            if(prisjegerViewModel.isLoggedIn.value) {
+            if (prisjegerViewModel.isLoggedIn.value) {
+                openDialog.value = false
                 // Setter som aktiv i ViewModel mtp. TopAppBar
-                prisjegerViewModel.setAktiv("Handleliste")
-                HandlelisteScreen(prisjegerViewModel)
-            }
-            else if   (!prisjegerViewModel.isLoggedIn.value)
-
-            {
-                    AlertDialog(
-                        onDismissRequest = {
-                            prisjegerViewModel.isLoggedIn.value = false
-                        },
-                        title = {
-                            Text(text = "må logge inn først")
-                        },
-                        buttons = {
-                            Row(
-                                modifier = Modifier.padding(all = 8.dp),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Button(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    onClick = {
-                                        prisjegerViewModel.isLoggedIn.value = true
-                                    }
-                                ) {
-                                    Text("ok")
-                                }
-                            }
-                        }
-                    )
-                }
-       else {
-            // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv("Login")
-            LoginScreen(prisjegerViewModel)
+                prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: oppdaterer alle data fra server
+                prisjegerViewModel.setAktiv("Handleliste") // TODO: ved innlogging
+                HandlelisteScreen(prisjegerViewModel)  // TODO: = alle data oppdateres ved navigering til handleliste
+            } else {
+                prisjegerViewModel.setAktiv("Innlogging")
+                LoginScreen(prisjegerViewModel)
             }
         }
+
+            /*
+            else if (openDialog.value) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog.value = false
+                    },
+                    title = {
+                        Text(text = "Logg inn for å opprette handleliste")
+                    },
+                    buttons = {
+                        Row(
+                            modifier = Modifier.padding(all = 8.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Button(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = {
+                                    openDialog.value = false
+                                }
+                            ) {
+                                Text("ok")
+                            }
+                        }
+                    }
+                )
+            }
+            if (!openDialog.value) {
+                // Setter som aktiv i ViewModel mtp. TopAppBar
+                prisjegerViewModel.setAktiv("Login")
+                LoginScreen(prisjegerViewModel)
+            }
+        }
+
+             */
 
         // OM OSS
         composable(BottomNavItem.Prissammenligning.screen_route) {

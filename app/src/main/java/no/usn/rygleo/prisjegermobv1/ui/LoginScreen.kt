@@ -130,12 +130,13 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
                             prisjegerViewModel.postAPILogin(brukerNavn, passord)
+                            // TODO: Kun alertDialog som viser feil
                             if (prisjegerViewModel.brukerAPI.value?.get("melding")
                                     .equals("innlogget")
                             ) {
+                                // TODO: trenger ny verdi brukernavn
                                 isLoggedIn = true
                                 text = "logget inn"
-
                             } else {
                                 isLoggedIn = false
                                 text = "Feil passord eller brukernavn"

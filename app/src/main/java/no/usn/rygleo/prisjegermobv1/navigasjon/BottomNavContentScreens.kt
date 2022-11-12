@@ -61,7 +61,8 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
 
     var testLogin = prisjegerViewModel.brukerAPI.value?.get("melding")
 
-
+ //   val t = prisjegerViewModel.brukerAPI.value?.get("melding")
+    val t = prisjegerViewModel.brukernavn
 
 
     Column(
@@ -73,7 +74,8 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
         Text(
             //   text = tekst.value?.key ?: "vent",
          //   text = (tekst?.get(0)?.toString() ?: ""),
-            text = testLogin.toString(),
+            text = t.toString(),
+          //  text = testAlleHandlelister.value.get("Agurk, 1 stk").toString(),
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),

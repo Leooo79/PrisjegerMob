@@ -53,7 +53,7 @@ interface VarerDAO {
 
 
     /**
-     * Insert av lister med Varer. Allerede eksisterende PK ignoreres
+     * Insert av lister med Varer. Allerede eksisterende PK erstattes
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllForce(vararg varer: Varer)
@@ -82,6 +82,13 @@ interface VarerDAO {
     fun oppdaterAntall(nyAntall: Int, varenavn: String, listenavn: String) : Int
 
    */
+
+
+  @Query("UPDATE varer SET antall=0 WHERE varenavn=:varenavn " +
+          "AND listenavn=:listenavn")
+  fun antallTilNull(varenavn: String, listenavn: String) : Int
+
+
 
     /**
      * Øker antall av vare med 1. Innført egen for inkrement og dekrement
@@ -120,9 +127,11 @@ interface VarerDAO {
     fun slettVare(varer: Varer)
 
 
+
+
     /**
      * Sletting av en hel handleliste, alle varer
      */
     @Query("DELETE FROM varer WHERE listenavn = :listenavn")
-    fun slettHandleliste(listenavn: String)
+    fun slettHandleliste(listenavn: String): Int
 }
