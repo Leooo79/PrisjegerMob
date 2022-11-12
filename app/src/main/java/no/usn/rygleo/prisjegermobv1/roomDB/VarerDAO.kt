@@ -124,7 +124,7 @@ interface VarerDAO {
      * Sletting av en enkelt vare, trenger ikke parameter
      */
     @Delete
-    fun slettVare(varer: Varer)
+    fun slettVare(varer: Varer): Int
 
 
 

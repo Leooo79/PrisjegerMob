@@ -534,7 +534,9 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
                         //                 .show()
                         aktiv = false
                         tekst = itemValue
-                        prisjegerViewModel.setButikknavn(tekst)
+                        // Oppdaterer pris når bytt butikk
+                        prisjegerViewModel.getAPIPriserPrButikk() // oppdaterer priser fra server
+                        prisjegerViewModel.setButikknavn(tekst) // henter priser for valgt butikk
                     },
                 ) {
                     Text(text = itemValue)
@@ -589,8 +591,9 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
                         aktiv = false
                         tekst = itemValue
                         // Nytt DB/ API-kall + oppdatert visning ved bytte av liste(navn)
+           // TODO her eller kontinuerlig?             prisjegerViewModel.getAPIPriserPrButikk() // oppdaterer priser
                         prisjegerViewModel.oppdaterVarerFraApi() // oppdaterer vareliste
-                        prisjegerViewModel.oppdaterListeFraApi() // oppdaterer handleliste fra server TODO: ok her
+                        prisjegerViewModel.oppdaterListeFraApi() // oppdaterer handleliste
                         prisjegerViewModel.setListeNavn(tekst) // oppdaterer listenavn
                     },
                 ) {
