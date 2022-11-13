@@ -309,9 +309,9 @@ fun NavigationGraph(
             if (prisjegerViewModel.isLoggedIn.value) {
                 openDialog.value = false
                 // Setter som aktiv i ViewModel mtp. TopAppBar
-                prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: oppdaterer alle data fra server
-                prisjegerViewModel.setAktiv("Handleliste") // TODO: ved innlogging
-                HandlelisteScreen(prisjegerViewModel)  // TODO: = alle data oppdateres ved navigering til handleliste
+                prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: kjører flere ganger?
+                prisjegerViewModel.setAktiv("Handleliste")
+                HandlelisteScreen(prisjegerViewModel)
             } else {
                 prisjegerViewModel.setAktiv("Innlogging")
                 LoginScreen(prisjegerViewModel)

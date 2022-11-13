@@ -147,40 +147,60 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     /** FUNKSJONER FOR Å HENTE DATA FRA SERVER OG OVERFØRE TIL LOKAL DB **************************/
 
+
+
     /**
      * Hjelepefunksjon for å oppdatere alle data fra server til lokal DB/ visning
      * OBS: kostbar og tidkrevende
+     *
+     * Kall på data fra server som forutsetter innlogging kjøres kun på isLoggedIn
      *
      * Kjører når:
      * init, ved navigasjon til handleliste, ved "oppdater handlelister" i HandlelisteScreen,
      * ved opprettelse av ny handleliste,
      */
     fun oppdaterAlleDataFraApi() {
-        getAPIVarer() // oppdaterer varenavn fra server
-        getAPIButikker() // oppdaterer butikknavn fra server
-        getAPIPriserPrButikk() // oppdaterer priser fra server
-        oppdaterVarerFraApi() // overfører varenavn til lokal DB
-        oppdaterListeFraApi() // oppdaterer alle handlelister fra server til lokal DB
-        getLokaleVarer() // emitter alle handlelister fra lokal DB, inkludert antall = 0
-        getAlleListenavn() // henter unike handlelistenavn fra lokal DB
+        _status.value = "oppdaterAlleDataFraApi prøver å oppdatere alle data fra server"
+        println(status.value)
+        try {
+            getAPIVarer() // henter varenavn fra server
+            getAPIButikker() // henter butikknavn fra server
+            getAPIPriserPrButikk() // henter priser fra server
+            oppdaterVarerFraApi() // overfører varenavn til lokal DB
+            if (isLoggedIn.value) { // handlelister krever innlogging :
+                oppdaterListeFraApi() // oppdaterer alle handlelister fra server til lokal DB
+                getLokaleVarer() // emitter alle handlelister fra lokal DB, inkludert antall = 0
+                getAlleListenavn() // henter unike handlelistenavn fra lokal DB
+            }
+            _status.value = "Vellykket, oppdaterAlleDataFraApi gjennomført"
+            println(status.value)
+        } catch (e:Exception) {
+            _status.value = "Feil oppdaterAlleDataFraApi: ${e.message}"
+            println(status.value)
+        }
     }
 
 
 
 
-
-    //funksjon for å registrere ny bruker
+    /**
+     * funksjon for å registrere ny bruker
+     */
     fun postAPIRegistrer(epost: String, passord: String) {
         val map = mapOf("epost" to epost, "passord" to passord)
+        _status.value = "postAPIRegistrer forsøker å opprette ny bruker på server"
+        println(status.value)
         viewModelScope.launch {
             try {
                 _registrerAPI.value = API.retrofitService.registrerBruker(map)
                 registrerAPI = _registrerAPI
-            }
-            catch (e: Exception) {
+                _status.value = "Vellykket, postAPIRegitrer opprettet ny bruker"
+                println(status.value)
+            } catch (e: Exception) {
                 _status.value = "Feil postAPIRegistrer: ${e.message}"
-                 }
+                println(status.value)
             }
+        }
     }
 
 
@@ -198,19 +218,19 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     /**
      * Funksjonen henter inn Array av varenavn (String) fra backend API via interface RestApi
-     * Kjøres ved oppstart og legger nye vareobjekter inn i lokal DB
-     * Varer som allerede er lagret i lokal DB med identisk listenavn blir ignorert
+     * Kjøres ved oppstart
      *
      */
-    private fun getAPIVarer() {
-        viewModelScope.launch {
-            _status.value = "Prøver å hente varenavn fra API"
-            try {
-                _hentVarerAPI.value = API.retrofitService.getVareliste()
-                _status.value = "Vellykket, varenavn hentet"
-            } catch (e: Exception) {
-                _status.value = "Feil: ${e.message}"
-            }
+    private fun getAPIVarer() = viewModelScope.launch {
+        _status.value = "getAPIVarer prøver å hente varenavn fra API"
+        println(status.value)
+        try {
+            _hentVarerAPI.value = API.retrofitService.getVareliste()
+            _status.value = "Vellykket, getAPIVarer hentet varenavn"
+            println(status.value)
+        } catch (e: Exception) {
+            _status.value = "Feil getAPIVarer: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -223,15 +243,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Kjøres ved oppstart og legger alle butikknavn inn i Array
      *
      */
-    private fun getAPIButikker() {
-        viewModelScope.launch {
-            _status.value = "Prøver å hente butikknavn fra API"
-            try {
-                _butikkerAPI.value = API.retrofitService.getButikkliste()
-                _status.value = "Vellykket, butikknavn hentet"
-            } catch (e: Exception) {
-                _status.value = "Feil: ${e.message}"
-            }
+    private fun getAPIButikker() = viewModelScope.launch {
+        _status.value = "getAPIButikker prøver å hente butikknavn fra API"
+        println(status.value)
+        try {
+            _butikkerAPI.value = API.retrofitService.getButikkliste()
+            _status.value = "Vellykket, getAPIButikker hentet butikknavn"
+            println(status.value)
+        } catch (e: Exception) {
+            _status.value = "Feil getAPIButikker: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -243,16 +264,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjonen henter inn Array av priser pr vare pr butikk (++)
      * Kjøres ved oppstart
      */
-    fun getAPIPriserPrButikk() {
-        viewModelScope.launch {
-            println("getAPIPriserPrButikk kjører")
-            _status.value = "Prøver å hente butikknavn fra API"
-            try {
-                _priserPrButikk.value = API.retrofitService.getPrisPrButikk()
-                _status.value = "Vellykket, priserPrButikk hentet"
-            } catch (e: Exception) {
-                _status.value = "Feil: ${e.message}"
-            }
+    fun getAPIPriserPrButikk() = viewModelScope.launch {
+        _status.value = "getAPIPriserPrButikk prøver å hente butikknavn fra API"
+        println(status.value)
+        try {
+            _priserPrButikk.value = API.retrofitService.getPrisPrButikk()
+            _status.value = "Vellykket, getAPIPriserPrButikk hentet"
+            println(status.value)
+        } catch (e: Exception) {
+            _status.value = "Feil getAPIPriserPrButikk: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -266,7 +287,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun postAPILogin(epost: String, passord: String) {
         val map = mapOf("epost" to epost, "passord" to passord)
         viewModelScope.launch {
-            _status.value = "prøver å logge inn bruker"
+            _status.value = "postAPILogin prøver å logge inn bruker"
+            println(status.value)
             try {
                 _brukerAPI.value = API.retrofitService.login(map)
                 if(brukerAPI.value?.get("melding").equals("innlogget")){
@@ -277,9 +299,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                     // TODO: lagrer bruker i lokal DB
                     brukerDAO.insert(Bruker(epost)) // insert av ny bruker til lokal DB
                     _status.value = "Vellykket, bruker innlogget og lagret" // vellykket
+                    println(status.value)
                 }
             } catch (e: Exception) {
                 _status.value = "Feil postAPILogin: ${e.message}"
+                println(status.value)
             }
         }
     }
@@ -294,19 +318,28 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     /**
-     * Funksjonen overfører alle varenavn fra API og inserter varer med antall =0 til lokal DB
+     * Funksjonen overfører alle varenavn hentet fra server til lokal database
+     * Inserter class Varer med antall =0 til Entity Varer
      */
     fun oppdaterVarerFraApi() {
         println("oppdaterVarerFraApi kjører")
-        _status.value = "Prøver å oppdatere lokal DB (varenavn) fra API"
+        _status.value = "oppdaterVarerFraApi prøver å oppdatere lokal DB (varenavn) fra API"
+        println(status.value)
         try {
-            for (varenavn in _hentVarerAPI.value!!) {
-                val vareApi = Varer(currentListenavn, varenavn, 0)
-                insertVare(vareApi) // insert lokal DB IGNORE
+            for (varenavn in hentVarerAPI.value!!) {
+                varerDAO.insertAll( // insert til lokal DB, duplikater ignoreres
+                    Varer( // class Varer
+                    currentListenavn, // tittel/ listenavn
+                    varenavn, // varenavn
+                    0 // antall
+                    )
+                )
             }
             _status.value = "Vellykket, varenavn i lokal DB oppdatert"
+            println(status.value)
         } catch (e: Exception) {
             _status.value = "Feil oppdaterVarerFraApi: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -317,28 +350,38 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
     /**
      * Funksjonen overfører handlelister fra API og inserter Varer til lokal DB
-     * OBS! Erstatter eksisterende varer, server eier sannheten om handlelister
-     * TODO: Denne kan potensielt lytte på endringer på server, me må testes mer
+     * OBS! Erstatter eksisterende duplikater, server eier sannheten om handlelister
+     * TODO: Denne kan potensielt lytte på endringer på server, men må testes mer
      * TODO: DENNE METODEN HAR VÆRT SKYLD I MYE BUGS, BLE KJØRT FOR OFTE/ KONTINUERLIG
      */
     fun oppdaterListeFraApi() = viewModelScope.launch {
-        println("oppdaterListerFraApi kjører")
-        _status.value = "Prøver å oppdatere lokal DB (handlelister) fra API"
-        try { // henter alle unike handlelistenavn fra server
-            val alleHandlelister = API.retrofitService.getHandlelister(brukernavn.value)
-            for (lister in alleHandlelister) { // henter alle handlelisterader fra server
-                val komplettListe = API.retrofitService.getHandleliste(brukernavn.value, lister)
-                for (varer in komplettListe) {
-                    varerDAO.insertAllForce(Varer( // insert REPLACE - server eier sannheten
-                        lister, // listenavn/ tittel
-                        varer.key, // varenavn
-                        varer.value // antall
-                    ))
+        _status.value = "oppdaterListeFraApi kjører"
+        println(status.value)
+        if (!isLoggedIn.value) { // handlelister forutsetter innlogging
+            _status.value = "oppdaterListeFraApi: Ingen bruker innlogget"
+            println(status.value)
+        } else {
+            _status.value = "oppdaterListeFraApi prøver å oppdatere lokal DB (handlelister) fra API"
+            try { // henter alle unike handlelistenavn fra server
+                val alleHandlelister = API.retrofitService.getHandlelister(brukernavn.value)
+                for (lister in alleHandlelister) { // henter alle handlelisterader fra server
+                    val komplettListe = API.retrofitService.getHandleliste(brukernavn.value, lister)
+                    for (varer in komplettListe) {   // server eier sannheten :
+                        varerDAO.insertAllForce( // insert lokal DB, duplikater erstattes
+                            Varer( // class Varer
+                                lister, // listenavn/ tittel
+                                varer.key, // varenavn
+                                varer.value // antall
+                            )
+                        )
+                    }
                 }
+                _status.value = "Vellykket, handlelister i lokal DB oppdatert"
+                println(status.value)
+            } catch (e: Exception) {
+                _status.value = "Feil oppdaterListeFraApi: ${e.message}"
+                println(status.value)
             }
-            _status.value = "Vellykket, handlelister i lokal DB oppdatert"
-        } catch (e: Exception) {
-            _status.value = "Feil oppdaterListeFraApi: ${e.message}"
         }
     }
 
@@ -381,19 +424,22 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun finnPrisPrVare(butikknavn: String, varenavn: String) : String {
         var pris = ""
         val indeksForButikkNavn = indeksForButikk(butikknavn)
-        _status.value = "Prøver å vise pris pr vare pr butikk (detaljer)"
+        _status.value = "finnPrisPrVare prøver å vise enhetspris"
+        println(status.value)
         try { // lopper ut enhetspris fra serverdata
-            for (priser in _priserPrButikk.value?.varer!!) {
+            for (priser in priserPrButikk.value?.varer!!) {
                 if (priser.key == varenavn) {
-                    _priserPrButikk.value?.varer?.get(priser.key)
+                    priserPrButikk.value?.varer?.get(priser.key)
                         ?.get(indeksForButikkNavn)?.let {
                             pris = it // ny enhetspris
                         }
                 }
             }
-            _status.value = "Vellykket, pris pr vare pr butikk vises"
+            _status.value = "Vellykket, enhetspris vises"
+            println(status.value)
         } catch (e: Exception) {
             _status.value = "Feil finnPrisPrVare: ${e.message}"
+            println(status.value)
             return "0.0"
         }
         return pris
@@ -412,13 +458,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun finnSumPrButikk(butikknavn: String) : String {
         var pris = 0.0
         val indeksForButikkNavn = indeksForButikk(butikknavn)
-        println("finnSumPrButikkNavn kjører")
         _status.value = "Prøver å vise sum pr handleliste pr butikk (detaljer)"
+        println(status.value)
         try { // looper alle varer i lokal DB og alle priser fra server
             for (varer in alleVarer.value!!) {
-                for (priser in _priserPrButikk.value?.varer!!) { // hvis rett vare og liste,
+                for (priser in priserPrButikk.value?.varer!!) { // hvis rett vare og liste,
                     if (priser.key == varer.varenavn && varer.listenavn == currentListenavn) {
-                        _priserPrButikk.value?.varer?.get(priser.key)
+                        priserPrButikk.value?.varer?.get(priser.key)
                             ?.get(indeksForButikkNavn)?.toDouble().let { // hent rett butikk (indeks)
                                 pris += it?.times(varer.antall) ?: 0.0 // aggregerer antall*pris
                             }
@@ -426,8 +472,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 }
             }
             _status.value = "Vellykket, viser sum pr handleliste pr butikk"
+            println(status.value)
         } catch (e: Exception) {
             _status.value = "Feil finnSumPrButikk: ${e.message}"
+            println(status.value)
             return "0.0"
         }
         return (Math.round(pris * 100.00) / 100.0).toString()+",-" // avrunding 2 des.
@@ -542,41 +590,53 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Hjelpefunksjon som sjekker om bruker er lagret i lokal DB
      * Slik at bruker slipper å logge inn på nytt
+     * OBS! Vil kaste og fange unntak dersom bruker ikke er opprettet på telefon (lokal DB)
      */
     private fun kontrollerForBruker() {
+        _status.value = "Prøver å kontrollere lokal DB for brukere"
+        println(status.value)
         try {
             if (!brukerDAO.getBruker().brukerNavn.isEmpty()) {
                 _isLoggedIn.value = true
                 _brukernavn.value = brukerDAO.getBruker().brukerNavn
+                _status.value = "Vellykket, bruker funnet i lokal DB"
+                println(status.value)
             }
         } catch (e:Exception) {
-            // det er ikke opprettet bruker i databasen
-            println("Bruker ikke opprettet")
+            // OBS: unntak dersom bruker ikke er opprettet
+            _status.value = "Mulig feil kontrollerForBruker: ${e.message}"
+            println(status.value)
         }
     }
 
 
 
-
+/*
     /**
      * Funksjonen etablerer og bytter ut innhold i LiveData -> LazyColumn fra lokal DB
      * Bytter til varer med antall > 0
+     * TODO: ikke i bruk, filter sorterer på antall
+     * TODO: kanskje aktuell for å hente data til kartvisning?
      */
     fun getSortertLokaleVarer() {
         println("getSortertLokaleVarer kjører")
         viewModelScope.launch {
             _status.value = "Henter valgte varer fra lokal DB"
+            println(status.value)
             try {
                 alleVarer = varerDAO.getAlleValgteVarer().asLiveData() // ny spørring lokal DB
                 _status.value = "Vellykket, sorterte varer hentet"
+                println(status.value)
                 setSortert() // rekomposisjon
             } catch (e: Exception) {
                 _status.value = "Feil: ${e.message}"
+                println(status.value)
             }
         }
     }
 
 
+ */
 
 
 
@@ -585,17 +645,17 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjonen etablerer og bytter ut innhold i LiveData -> LazyColumn fra lokal DB
      * Henter alle varer uavhengig av antall
      */
-    fun getLokaleVarer() {
-        println("getLokaleVarer kjører")
-        viewModelScope.launch {
-            _status.value = "Henter alle varer fra lokal DB"
-            try {
-                alleVarer = varerDAO.getAlleVarer().asLiveData() // ny spørring lokal DB
-                _status.value = "Vellykket, alle varer hentet"
-                setUsortert() // rekomposisjon
-            } catch (e: Exception) {
-                _status.value = "Feil: ${e.message}"
-            }
+    fun getLokaleVarer() = viewModelScope.launch {
+        _status.value = "getLokaleVarer prøver å vise varer fra lokal DB"
+        println(status.value)
+        try {
+            alleVarer = varerDAO.getAlleVarer().asLiveData() // ny spørring lokal DB
+            _status.value = "Vellykket, varer fra lokal Db hentet"
+            println(status.value)
+            setUsortert() // rekomposisjon
+        } catch (e: Exception) {
+            _status.value = "Feil: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -608,17 +668,16 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjonen henter ut unike listenavn fra lokal DB
      *
      */
-    fun getAlleListenavn() {
-        println("getAlleListenavn kjører")
-        viewModelScope.launch {
-            _status.value = "Henter unike listenavn fra lokal DB"
-            try {
-                alleListenavn = varerDAO.getAlleListenavn().asLiveData()
-                _status.value = "Vellykket, unike listenavn hentet ut"
-                //         setSortert() // rekomposisjon
-            } catch (e: Exception) {
-                _status.value = "Feil getAlleListenavn: ${e.message}"
-            }
+    fun getAlleListenavn() = viewModelScope.launch {
+        _status.value = "Henter unike listenavn fra lokal DB"
+        println(status.value)
+        try {
+            alleListenavn = varerDAO.getAlleListenavn().asLiveData()
+            _status.value = "Vellykket, unike listenavn hentet ut"
+            println(status.value)
+        } catch (e: Exception) {
+            _status.value = "Feil getAlleListenavn: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -633,16 +692,22 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun inkementerVareAntall(varenavn: String, listenavn: String) =
         viewModelScope.launch {
         try { // hvis lokal DB har oppdatert: oppdater sentral DB
-            if (varerDAO.inkrementerAntall(varenavn, listenavn) == 1)
+            if (varerDAO.inkrementerAntall(varenavn, listenavn) == 1) {
                 // API oppretter handleliste/ legger til vare/ antall++
                 API.retrofitService.inkrementerHandleliste(
                     brukernavn.value,
                     listenavn,
                     varenavn
                 )
-            else println("Feil inkrementerVareAntall : Lokal database svarer ikke")
+                _status.value = "Vellykket, inkrementerVareAntall gjennomført"
+                println(status.value)
+            } else {
+                _status.value = "Feil inkrementerVareAntall : Lokal database svarer ikke"
+                println(status.value)
+            }
         } catch (e: Exception) {
-            println("Feil inkrementerVareAntall: ${e.message}")
+            _status.value = "Feil inkementerVareAntall: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -657,16 +722,41 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun dekrementerVareAntall(varenavn: String, listenavn: String) =
         viewModelScope.launch {
         try {   // hvis lokal DB har oppdatert: oppdater sentral DB
-            if (varerDAO.dekrementerAntall(varenavn, listenavn) == 1)
+            if (varerDAO.dekrementerAntall(varenavn, listenavn) == 1) {
                 // API sletter handleliste/ sletter vare/ antall--
                 API.retrofitService.dekrementerHandleliste(
                     brukernavn.value,
                     listenavn,
                     varenavn
                 )
-            else println("Feil dekrementerVareAntall : Lokal database svarer ikke")
+                _status.value = "Vellykket, dekrementerVareAntall gjennomført"
+                println(status.value)
+            } else {
+                _status.value = "Feil dekrementerVareAntall : Lokal database svarer ikke"
+                println(status.value)
+            }
         } catch (e: Exception) {
-            println("Feil dekrementerVareAntall: ${e.message}")
+            _status.value = "Feil dekrementerVareAntall: ${e.message}"
+            println(status.value)
+        }
+    }
+
+
+
+
+/*
+
+    /**
+     * Fuksjon for å sette inn ny vare i lokal DB, tabell Vare (handlelister)
+     * OBS: ignorerer ny ved duplikat
+     */
+    private fun insertVare(vare: Varer) = viewModelScope.launch {
+        _status.value = "insertVare prøver insert til lokal DB"
+        try {
+            varerDAO.insertAll(vare)
+        } catch (e: Exception) {
+            _status.value = "Feil insertVare: ${e.message}"
+            println("Feil insertVare: ${e.message}")
         }
     }
 
@@ -674,28 +764,17 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 
-
     /**
      * Fuksjon for å sette inn ny vare i lokal DB, tabell Vare (handlelister)
-     * OBS: ignorerer ny ved duplikat
-     */
-    private fun insertVare(vare: Varer) = viewModelScope.launch {
-        varerDAO.insertAll(vare)
-    }
-
-
-
-
-
-    /**
-     * Fuksjon for å sette inn ny vare i lokal DB, tabell Vare (handlelister)
-     * OBS: erstatter ved duplikat!
+     * OBS: erstatter eksisterende ved duplikat
      */
     private fun insertVareForce(vare: Varer) = viewModelScope.launch {
         varerDAO.insertAllForce(vare)
     }
 
 
+
+ */
 
 
 
@@ -705,16 +784,20 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun slettVare(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
         try { // hvis slettet lokalt: slett sentralt
-            if (varerDAO.slettVare(varer) == 1)
+            if (varerDAO.slettVare(varer) == 1) {
                 API.retrofitService
                     .slettVareIListe(
                         brukernavn.value,
                         varer.listenavn,
                         varer.varenavn
                     )
+                _status.value = "Vellykket, vare slettet"
+                println(status)
+            }
             else println("Feil slettVare: Lokal database svarer ikke")
         } catch (e:Exception) {
-            println("Feil slettVare: ${e.message}")
+            _status.value = "Feil slettVare: ${e.message}"
+            println(status)
         }
     }
 
@@ -725,18 +808,26 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Funksjon for å sette antall til 0 -> blir valgbar i lokal DB, men slettet fra sentral
      */
-    fun settAntallTilNull(varer: Varer) = viewModelScope.launch(Dispatchers.IO) {
+    fun settAntallTilNull(varer: Varer) = viewModelScope.launch {
+        _status.value = "settAntallTilNull forsøker å oppdatere databaser"
         try { // hvis tilNull lokalt: slett sentralt
-            if (varerDAO.antallTilNull(varer.varenavn, varer.listenavn) == 1)
+            if (varerDAO.antallTilNull(varer.varenavn, varer.listenavn) == 1) {
                 API.retrofitService.slettVareIListe(
                     brukernavn.value,
                     varer.listenavn,
                     varer.varenavn
                 )
-            else println("Feil settAntallTilNull: Lokal database svarer ikke")
+                _status.value = "Vellykket, settAntallTilNull gjennomført"
+                println(status.value)
+            }
+            else {
+                _status.value = "Feil settAntallTilNull: Lokal database svarer ikke"
+                println(status.value)
+            }
         }
         catch (e:Exception) {
-            println("Feil settAntallTilNull: ${e.message}")
+            _status.value = "Feil settAntallTilNull: ${e.message}"
+            println(status.value)
         }
     }
 
@@ -748,12 +839,20 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjon for å slette en handleliste fra lokal/ sentral DB
      */
     fun slettHandleliste() = viewModelScope.launch {
+        _status.value = "slettHandleliste forsøker å slette liste"
         try {// Hvis slettet fra lokal DB, slett fra sentral DB
-            if (varerDAO.slettHandleliste(currentListenavn) >= 1)
+            if (varerDAO.slettHandleliste(currentListenavn) >= 1) {
                 API.retrofitService.slettHandleliste(brukernavn.value, currentListenavn)
-            else println("Feil slettHandleliste: Lokal database svarer ikke")
+                _status.value = "Vellykket, handleliste slettet"
+                println(status.value)
+            }
+            else {
+                _status.value = "Feil slettHandleliste: Lokal database svarer ikke"
+                println(status.value)
+            }
         } catch (e: Exception) {
-            println("Feil settAntallTilNull: ${e.message}")
+            _status.value = "Feil slettHandleliste: ${e.message}"
+            println(status.value)
         }
     }
 
