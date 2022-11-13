@@ -3,7 +3,7 @@
     <string name="NAVBAR"></string>
     <string name="home">Hjem</string>
     <string name="shoppingList">Handleliste</string>
-    <string name="post">post</string>
+    <string name="priceComparison">Prissammenligning</string>
     <string name="aboutUs">Om oss</string>
     <string name="login">Logg inn</string>
 

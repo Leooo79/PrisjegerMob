@@ -356,7 +356,7 @@ fun NavigationGraph(
         // OM OSS
         composable(BottomNavItem.Prissammenligning.screen_route) {
             // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv("Post")
+            prisjegerViewModel.setAktiv("Prissammenligning")
             SammenligningScreen(prisjegerViewModel)
         }
 

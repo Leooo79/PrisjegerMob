@@ -122,6 +122,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val valgDialog = mutableStateOf(false) // vise valgmuligheter?
     val vilSletteDialog = mutableStateOf(false) // vise bekreftelse sletting
     val butikkDialog = mutableStateOf(false) // vise detaljer om sum pr butikk
+    val filtrerEtterAntall = mutableStateOf(false) // vis kun varer med antall < 0
 
 
 

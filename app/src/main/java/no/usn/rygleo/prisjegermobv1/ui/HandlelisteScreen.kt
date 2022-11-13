@@ -78,7 +78,7 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
             textState
         )
         Overskrift()
-        ListeVisning(
+        FiltrerListe(
             vareListe,
             state = textState,
             prisjegerViewModel,
@@ -144,10 +144,7 @@ private fun HeaderDialog(
 
     // BER OM BEKREFTELSE PÅ SLETTING
     if (prisjegerViewModel.vilSletteDialog.value) {
-        BekreftelseBruker(
-            prisjegerViewModel,
-         //   vilSlette = { prisjegerViewModel.vilSletteDialog.value = !prisjegerViewModel.vilSletteDialog.value }
-        )
+        BekreftelseBruker(prisjegerViewModel)
     }
     // VISER DIALOG MED VALG
     if (prisjegerViewModel.valgDialog.value) {
@@ -162,8 +159,6 @@ private fun HeaderDialog(
     HeaderInnhold(
         prisjegerViewModel,
         valgbare,
-    //    alertDialog = {prisjegerViewModel.valgDialog.value = !prisjegerViewModel.valgDialog.value},
-    //    butikkDialog = {prisjegerViewModel.butikkDialog.value = !prisjegerViewModel.butikkDialog.value}
     )
 } // slutt HeaderVisning
 
@@ -174,7 +169,7 @@ private fun HeaderDialog(
 
 
 /**
- * Funksjonen viser Alertdialog med sum pr liste pr butikk
+ * Funksjonen viser Alertdialog med totalsum pr liste pr butikk
  */
 @Composable
 fun VisSumPrButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<String>) {
@@ -226,7 +221,7 @@ fun VisSumPrButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<Strin
                     )
                     Spacer(Modifier.size(10.dp))
                     for (butikker in valgbare) {// looper ut enhetspriser
-                        Text(prisjegerViewModel.finnSumPrButikk(butikker).toString())
+                        Text(prisjegerViewModel.finnSumPrButikk(butikker))
                         Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
                         Spacer(Modifier.size(10.dp))
                     }
@@ -280,15 +275,14 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                         if (prisjegerViewModel.kontrollerListenavn(text)) {
                             tittel = "Listen finnes fra før, velg et annet navn"
                             text = ""
-                        } else if (text.length > 20){ // antall tillate tegn
-                            tittel = "Listenavn kan maksimalt bestå av 20 tegn, " +
-                                    "velg et annet navn"
+                        } else if (text.length > 16){ // antall tillate tegn
+                            tittel = "Listenavn kan maksimalt bestå av 16 tegn"
                             text = ""
                         } else {
                             prisjegerViewModel.setListeNavn(text) // endrer listenavn
-                            prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data fra server
+                            prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data
                             prisjegerViewModel.valgDialog.value = false
-                            prisjegerViewModel.setButikknavn("Velg butikk")
+                            prisjegerViewModel.setButikknavn("Velg butikk") // nullstill butikk
                         }
                     }
                 ) {
@@ -296,23 +290,23 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                 }
             }
             //  Ekstra knapper
-            Button( // Knapp for å sortere varer i handleliste. Antall > 0
+            Button( // Knapp for å filtrerte varer i handleliste. Antall > 0.
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    prisjegerViewModel.getSortertLokaleVarer()
+                    prisjegerViewModel.filtrerEtterAntall.value = true
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
                 Text("Vis bare valgte")
             }
-            Button( // Knapp for å vise alle varer. Inkludert antall == 0
+            Button( // Knapp for å vise alle. Inkludert antall == 0.
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    prisjegerViewModel.getLokaleVarer()
+                    prisjegerViewModel.filtrerEtterAntall.value = false
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
@@ -329,7 +323,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
             ) {
                 Text("Oppdater handleliste")
             }
-            Button( // Knapp for å slette handleliste fra lokal DB
+            Button( // Knapp for å slette handleliste fra lokal DB. Egen alert med bekreftelse.
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
@@ -338,7 +332,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
-                Text("Slett handleliste !")
+                Text("Slett handleliste")
             }
             Button( // Knapp for å gå tilbake/ lukke alert
                 modifier = Modifier
@@ -366,10 +360,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
  * handleliste
  */
 @Composable
-fun BekreftelseBruker(
-    prisjegerViewModel: PrisjegerViewModel,
-   // vilSlette: () -> Unit
-) {
+fun BekreftelseBruker(prisjegerViewModel: PrisjegerViewModel) {
 
     var tittel by remember {
         mutableStateOf(
@@ -400,13 +391,12 @@ fun BekreftelseBruker(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            // TODO: setter currentListenavn tilbake til standard
                             tittel = "Handleliste "+prisjegerViewModel.currentListenavn+
                                     " ble slettet"
-                            prisjegerViewModel.slettHandleliste()
+                            prisjegerViewModel.slettHandleliste() // slett liste lokalt/sentralt
                             prisjegerViewModel.vilSletteDialog.value =
                                 !prisjegerViewModel.vilSletteDialog.value
-                            prisjegerViewModel.setListeNavn("MinHandleliste")
+                            prisjegerViewModel.setListeNavn("MinHandleliste") // nullstill listenavn
                         }
                     ) {
                         Text("Slett "+prisjegerViewModel.currentListenavn)
@@ -431,17 +421,14 @@ fun BekreftelseBruker(
  * dropdown for butikk/ handleliste (egne funksjoner)
  *
  */
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun HeaderInnhold(
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>,
- //   alertDialog: () -> Unit,
- //   butikkDialog: () -> Unit
 ) {
 
     Card(
-        backgroundColor = MaterialTheme.colors.secondary,
+        backgroundColor = MaterialTheme.colors.secondary
     ) {
         Column(
             modifier = Modifier
@@ -453,47 +440,35 @@ private fun HeaderInnhold(
             Row(
                 modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(start = 10.dp, end = 10.dp),
+                .padding(start = 10.dp, end = 10.dp)
             ) {
                 Column(Modifier
                     .weight(3F)) {
-                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
+                    // DropDown for valg av butikk
                     VelgButikk(prisjegerViewModel, valgbare)
-                    //    VelgHandleliste(prisjegerViewModel)
                 }
                 Spacer(modifier = Modifier.weight(0.1F))
                 Column(Modifier
                     .weight(4F)) {
-                    //         VelgButikk(prisjegerViewModel, valgbare)
-                    // DROPDOWN FOR VALG AV HANDLELISTE -> VISER VARER PR LISTENAVN FRA LOKAL DB
+                    // DropDown for valg av handleliste
                     VelgHandleliste(prisjegerViewModel)
                 }
                 Spacer(modifier = Modifier.weight(0.1F))
                 Column(modifier = Modifier
                     .background(MaterialTheme.colors.primary)
-                    //    .width(120.dp)
                     .padding(10.dp)
                     .weight(3F)
                     .fillMaxWidth()
                     .clickable {
                         prisjegerViewModel.butikkDialog.value =
                             !prisjegerViewModel.butikkDialog.value
-                    },
+                    }
                 ) {
                     Text(modifier = Modifier
                         .align(Alignment.CenterHorizontally),
                         color = Color.White,
-                        text =
+                        text = // viser totalsum pr handleliste pr butikk
                         prisjegerViewModel.finnSumPrButikk(prisjegerViewModel.currentButikk)
-                        /*
-                    "Handleliste: "
-                            + prisjegerViewModel.currentListenavn
-                            + "| Butikk: "
-                            + prisjegerViewModel.currentButikk
-                            + "| Totalsum: "
-                            + prisjegerViewModel.sumPrHandleliste()
-                     */
-
                     )
                 }
             }
@@ -515,19 +490,15 @@ private fun HeaderInnhold(
 @Composable
 private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<String>) {
 
-    //  val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = null)
     //   val valgbareToast = LocalContext.current.applicationContext
     var tekst = prisjegerViewModel.currentButikk // for rekomp
     var aktiv by remember { mutableStateOf(false) }
 
-    //  Text("Velg butikk")
     Column(modifier = Modifier
         .background(MaterialTheme.colors.primary)
-        //   .width(120.dp)
         .fillMaxWidth()
         .padding(10.dp)
         .clickable { aktiv = !aktiv },
-      //  contentAlignment = Alignment.Center,
     ) {
         // knapp for å åpne nedtrekksmeny
             Text(modifier = Modifier
@@ -607,7 +578,6 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
                         //            .show()
                         aktiv = false
                         tekst = itemValue
-                        // Nytt DB/ API-kall + oppdatert visning ved bytte av liste(navn)
            // TODO her eller kontinuerlig?             prisjegerViewModel.getAPIPriserPrButikk() // oppdaterer priser
                         prisjegerViewModel.oppdaterVarerFraApi() // oppdaterer vareliste
                         prisjegerViewModel.oppdaterListeFraApi() // oppdaterer handleliste
@@ -705,45 +675,52 @@ private fun Sokefelt(state: MutableState<TextFieldValue>) {
  * Filteret sorterer ut varelinjer for hver handleliste(navn)
  */
 @Composable
-private fun ListeVisning(
+private fun FiltrerListe(
     vareListe: List<Varer>,
     state: MutableState<TextFieldValue>,
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>
 ) {
-
     val visRettListe = ArrayList<Varer>()
-    // Kun varelinjer tilhørende inneværende liste(navn) vises
-    for (varer in vareListe) {
-        if (varer.listenavn == prisjegerViewModel.currentListenavn) {
-            visRettListe.add(varer)
+    // skal kun varer med antall > 0 vises?
+    if (prisjegerViewModel.filtrerEtterAntall.value) {
+        for (varer in vareListe) {
+            if (varer.listenavn == prisjegerViewModel.currentListenavn && varer.antall > 0) {
+                visRettListe.add(varer)
+            }
+        }
+    }
+    else {
+        // Kun varelinjer tilhørende inneværende handleliste(navn) vises
+        for (varer in vareListe) {
+            if (varer.listenavn == prisjegerViewModel.currentListenavn) {
+                visRettListe.add(varer)
+            }
         }
     }
     var filtrerteVarer: ArrayList<Varer>
-    // bygger LazyColumn - filtrerte treff eller hele lista
+    // bygger LazyList - viser treff fra filteret eller hele handlelisten
     LazyColumn(
         Modifier
             .fillMaxWidth()
             .padding(10.dp)
-    )
-    {
-        val leterEtter = state.value.text
+    ) {
+        val leterEtter = state.value.text // lytter på søkefelt, viser alle om felt er tomt
         filtrerteVarer = if (leterEtter.isEmpty()) {
             visRettListe
         } else {
             val treffListe = ArrayList<Varer>()
-            // filter for sammenligning av strenger. Søker på kombinasjoner av char
-            // ved å lytte på søkefelt
+            // filter for sammenligning av tekst. Søker på kombinasjoner av char
             for (varer in visRettListe) {
                 if (varer.varenavn.lowercase().contains(leterEtter.lowercase())) {
                     treffListe.add(varer)
                 }
             }
             treffListe
-        } // OBS: Må bruke både varenavn og listenavn som key for id av unike
-        items(filtrerteVarer, {filtrerteVarer: Varer ->
+        } // etablerer items basert på hva som skal vises og sender til VarelisteDialog for comp
+        items(filtrerteVarer, {filtrerteVarer: Varer -> // Key = varenavn + listenavn
             filtrerteVarer.varenavn + filtrerteVarer.listenavn}) { filtrerte ->
-            VarelisteDialog(filtrerte, prisjegerViewModel, valgbare)
+                VarelisteDialog(filtrerte, prisjegerViewModel, valgbare)
         }
     }
 }
@@ -754,12 +731,9 @@ private fun ListeVisning(
 
 
 /**
- * Funksjonen bygger opp og viser handlelister/ varelister
- * Kolonner består av datafelt fra Varer objekt/ entitet (lokal DB)
- * Events:
- * - Legge til/ trekke fra antall -> oppdatering av DB + sumPrVare + sumPrHandleliste
- * - Vise detaljer om hver vare -> utvider rad og henter inn tekst (bilde?)
- * - Slette rad med swipe -> varen slettes fra lokal DB + visning oppdateres
+ * Funksjonen håndterer hva som skal vises fra Handleliste og bygger SwipeToDismiss
+ * Kontrollerer for visning av Alertdialog med detaljer om hver vare
+ * Videreformidler innhold til items/ rader
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -772,7 +746,7 @@ private fun VarelisteDialog(
     var visDetaljer by rememberSaveable { mutableStateOf(false) }
     val dismissState = rememberDismissState()
 
-    // HVIS BRUKER DRAR VENSTRE FOR SLETTING AV RAD
+    // Antall pr vare (rad) settes til 0 ved left-swipe
     if (dismissState.currentValue != DismissValue.Default) {
         prisjegerViewModel.settAntallTilNull(vare) // 0 i lokal DB, slettes fra sentral DB
         LaunchedEffect(Unit) { // for suspendert kall
@@ -780,7 +754,7 @@ private fun VarelisteDialog(
         }
     }
 
-    // HVIS BRUKER ØNSKER Å SE FLERE DETALJER OM HVER ENKELT VARE: UTLØSES AV ONCLICK VIS DETALJER
+    // Viser detaljer om hver vare. Aktiveres av onClick knapp "Vis detaljer"
     if (visDetaljer) {
         visDetaljer(
             vare,
@@ -789,10 +763,7 @@ private fun VarelisteDialog(
             visDetaljer = { visDetaljer = !visDetaljer }
         )
     }
-
-    // INNHOLD SOM KAN DRAS MOT VENSTRE FOR DELETE.
-    // ANTALL SETTES TIL 0 I LOKAL DB, VARE SLETTES FRA HANDLELISTE
-    // I SENTRAL DB
+    // Innhold som kan swipes. Bygger "ramme" med animasjon og kaller videre på radinnhold.
     SwipeToDismiss(
         state = dismissState,
         modifier = Modifier
@@ -820,7 +791,7 @@ private fun VarelisteDialog(
                 if (dismissState.targetValue == DismissValue.Default) 0.75f
                 else 1f
             )
-            // ekstra ytterramme for mindre mellomrom ved touch/ swipe, ikon for sletting
+            // Ekstra ytterramme for mindre mellomrom ved touch/ swipe, ikon for sletting
             Box(
                 Modifier
                     .fillMaxSize()
@@ -838,14 +809,15 @@ private fun VarelisteDialog(
             }
         }, // slutt background for swipe
         dismissContent = {
+            // VarelisteItem bygger opp hver rad med innhold
             VarelisteItem(
                 vare,
                 prisjegerViewModel,
                 visDetaljer = { visDetaljer = !visDetaljer }
             )
-        } // slutt dismissContent
-    ) // slutt SwipeToDismiss
-} // slutt fun VarelisteItem
+        }
+    )
+}
 
 
 
@@ -855,7 +827,8 @@ private fun VarelisteDialog(
 
 
 /**
- * Funksjonen viser innholdet (rader) i handleliste
+ * Funksjonen viser innholdet (items/ rader) i handleliste.
+ * Består av datafelt fra class/entity Varer lagret i lokal DB (emittes som Flow/ LiveData)
  */
 @Composable
 private fun VarelisteItem(
@@ -864,6 +837,7 @@ private fun VarelisteItem(
     visDetaljer: () -> Unit
 )
 {
+    // viser ekstra rad med knapper i expandedState
     var expandedState by remember { mutableStateOf(false) }
 
     Card(modifier = Modifier
@@ -878,7 +852,7 @@ private fun VarelisteItem(
     ) {
         Column()
         {
-            /** WHEN NOT EXPANDED */
+            // Når ikke expandedState
             Row() {
                 Column(
                     modifier = Modifier
@@ -920,7 +894,7 @@ private fun VarelisteItem(
                     }
                 }
             }
-            /** WHEN EXPANDED */
+            // Når expandedState:
             Row() {
                 if (expandedState){
                     Column(
@@ -953,7 +927,7 @@ private fun VarelisteItem(
                                 backgroundColor = MaterialTheme.colors.secondaryVariant
                             ),
                             onClick = {
-                                if (vare.antall >= 1) { // TODO: OBS! må være 1 dersom update lokal DB
+                                if (vare.antall >= 1) {
                                     prisjegerViewModel.dekrementerVareAntall(
                                         vare.varenavn,
                                         vare.listenavn,
@@ -984,7 +958,6 @@ private fun VarelisteItem(
             }
         }
     }
-
 }
 
 
@@ -1055,10 +1028,8 @@ private fun visDetaljer(
                             backgroundColor = MaterialTheme.colors.secondaryVariant
                         ),
                         onClick = {
-                            // minimum 0 vare.
-                            // TODO: Klarer ikke alltid å hente med, kontrolleres
-                            // TODO: nå også av lokal DB
-                            if (vare.antall >= 1) { //TODO: OBS !!!!   1/ 0
+                            // minimum 0 vare. Kontrolleres også av lokal DB ved update
+                            if (vare.antall >= 1) {
                                 prisjegerViewModel.dekrementerVareAntall(
                                     vare.varenavn,
                                     vare.listenavn,
