@@ -310,6 +310,7 @@ fun NavigationGraph(
                 openDialog.value = false
                 // Setter som aktiv i ViewModel mtp. TopAppBar
                 prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: kjører flere ganger?
+                prisjegerViewModel.seEtterOppdateringer()
                 prisjegerViewModel.setAktiv("Handleliste")
                 HandlelisteScreen(prisjegerViewModel)
             } else {

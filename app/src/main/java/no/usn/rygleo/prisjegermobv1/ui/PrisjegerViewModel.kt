@@ -2,15 +2,21 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
+import android.icu.text.SimpleDateFormat
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import no.usn.rygleo.prisjegermobv1.API // companion-objekt server/ API
-import no.usn.rygleo.prisjegermobv1.data.*
-import no.usn.rygleo.prisjegermobv1.navigasjon.BottomNavItem
+import no.usn.rygleo.prisjegermobv1.API
+import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
+import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.*
+import java.util.*
 
 
 /**
@@ -180,7 +186,48 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    /**
+     * Funksjon som sjekker om data må oppdateres, og iverksetter oppdatering dersom
+     * backend meller fra om endret data.
+     */
+    var oppdateringAktiv = mutableStateOf(false) // sett denne til false for å skru av oppdateringer
 
+    fun seEtterOppdateringer() = viewModelScope.launch {
+        if (!oppdateringAktiv.value) { // forhindrer dobbel kjøring
+            oppdateringAktiv.value = true
+            while (oppdateringAktiv.value) {
+                if (måEndre()) oppdaterAlleDataFraApi()
+                delay(30000) // hvor mange millisekunder det skal være mellom oppdateringer
+            }
+        }
+    }
+
+    var sisteTidspunkt = mutableStateOf(nåTid()) // initialisering av tidspunkt
+    suspend fun måEndre(): Boolean {
+        _status.value = "Sjekker om API data trenger oppfriskning..."
+        println(status.value)
+        try {
+            println("Siste tidspunkt: " + sisteTidspunkt.value)
+            var svar = API.retrofitService.sjekkOppdatert(sisteTidspunkt.value)
+            sisteTidspunkt.value = nåTid()
+            println("Siste tidspunkt: " + sisteTidspunkt.value)
+            return svar
+        } catch (e: Exception) {
+            _status.value = "Klarte ikke sjekke om data trenger oppfriskning: ${e.message}"
+            println(status.value)
+            return false
+        }
+    }
+    /**
+     * Hjelpefunksjon som returnerer tidsstempel i ISO format ("yyyy-mm-hh-dd hh:mm:ss")
+     */
+    fun nåTid(): String {
+        val tz = TimeZone.getTimeZone("GMT+02:00")
+        val time = Calendar.getInstance(tz).time
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        val current = formatter.format(time)
+        return current
+    }
 
 
     /**
