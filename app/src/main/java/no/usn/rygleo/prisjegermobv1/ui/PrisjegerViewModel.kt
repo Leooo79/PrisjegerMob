@@ -224,7 +224,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     fun nåTid(): String {
         val tz = TimeZone.getTimeZone("GMT+02:00")
         val time = Calendar.getInstance(tz).time
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val current = formatter.format(time)
         return current
     }
