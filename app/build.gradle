@@ -139,5 +139,6 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
 // ConverterFactory for å lage Converter av Moshi-biblioteket
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation 'com.github.MahmoudIbrahim3:android-compose-charts:1.2.2'
 
 }

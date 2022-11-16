@@ -80,9 +80,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     private val _registrerAPI = MutableLiveData<String>()
     var registrerAPI: LiveData<String> = _registrerAPI
 
-    //sessionId som benyttes for at serveren skal kunne loggføre hvem som redigerer
-    //handlelister. Brukes for å holde oversikt over live data
-    private val sessionId = lagSession(lengde = 20)
+    //sessionId som benyttes for at serveren skal kunne loggføre sesjonen som redigerer
+    //handlelister. Dette er nødvendig for logikken til livedata fra server.
+    val _sessionId = mutableStateOf("")
+    var sessionId = _sessionId
 
 
 
@@ -223,11 +224,15 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 sisteTidspunkt.value,
                 brukernavn.value,
                 currentListenavn,
-                sessionId
+                sessionId.value
             )
             sisteTidspunkt.value = nåTid()
-            println("Siste tidspunkt: " + sisteTidspunkt.value)
-            return svar
+            println(
+                "Nytt tidspunkt: " + sisteTidspunkt.value +
+                ", bruker: " + brukernavn.value +
+                ", session:" + sessionId.value
+            )
+            return svar // TODO: Det skal være en egen metode her for å lese av svaret
         } catch (e: Exception) {
             _status.value = "Klarte ikke sjekke om data trenger oppfriskning: ${e.message}"
             println(status.value)
@@ -373,7 +378,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 //    _brukernavn.value = brukerAPI.value?.get("bruker").toString()
                     _brukernavn.value = epost
                     // TODO: lagrer bruker i lokal DB
-                    brukerDAO.insert(Bruker(epost)) // insert av ny bruker til lokal DB
+                    brukerDAO.insert(Bruker(epost, lagSession(30))) // insert av ny bruker til lokal DB
                     _status.value = "Vellykket, bruker innlogget og lagret" // vellykket
                     println(status.value)
                 }
@@ -675,6 +680,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             if (!brukerDAO.getBruker().brukerNavn.isEmpty()) {
                 _isLoggedIn.value = true
                 _brukernavn.value = brukerDAO.getBruker().brukerNavn
+                _sessionId.value = brukerDAO.getBruker().sessionId
                 _status.value = "Vellykket, bruker funnet i lokal DB"
                 println(status.value)
             }
