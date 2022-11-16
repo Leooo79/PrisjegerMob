@@ -3,7 +3,10 @@ package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
 import android.icu.text.SimpleDateFormat
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.util.toRange
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -17,6 +20,7 @@ import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.*
 import java.util.*
+import kotlin.random.Random.Default.nextInt
 
 
 /**
@@ -75,6 +79,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     //variabel for regstrerAPI
     private val _registrerAPI = MutableLiveData<String>()
     var registrerAPI: LiveData<String> = _registrerAPI
+
+    //sessionId som benyttes for at serveren skal kunne loggføre hvem som redigerer
+    //handlelister. Brukes for å holde oversikt over live data
+    private val sessionId = lagSession(lengde = 20)
 
 
 
@@ -192,6 +200,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     var oppdateringAktiv = mutableStateOf(false) // sett denne til false for å skru av oppdateringer
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun seEtterOppdateringer() = viewModelScope.launch {
         if (!oppdateringAktiv.value) { // forhindrer dobbel kjøring
             oppdateringAktiv.value = true
@@ -202,13 +211,20 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     var sisteTidspunkt = mutableStateOf(nåTid()) // initialisering av tidspunkt
+    @RequiresApi(Build.VERSION_CODES.N)
     suspend fun måEndre(): Boolean {
         _status.value = "Sjekker om API data trenger oppfriskning..."
         println(status.value)
         try {
             println("Siste tidspunkt: " + sisteTidspunkt.value)
-            var svar = API.retrofitService.sjekkOppdatert(sisteTidspunkt.value)
+            var svar = API.retrofitService.sjekkOppdatert(
+                sisteTidspunkt.value,
+                brukernavn.value,
+                currentListenavn,
+                sessionId
+            )
             sisteTidspunkt.value = nåTid()
             println("Siste tidspunkt: " + sisteTidspunkt.value)
             return svar
@@ -218,15 +234,28 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             return false
         }
     }
+
+    /**
+     * Hjelpefunksjon som lager en sessionId i form av en tilfeldig String
+     */
+    fun lagSession(lengde: Int): String {
+        val chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        var nySession = ""
+        for (i in 0..lengde) {
+            nySession += chars[nextInt(chars.length)] //plukker ut et tilfeldig tegn
+        }
+        return nySession
+    }
+
     /**
      * Hjelpefunksjon som returnerer tidsstempel i ISO format ("yyyy-mm-hh-dd hh:mm:ss")
      */
+    @RequiresApi(Build.VERSION_CODES.N)
     fun nåTid(): String {
         val tz = TimeZone.getTimeZone("GMT+02:00")
         val time = Calendar.getInstance(tz).time
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val current = formatter.format(time)
-        return current
+        return formatter.format(time)
     }
 
 
