@@ -1,8 +1,8 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
@@ -10,12 +10,13 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -24,65 +25,63 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mahmoud.composecharts.barchart.BarChartEntity
 import com.mahmoud.composecharts.linechart.LineChart
 import com.mahmoud.composecharts.linechart.LineChartEntity
 import no.usn.rygleo.prisjegermobv1.R
-import no.usn.rygleo.prisjegermobv1.roomDB.Varer
-import no.usn.rygleo.prisjegermobv1.ui.graph.Chart
-import no.usn.rygleo.prisjegermobv1.ui.komponenter.ExpandableCard
-import no.usn.rygleo.prisjegermobv1.ui.theme.PrisjegerMobV1Theme
 import java.lang.Float.POSITIVE_INFINITY
-import com.github.mikephil.charting.charts.BarChart as BarChart
 
 @Composable
 fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     val textFieldFocus = remember { mutableStateOf(false) }
+    val grafFokus = remember { mutableStateOf(false) }
+    val filterLaget = remember { mutableStateOf(false) }
+    val aktiverInnstillinger = remember { mutableStateOf(false) }
     val valgtVare = rememberSaveable { mutableStateOf("Ingen") }
-    val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
+    val vareListe = prisjegerViewModel.hentVarerAPI.observeAsState(initial = emptyArray())
     val butikkListe by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
+    var filterListe = rememberSaveable { mutableStateOf(ArrayList<String>()) }
 
-    PrisjegerMobV1Theme {
-        // A surface container using the 'background' color from the theme
         val scrollState = rememberScrollState()
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.secondary)
+    ) {
+        if (!grafFokus.value) {
             Column(
                 modifier = Modifier
                     .scrollable(state = scrollState, orientation = Orientation.Vertical)
-                    .padding(vertical = 6.dp)
+                    .padding(10.dp)
+                    .background(MaterialTheme.colors.secondary)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(
                     text = "Prissammenligning",
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                 )
                 if (valgtVare.value == "Ingen") {
                     Text(
                         text = "Søk etter vare",
-                        color = MaterialTheme.colors.primary,
+                        color = MaterialTheme.colors.onPrimary,
                         fontWeight = FontWeight.Normal,
                         fontSize = 17.sp,
                     )
@@ -98,17 +97,18 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                     //SokNyVareButton(valgtVare)
                     Text(
                         text = valgtVare.value,
-                        color = MaterialTheme.colors.primary,
+                        color = MaterialTheme.colors.onPrimary,
                         fontSize = 20.sp,
                     )
-                    ExpandableCard(title = "Se tabell",
-                        description = "",
-                        metode2 = tabellItem(vareListe, butikkListe, valgtVare, prisjegerViewModel),
-                        padding = 12.dp,
-                        open = true,
-                        fontWeight = FontWeight.Normal,
-                    )
-                    ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
+                    Innstillinger(butikkListe,
+                        filterListe = filterListe,
+                        filterLaget,
+                        aktiverInnstillinger,
+                        valgtVare,
+                        prisjegerViewModel,
+                        aktiverInnstillinger)
+                    //ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
+                    grafBoxButton(grafFokus = grafFokus, tekst = "Se historikk")
                 }
                 else {
                     Image(
@@ -122,23 +122,148 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                 }
             }
         }
+        else {
+            Column(modifier = Modifier
+                .fillMaxSize()) {
+                grafBoxButton(grafFokus = grafFokus, tekst = "Tilbake")
+                MainChart()
+            }
+        }
     }
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainChart(): @Composable () -> Unit {
-    /*
-    Chart(
-        data = mapOf(
-            Pair(0.2f, "Rema 1000"),
-            Pair(0.3f, "Kiwi"),
-            Pair(0.5f, "Joker"),
-            Pair(0.7f, "Meny"),
-            Pair(0.9f, "Test"),
-        ), max_value = 1000
+private fun Innstillinger(
+    butikkListe: Array<String>,
+    filterListe: MutableState<ArrayList<String>>,
+    filterLaget: MutableState<Boolean>,
+    aktiverInnstillinger: MutableState<Boolean>,
+    valgtVare: MutableState<String>,
+    prisjegerViewModel: PrisjegerViewModel,
+    aktiverInnstillinger1: MutableState<Boolean>
+){
+    var expandedState by remember { mutableStateOf(false) }
+    val rotationState by animateFloatAsState(targetValue =
+    if (expandedState) 180f else 0f)
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 10.dp)
+        .animateContentSize(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = LinearOutSlowInEasing
+            )
+        ),
+        //backgroundColor = MaterialTheme.colors.secondaryVariant,
+        backgroundColor = Color(0xFFd9eeee),
+        shape = RoundedCornerShape(topStart = 35.dp, topEnd = 35.dp),
+        onClick = {
+            expandedState = !expandedState
+        },
+    ) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.primary)
+            .padding(1.dp)) {
+            Row(modifier = Modifier
+                .background(MaterialTheme.colors.primary),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(modifier = Modifier
+                    .fillMaxWidth(),
+                    text = "Filter",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+                IconButton(modifier = Modifier
+                    .alpha(ContentAlpha.medium)
+                    .rotate(rotationState),
+                    onClick = { expandedState = !expandedState }) {
+                    IconButton(modifier = Modifier
+                        .alpha(ContentAlpha.medium)
+                        .rotate(rotationState),
+                        onClick = {
+                            expandedState = !expandedState
+                        }) {
+                        Icon(modifier = Modifier,
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = "Drop-Down Arrow",
+                        )
+                    }
+                }
+            } //End of column
+            Divider(color = MaterialTheme.colors.onPrimary, thickness = 2.dp)
+            if (expandedState) {
+                Row(modifier = Modifier
+                    .padding(top = 2.dp)
+                    .background(Color.White)
+                    .fillMaxWidth(),
+                )
+                {
+                    if (!filterLaget.value) {
+                        for (butikker in butikkListe) {
+                            filterListe.value.add(butikker)
+                        }
+                        filterLaget.value = true
+                    }
+                    Column() {
+                        Row(
+                            modifier = Modifier
+                                .background(MaterialTheme.colors.secondaryVariant)
+                                .padding(10.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Column() {
+                                for (butikker in butikkListe) {
+                                    val checked = remember { mutableStateOf(filterListe.value.contains(butikker)) }
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Checkbox(
+                                            checked = checked.value,
+                                            onCheckedChange = {
+                                                if (it) {
+                                                    if (!filterListe.value.contains(butikker)) {
+                                                        filterListe.value.add(butikker)
+                                                        checked.value = true
+                                                    }
+                                                }
+                                                else {
+                                                    filterListe.value.remove(butikker)
+                                                    checked.value = false
+                                                }
+                                            }
+                                        )
+                                        Text(text = butikker, color = MaterialTheme.colors.onSecondary)
+                                    }
+                                }
+                            }
+                        }
+                        Divider(color = MaterialTheme.colors.onPrimary, thickness = 2.dp)
+                    }
+                }
+            }
+        }
+    }
+    tabellItem(
+        butikkListe = butikkListe,
+        valgtVare = valgtVare,
+        prisjegerViewModel = prisjegerViewModel,
+        filterListe = filterListe,
+        filterLaget = filterLaget,
+        aktiverInnstillinger = aktiverInnstillinger
     )
-     */
+}
+
+@Composable
+private fun MainChart() {
     /*
     val barChartData = ArrayList<BarChartEntity>()
     barChartData.add(BarChartEntity(150.0f, Color(0xFF618A32), "1"))
@@ -152,33 +277,27 @@ fun MainChart(): @Composable () -> Unit {
     )
      */
 
-    var functionVariable: @Composable () -> Unit = {}
 
     val lineChartData = listOf(
-        LineChartEntity(150.0f, "Jan"),
-        LineChartEntity(250.0f, "Feb"),
-        LineChartEntity(50.0f, "Mar"),
-        LineChartEntity(300.0f, "Apr"),
-        LineChartEntity(400.0f, "Mai")
+        LineChartEntity(10.0f, "Jan"),
+        LineChartEntity(30.0f, "Feb"),
+        LineChartEntity(40.0f, "Mar"),
+        LineChartEntity(50.0f, "Apr"),
+        LineChartEntity(20.0f, "Mai"),
     )
 
-    functionVariable = { LineChart(
+    LineChart(
         lineChartData = lineChartData,
-        verticalAxisValues = listOf(0.0f, 100.0f, 200.0f, 300.0f, 400.0f, 500.0f),
-    ) }
-    return functionVariable
-}
-
-fun test(test : String) {
-    println(test)
+        verticalAxisValues = listOf(0.0f, 25.0f, 50.0f, 75.0f),
+    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Sokefelt(
     state: MutableState<TextFieldValue>,
-    textFieldFocus : MutableState<Boolean>,
-    vareListe: List<Varer>,
+    textFieldFocus: MutableState<Boolean>,
+    vareListe: State<Array<String>?>,
     prisjegerViewModel: PrisjegerViewModel,
     valgtVare: MutableState<String>
 ) {
@@ -239,10 +358,10 @@ private fun Sokefelt(
         singleLine = true,
         // bør testes på håndholdt enhet :
         colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.White,
-            cursorColor = Color.White,
-            leadingIconColor = Color.White,
-            trailingIconColor = Color.White,
+            textColor = MaterialTheme.colors.onSecondary,
+            cursorColor = MaterialTheme.colors.onPrimary,
+            leadingIconColor = MaterialTheme.colors.onPrimary,
+            trailingIconColor = MaterialTheme.colors.onPrimary,
             backgroundColor = MaterialTheme.colors.secondaryVariant,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -263,87 +382,93 @@ private fun Sokefelt(
 }
 
 @Composable
+private fun grafBoxButton(grafFokus: MutableState<Boolean>, tekst: String) {
+    Button(modifier = Modifier
+        .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+        onClick =  {
+            updateGrafFocus(grafFokus)
+        }) {
+        Text(modifier = Modifier
+            .padding(20.dp),
+            text = tekst)
+    }
+}
+
+@Composable
 private fun sokeFeltVisning(
-    vareListe: List<Varer>,
+    vareListe: State<Array<String>?>,
     state: MutableState<TextFieldValue>,
     prisjegerViewModel: PrisjegerViewModel,
     textFieldFocus: MutableState<Boolean>,
     valgtVare: MutableState<String>,
     focusManager: FocusManager
 ) {
-    val visRettListe = ArrayList<Varer>()
+    val visRettListe = ArrayList<String>()
     // Kun varelinjer tilhørende inneværende liste(navn) vises
-    var filtrerteVarer: ArrayList<Varer>
-    // bygger LazyColumn - filtrerte treff eller hele lista
-    LazyColumn(Modifier
-        .fillMaxWidth()
-    )
-    {
-        val leterEtter = state.value.text
-        filtrerteVarer = if (leterEtter.isEmpty()) {
-            if (textFieldFocus.value && leterEtter.isEmpty()) {
-                for (varer in vareListe) {
-                    visRettListe.add(varer)
+    if (textFieldFocus.value) {
+        for (varer in vareListe.value!!) {
+            visRettListe.add(varer)
+        }
+        var filtrerteVarer: ArrayList<String>
+        // bygger LazyColumn - filtrerte treff eller hele lista
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+        )
+        {
+            val leterEtter = state.value.text
+            filtrerteVarer = if (leterEtter.isEmpty()) {
+                visRettListe
+            } else {
+                val treffListe = ArrayList<String>()
+                // filter for sammenligning av strenger. Søker på kombinasjoner av char
+                // ved å lytte på søkefelt
+                for (varer in visRettListe) {
+                    if (varer.lowercase().contains(leterEtter.lowercase())) {
+                        treffListe.add(varer)
+                    }
                 }
+                treffListe
+            } // OBS: Må bruke både varenavn og listenavn som key for id av unike
+            items(filtrerteVarer ) { filtrerte ->
+                sokliste(filtrerte, textFieldFocus, valgtVare, focusManager)
             }
-            else {
-                visRettListe.clear()
-            }
-            visRettListe
-        } else {
-            val treffListe = ArrayList<Varer>()
-            // filter for sammenligning av strenger. Søker på kombinasjoner av char
-            // ved å lytte på søkefelt
-            for (varer in visRettListe) {
-                if (varer.varenavn.lowercase().contains(leterEtter.lowercase())) {
-                    treffListe.add(varer)
-                }
-            }
-            treffListe
-        } // OBS: Må bruke både varenavn og listenavn som key for id av unike
-        println(filtrerteVarer.joinToString(" "))
-        items(filtrerteVarer, {filtrerteVarer: Varer ->
-            filtrerteVarer.varenavn + filtrerteVarer.listenavn}) { filtrerte ->
-            sokliste(filtrerte, textFieldFocus, valgtVare, focusManager)
         }
     }
 }
 
 @Composable
 fun sokliste(
-    filtrerte: Varer,
+    filtrerte: String,
     textFieldFocus: MutableState<Boolean>,
     valgtVare: MutableState<String>,
     focusManager: FocusManager
 )
 {
-    Card(modifier = Modifier
-        .animateContentSize(
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = LinearOutSlowInEasing
-            )
-        ),
-    ) {
-        TextButton(modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp, top = 0.dp),
-            onClick =  {
-                updateTextFieldFocus(textFieldFocus)
-                valgtVare.value = filtrerte.varenavn
-                focusManager.clearFocus()
-            }) {
-            Text(filtrerte.varenavn)
-        }
-        Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+    OutlinedButton(modifier = Modifier
+        .fillMaxWidth()
+        .background(MaterialTheme.colors.secondaryVariant)
+        .padding(0.dp)
+        .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp),
+        shape = RoundedCornerShape(0.dp),
+        contentPadding = PaddingValues(14.dp),
+        onClick =  {
+            updateTextFieldFocus(textFieldFocus)
+            valgtVare.value = filtrerte
+            focusManager.clearFocus()
+        }) {
+        Text(text = filtrerte, color = MaterialTheme.colors.onSecondary)
     }
 }
 
 @Composable
-private fun tabellItem(vareListe : List<Varer>,
+private fun tabellItem(
                        butikkListe: Array<String>,
                        valgtVare: MutableState<String>,
-                       prisjegerViewModel: PrisjegerViewModel): @Composable () -> Unit {
+                       prisjegerViewModel: PrisjegerViewModel,
+                       filterListe: MutableState<ArrayList<String>>,
+                       filterLaget: MutableState<Boolean>,
+                       aktiverInnstillinger: MutableState<Boolean>) {
     var lavestPris = POSITIVE_INFINITY
         for (butikker in butikkListe) {
             var hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
@@ -351,67 +476,76 @@ private fun tabellItem(vareListe : List<Varer>,
                 lavestPris = hentetPris
             }
     }
-    var functionVariable: @Composable () -> Unit = {}
-    var datoListe = arrayOf("25/06/98","25/06/98","25/06/98","25/06/98","25/06/98","25/06/98")
-    functionVariable = {
-    Row(modifier = Modifier
-        .padding(all = 8.dp),
+    Card(
+        shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp),
     ) {
-        //Butikknavn
-        Column(
-            modifier = Modifier
-                .weight(2F)
-                .padding(start = 5.dp)
+        Row(modifier = Modifier
+            .background(MaterialTheme.colors.secondaryVariant)
+            .padding(10.dp),
         ) {
-            Text(
-                text = "Butikk",
-                fontWeight = FontWeight.Bold
-            )
-            for (butikker in butikkListe) {
-                tabellItemButikk(butikker)
-            }
-        }
-        //Pris
-        Column(
-            modifier = Modifier
-                .weight(2F)
-        ) {
-            Text(text = "Pris",
-                fontWeight = FontWeight.Bold
-            )
-            for (butikker in butikkListe) {
-                var hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
-                if (hentetPris == lavestPris) {
-                    tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), true)
-                } else {
-                    tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), false)
+            //Butikknavn
+            Column(
+                modifier = Modifier
+                    .weight(2F)
+                    .padding(start = 5.dp)
+            ) {
+                Text(
+                    text = "Butikk",
+                    color = MaterialTheme.colors.onSecondary,
+                    fontWeight = FontWeight.Bold
+                )
+                for (butikker in butikkListe) {
+                    if (filterListe.value.contains(butikker) || !filterLaget.value) {
+                        tabellItemButikk(butikker)
+                    }
                 }
             }
-        }
-        //Dato
-        Column(
-            modifier = Modifier
-                .weight(1F)
-                .padding(end = 0.dp)
-        ) {
-            Text(text = "Dato",
-                fontWeight = FontWeight.Bold
-            )
-            for (elements in datoListe) {
-                tabellItemDato(elements)
+            //Pris
+            Column(
+                modifier = Modifier
+                    .weight(2F)
+            ) {
+                Text(
+                    text = "Pris",
+                    color = MaterialTheme.colors.onSecondary,
+                    fontWeight = FontWeight.Bold
+                )
+                for (butikker in butikkListe) {
+                    var hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
+                    if (filterListe.value.contains(butikker) || !filterLaget.value) {
+                        if (hentetPris == lavestPris) {
+                            tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), true)
+                        } else {
+                            tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), false)
+                        }
+                    }
+                }
             }
+            //Dato
+            Column(
+                modifier = Modifier
+                    .weight(1F)
+                    .padding(end = 0.dp)
+            ) {
+                Text(
+                    text = "Dato",
+                    color = MaterialTheme.colors.onSecondary,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(Modifier.size(30.dp))
         }
-        Spacer(Modifier.size(30.dp))
     }
-    }
-    return functionVariable
 }
 
 @Composable
 private fun tabellItemButikk(butikk : String) {
     Spacer(Modifier.size(10.dp))
-    Text(butikk)
-    Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+    Text(
+        text = butikk,
+        color = MaterialTheme.colors.onSecondary
+    )
+    Divider(color = MaterialTheme.colors.onSecondary, thickness = 2.dp)
     Spacer(Modifier.size(10.dp))
 }
 
@@ -419,7 +553,10 @@ private fun tabellItemButikk(butikk : String) {
 private fun tabellItemPris(pris: String, lavest: Boolean) {
     Spacer(Modifier.size(10.dp))
     Row() {
-        Text("$pris")
+        Text(
+            text = "$pris",
+            color = MaterialTheme.colors.onSecondary
+        )
         if (lavest) {
             Image(
                 painter = painterResource(id = R.drawable.gronnhake),
@@ -430,101 +567,35 @@ private fun tabellItemPris(pris: String, lavest: Boolean) {
             )
         }
     }
-    Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+    Divider(color = MaterialTheme.colors.onSecondary, thickness = 2.dp)
     Spacer(Modifier.size(10.dp))
 }
 
 @Composable
 private fun tabellItemDato(dato : String) {
     Spacer(Modifier.size(10.dp))
-    Text(dato)
-    Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+    Text(
+        text = dato,
+        color = MaterialTheme.colors.onSecondary
+    )
+    Divider(color = MaterialTheme.colors.onSecondary, thickness = 2.dp)
     Spacer(Modifier.size(10.dp))
 }
 
-@Composable
-private fun tabellItem(
-    lavPris : Boolean,
-    butikkListe: Array<String>,
-    valgtVare: MutableState<String>,
-    prisjegerViewModel: PrisjegerViewModel
-) {
-    var datoListe = arrayOf("25/06/98","25/06/98","25/06/98","25/06/98","25/06/98","25/06/98")
-    Row(modifier = Modifier
-        .padding(all = 8.dp),
-    ) {
-        //Butikknavn
-        Column(
-            modifier = Modifier
-                .weight(2F)
-                .padding(start = 5.dp)
-        ) {
-            Text(
-                text = "Butikk",
-                fontWeight = FontWeight.Bold
-            )
-            for (butikker in butikkListe) {
-                tabellItemButikk(butikker)
-            }
-        }
-        //Pris
-        Column(
-            modifier = Modifier
-                .weight(2F)
-        ) {
-            Text(text = "Pris",
-                fontWeight = FontWeight.Bold
-            )
-            for (butikker in butikkListe) {
-                //tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value))
-            }
-        }
-        //Dato
-        Column(
-            modifier = Modifier
-                .weight(1F)
-                .padding(end = 0.dp)
-        ) {
-            Text(text = "Dato",
-                fontWeight = FontWeight.Bold
-            )
-            for (elements in datoListe) {
-                tabellItemDato(elements)
-            }
-        }
-        Spacer(Modifier.size(30.dp))
-    }
-
-
-
-}
-
-@Composable
-private fun SokNyVareButton(valgtVare: MutableState<String>) {
-    Button(modifier = Modifier
-        .padding(top = 12.dp),
-        onClick = {
-            valgtVare.value = "Ingen"
-        },
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.secondaryVariant,
-            contentColor = MaterialTheme.colors.secondaryVariant)
-    )
-    {
-        Text(modifier = Modifier,
-            text = "Søk etter ny vare",
-            textAlign = TextAlign.Center,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-        )
-    }
-}
 private fun updateTextFieldFocus(textFieldFocus: MutableState<Boolean>) {
     if (!textFieldFocus.value) {
         textFieldFocus.value = true
     }
     else if (textFieldFocus.value) {
         textFieldFocus.value = false
+    }
+}
+
+private fun updateGrafFocus(grafFokus: MutableState<Boolean>) {
+    if (!grafFokus.value) {
+        grafFokus.value = true
+    }
+    else if (grafFokus.value) {
+        grafFokus.value = false
     }
 }

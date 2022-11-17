@@ -1,6 +1,8 @@
 package no.usn.rygleo.prisjegermobv1.navigasjon
 
 import android.graphics.drawable.Icon
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,6 +74,7 @@ fun MainScreenView(){
 // Ny MainScreenView med navigasjonsskuff
 // Kilde:
 // https://johncodeos.com/how-to-create-a-navigation-drawer-with-jetpack-compose/
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun MainScreenView(){
     val prisjegerViewModel: PrisjegerViewModel = viewModel()
@@ -285,6 +288,7 @@ fun BottomNavigation(navController: NavController) {
     }
 }*/
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
@@ -377,6 +381,7 @@ fun NavigationGraph(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
 @Composable
 fun BottomNavigationPreview() {

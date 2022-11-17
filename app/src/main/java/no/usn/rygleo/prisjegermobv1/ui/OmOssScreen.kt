@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,10 +19,17 @@ import androidx.compose.ui.unit.dp
 import no.usn.rygleo.prisjegermobv1.ui.theme.PrisjegerMobV1Theme
 import no.usn.rygleo.prisjegermobv1.R
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.progressSemantics
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import kotlin.math.exp
 
 
 @Composable
@@ -44,7 +52,7 @@ fun OmOss() {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.surface
+            color = MaterialTheme.colors.secondary
         ) {
             Column(
                 modifier = Modifier.padding(bottom = 0.dp)
@@ -75,7 +83,7 @@ private fun makeAboutProject(content: @Composable () -> Unit = {}) {
                 horizontalAlignment = Alignment.CenterHorizontally){
                 Text(text = stringResource(id = R.string.about))
                 Text(text = stringResource(id = R.string.aboutProject))
-                addImage(name = "logo", profilePic = R.drawable.prisjegerlogo)
+                //addImage(name = "logo", profilePic = R.drawable.prisjegerlogo)
             }
 
         }
@@ -86,47 +94,61 @@ private fun makeAboutProject(content: @Composable () -> Unit = {}) {
 @Composable
 private fun makeAbout(person: Person) {
     var expanded by remember {mutableStateOf(false)}
-    val extraPadding by animateDpAsState(
-        if (expanded) 40.dp else 10.dp,
+    val extraPaddingHor by animateDpAsState(
+        if (expanded) 10.dp else 40.dp,
             animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
         )
     )
-
-
-    Column(
-        modifier = Modifier
-            .padding(vertical = 5.dp, horizontal = 2.dp)
-            .clickable(onClick = { expanded = !expanded }),
-
-
-        //color = MaterialTheme.colors.surface
-
-    ) {
-        Row(
+    val extraPaddingVer by animateDpAsState(
+        if (expanded) 20.dp else 10.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
+    Card(modifier = Modifier
+        .padding(horizontal = extraPaddingHor, vertical = extraPaddingVer)
+        .fillMaxSize()
+        .background(Color.Black.copy(alpha = 0f)),
+        shape = RoundedCornerShape(size = 20.dp)
         ) {
-            Column(modifier = Modifier
-                .padding(24.dp)
-                .padding(bottom = extraPadding)
-                .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally){
-                Text(text = stringResource(id = R.string.about) + " " + stringResource(id = person.name))
-                Text(if (expanded) stringResource(person.description) else "")
-                if (expanded) addImage(name = stringResource(id = person.name), person.profilePic)
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colors.primary)
+                .clickable(onClick = { expanded = !expanded }),
+            horizontalAlignment = Alignment.CenterHorizontally
+            //color = MaterialTheme.colors.surface
+
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = stringResource(id = R.string.about) + " " + stringResource(id = person.name), color = MaterialTheme.colors.onPrimary, fontWeight = FontWeight.Bold)
+                addImage(name = stringResource(id = person.name), person.profilePic)
+                Spacer(modifier = Modifier.padding(top = 130.dp))
+            }
+            Divider(color = MaterialTheme.colors.onPrimary, thickness = 3.dp)
+            if (expanded) {
+                Column(modifier = Modifier
+                    .background(MaterialTheme.colors.secondaryVariant)
+                    .padding(horizontal = extraPaddingHor, vertical = extraPaddingVer)
+                    .fillMaxWidth()) {
+                    Text(text = stringResource(person.description), color = MaterialTheme.colors.onSecondary)
+                }
             }
         }
-
     }
 }
 
-
-
-
 @Composable
 fun addImage(name: String, profilePic: Int) {
-    Image(painter = painterResource(id = profilePic),
-        contentDescription = "Profile picture for $name"
+    Image(modifier = Modifier
+        .height(100.dp)
+        .padding(start = 20.dp),
+        painter = painterResource(id = profilePic),
+        contentDescription = "Profile picture for $name",
     )
 }
 
