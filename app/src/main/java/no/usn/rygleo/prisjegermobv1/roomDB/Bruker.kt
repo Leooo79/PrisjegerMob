@@ -9,5 +9,6 @@ data class Bruker(
  //   @PrimaryKey(autoGenerate = true) val brukerId: Long = 0,
     @PrimaryKey
     @ColumnInfo(name = "brukerNavn")    val brukerNavn: String,
+    @ColumnInfo(name = "sessionId")     val sessionId: String,
     //   @ColumnInfo(name = "passord")       val passord: String?
 )

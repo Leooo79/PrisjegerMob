@@ -68,7 +68,7 @@ fun visAPI(prisjegerViewModel: PrisjegerViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colors.secondary)
             .wrapContentSize(Alignment.Center)
     ) {
         Text(

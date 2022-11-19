@@ -67,6 +67,15 @@ interface RestApi {
     @GET("butikkliste")
     suspend fun getButikkliste(): Array<String>
 
+    // Funksjon for å sjekke om backendAPI har endret data siden siste forespørsel
+    @GET("sjekkoppdatert/{tidspunkt}/{epost}/{session}/{handleliste}")
+    suspend fun sjekkOppdatert(
+        @Path("tidspunkt") tidspunkt: String,
+        @Path("epost") epost: String,
+        @Path("session") sessionId: String,
+        @Path("handleliste") handleliste: String
+    ): Boolean
+
 
     // Funksjonen for å autentisere bruker, og logge inn 
     @POST("login")
