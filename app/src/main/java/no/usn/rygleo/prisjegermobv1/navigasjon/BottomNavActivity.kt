@@ -1,6 +1,7 @@
 package no.usn.rygleo.prisjegermobv1.navigasjon
 
 import android.graphics.drawable.Icon
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
@@ -121,6 +123,17 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
         actions = {
             if (activeNavItem == "Handleliste") {
                 IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
+                    prisjegerViewModel.handleModus.value = !prisjegerViewModel.handleModus.value
+                    prisjegerViewModel.filtrerEtterAntall.value =
+                        !prisjegerViewModel.filtrerEtterAntall.value
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = "Handlemodus",
+                        tint = Color.White
+                    )
+                }
+                IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
                     prisjegerViewModel.valgDialog.value = !prisjegerViewModel.valgDialog.value
                 }) {
                     Icon(
@@ -211,15 +224,15 @@ fun DrawerContent(
 }
 @Composable
 fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavItem) -> Unit) {
-    val background = if (selected) MaterialTheme.colors.onPrimary else Color.Transparent
+  // TODO: Kjærsjer:  val background = if (selected) MaterialTheme.colors.onPrimary else Color.Transparent
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .background(color = Color.Gray, shape = RoundedCornerShape(20.dp))
+            //     .background(color = Color.Gray, shape = RoundedCornerShape(20.dp))
             .width(200.dp)
             .clickable(onClick = { onItemClick(item) })
             .height(45.dp)
-            //        .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colors.primary)
             .padding(start = 10.dp)
     ) {
         Image(
@@ -310,7 +323,7 @@ fun NavigationGraph(
                 openDialog.value = false
                 // Setter som aktiv i ViewModel mtp. TopAppBar
                 prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: kjører flere ganger?
-                prisjegerViewModel.setAktiv("Handleliste")
+                prisjegerViewModel.setAktiv(stringResource(id = R.string.shoppingList))
                 HandlelisteScreen(prisjegerViewModel)
             } else {
                 prisjegerViewModel.setAktiv("Innlogging")

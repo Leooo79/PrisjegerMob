@@ -140,4 +140,6 @@ dependencies {
 // ConverterFactory for å lage Converter av Moshi-biblioteket
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
+    // Daniel
+    implementation 'com.github.MahmoudIbrahim3:android-compose-charts:1.2.2'
 }

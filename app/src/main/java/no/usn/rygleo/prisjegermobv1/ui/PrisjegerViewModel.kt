@@ -123,6 +123,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val vilSletteDialog = mutableStateOf(false) // vise bekreftelse sletting
     val butikkDialog = mutableStateOf(false) // vise detaljer om sum pr butikk
     val filtrerEtterAntall = mutableStateOf(false) // vis kun varer med antall < 0
+    val handleModus = mutableStateOf(false) // Handleliste i handlemodus?
 
 
 
@@ -169,7 +170,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             oppdaterVarerFraApi() // overfører varenavn til lokal DB
             if (isLoggedIn.value) { // handlelister krever innlogging :
                 oppdaterListeFraApi() // oppdaterer alle handlelister fra server til lokal DB
-                getLokaleVarer() // emitter alle handlelister fra lokal DB, inkludert antall = 0
+                getLokaleVarer(currentListenavn) // emitter alle handlelister fra lokal DB, inkludert antall = 0
                 getAlleListenavn() // henter unike handlelistenavn fra lokal DB
             }
             _status.value = "Vellykket, oppdaterAlleDataFraApi gjennomført"
@@ -645,11 +646,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjonen etablerer og bytter ut innhold i LiveData -> LazyColumn fra lokal DB
      * Henter alle varer uavhengig av antall
      */
-    fun getLokaleVarer() = viewModelScope.launch {
+    fun getLokaleVarer(listenavn: String) = viewModelScope.launch {
         _status.value = "getLokaleVarer prøver å vise varer fra lokal DB"
         println(status.value)
         try {
-            alleVarer = varerDAO.getAlleVarer().asLiveData() // ny spørring lokal DB
+            alleVarer = varerDAO.getAlleVarer(listenavn).asLiveData() // ny spørring lokal DB
             _status.value = "Vellykket, varer fra lokal Db hentet"
             println(status.value)
             setUsortert() // rekomposisjon

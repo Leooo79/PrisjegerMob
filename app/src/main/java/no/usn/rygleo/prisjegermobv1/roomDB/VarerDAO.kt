@@ -19,8 +19,8 @@ interface VarerDAO {
     /**
      * Returnerer Flow med alle varelinjer lagret lokalt (alle lister)
      */
-    @Query("SELECT * FROM Varer ORDER BY varenavn ASC")
-    fun getAlleVarer(): Flow<List<Varer>>
+    @Query("SELECT * FROM Varer WHERE listenavn=:listenavn ORDER BY varenavn ASC")
+    fun getAlleVarer(listenavn: String): Flow<List<Varer>>
 
 
     /**

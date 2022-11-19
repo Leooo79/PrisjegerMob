@@ -47,9 +47,9 @@ class VarerRepo(private val varerDAO: VarerDAO) {
     }
 
 
-    suspend fun getAlleVarer() : Flow<List<Varer>> {
-        return varerDAO.getAlleVarer()
-    }
+//    suspend fun getAlleVarer() : Flow<List<Varer>> {
+//        return varerDAO.getAlleVarer()
+ //   }
 
     suspend fun getAlleValgteVarer() : Flow<List<Varer>> {
         return varerDAO.getAlleValgteVarer()
