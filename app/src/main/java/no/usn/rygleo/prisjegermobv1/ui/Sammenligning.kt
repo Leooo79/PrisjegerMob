@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -57,6 +58,10 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
     val butikkListe by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
     var filterListe = rememberSaveable { mutableStateOf(ArrayList<String>()) }
 
+    val prissammenligningLabel = stringResource(id = R.string.priceComparison)
+    val searchForItemLabel = stringResource(id = R.string.searchForItem)
+
+
         val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -73,14 +78,14 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(
-                    text = "Prissammenligning",
+                    text = prissammenligningLabel,
                     color = MaterialTheme.colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                 )
                 if (valgtVare.value == "Ingen") {
                     Text(
-                        text = "Søk etter vare",
+                        text = searchForItemLabel,
                         color = MaterialTheme.colors.onPrimary,
                         fontWeight = FontWeight.Normal,
                         fontSize = 17.sp,
@@ -108,12 +113,13 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                         prisjegerViewModel,
                         aktiverInnstillinger)
                     //ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
-                    grafBoxButton(grafFokus = grafFokus, tekst = "Se historikk")
+                    //"see history"
+                    grafBoxButton(grafFokus = grafFokus, tekst = stringResource(id = R.string.seeHistory))
                 }
                 else {
                     Image(
                         painter = painterResource(id = R.drawable.searchhand2),
-                        contentDescription = "Bilde av mann med statestikk",
+                        contentDescription = "Bilde av mann med statistikk",
                         modifier = Modifier
                             .height(1000.dp)
                             .fillMaxWidth()
@@ -125,7 +131,8 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
         else {
             Column(modifier = Modifier
                 .fillMaxSize()) {
-                grafBoxButton(grafFokus = grafFokus, tekst = "Tilbake")
+                //"gå tilbake"
+                grafBoxButton(grafFokus = grafFokus, tekst = stringResource(id = R.string.seeHistory))
                 MainChart()
             }
         }
@@ -490,7 +497,7 @@ private fun tabellItem(
                     .padding(start = 5.dp)
             ) {
                 Text(
-                    text = "Butikk",
+                    text = stringResource(id = R.string.store),
                     color = MaterialTheme.colors.onSecondary,
                     fontWeight = FontWeight.Bold
                 )
@@ -506,7 +513,7 @@ private fun tabellItem(
                     .weight(2F)
             ) {
                 Text(
-                    text = "Pris",
+                    text = stringResource(id = R.string.price),
                     color = MaterialTheme.colors.onSecondary,
                     fontWeight = FontWeight.Bold
                 )
@@ -528,7 +535,7 @@ private fun tabellItem(
                     .padding(end = 0.dp)
             ) {
                 Text(
-                    text = "Dato",
+                    text = stringResource(id = R.string.date),
                     color = MaterialTheme.colors.onSecondary,
                     fontWeight = FontWeight.Bold
                 )

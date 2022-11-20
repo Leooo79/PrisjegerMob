@@ -35,4 +35,8 @@
     <string name="userMustHaveValue">Brukernavn og eller passord kan ikke være tom</string>
     <string name="register">Registrer</string>
     <string name="logout">Logg ut</string>
+    <string name="searchForItem">Søk etter vare</string>
+    <string name="seeHistory">See historikk</string>
+    <string name="store">Butikk</string>
+    <string name="date">Dato</string>
 </resources>

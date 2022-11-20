@@ -35,4 +35,8 @@
     <string name="userMustHaveValue">Username or password cannot be empty</string>
     <string name="register">Register</string>
     <string name="logout">Log out</string>
+    <string name="searchForItem">Search for item</string>
+    <string name="seeHistory">See history</string>
+    <string name="store">Store</string>
+    <string name="date">Date</string>
 </resources>
