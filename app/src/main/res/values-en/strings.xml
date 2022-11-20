@@ -23,4 +23,16 @@
     <string name="aboutTore">Tore has a huge you know what ;)</string>
     <string name="price">price</string>
     <string name="showDetailsButton">Vis detaljer</string>
+    <string name="goBack">Go back</string>
+    <string name="userName">Username</string>
+    <string name="password">Password</string>
+    <string name="wrongUserNameOrPassword">Wrong username or password</string>
+    <string name="loggedIn">Logged in</string>
+    <string name="Login">Log in</string>
+    <string name="registerUser">Register user</string>
+    <string name="userAlreadyExists">This user already exists</string>
+    <string name="userRegistered">User registered</string>
+    <string name="userMustHaveValue">Username or password cannot be empty</string>
+    <string name="register">Register</string>
+    <string name="logout">Log out</string>
 </resources>

@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -41,6 +42,14 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
     val openDialog = remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
 
+    val feilBrukerNavn = stringResource(id = R.string.wrongUserNameOrPassword)
+    val loggetInn = stringResource(id = R.string.loggedIn)
+    val userAlreadyExists = stringResource(id = R.string.userAlreadyExists)
+    val userRegistered = stringResource(id = R.string.userRegistered)
+    val userMustHaveValue = stringResource(id = R.string.userMustHaveValue)
+    val register = stringResource(id = R.string.register)
+    val logout = stringResource(id = R.string.logout)
+
 
     if (openDialog.value) {
         AlertDialog(
@@ -59,7 +68,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { openDialog.value = false }
                     ) {
-                        Text("Tilbake")
+                        Text(stringResource(id = R.string.goBack))
                     }
                 }
             }
@@ -103,7 +112,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             OutlinedTextField(
                 value = brukerNavn,
                 onValueChange = { brukerNavn = it },
-                label = { Text("brukernavn") },
+                label = { Text(stringResource(id = R.string.userName)) },
                 leadingIcon = {
                     Icon(Icons.Default.Person, contentDescription = "bruker")
                 },
@@ -114,7 +123,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             OutlinedTextField(
                 value = passord,
                 onValueChange = { passord = it },
-                label = { Text("passord") },
+                label = { Text(stringResource(id = R.string.password)) },
                 leadingIcon = {
                     Icon(Icons.Default.Info, contentDescription = "password")
                 },
@@ -136,14 +145,14 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                             ) {
                                 // TODO: trenger ny verdi brukernavn
                                 isLoggedIn = true
-                                text = "logget inn"
+                                text = loggetInn
                             } else {
                                 isLoggedIn = false
-                                text = "Feil passord eller brukernavn"
+                                text = feilBrukerNavn
                             }
                             //HVIS VELLYKKET = RES.JSON("MEDLING": 'INNLOGGET')
                         } else {
-                            text = "feil passord eller brukernavn"
+                            text = feilBrukerNavn
                         }
                         openDialog.value = true
                     },
@@ -157,7 +166,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     )
                 ) {
                     Text(
-                        text = "login",
+                        text = stringResource(id = R.string.Login),
                         textAlign = TextAlign.Center
                     )
 
@@ -170,7 +179,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 ) {
 
                     ClickableText(
-                        text = AnnotatedString("Registrer ny bruker"),
+                        text = AnnotatedString(stringResource(id = R.string.registerUser)),
 
                         onClick = { isLoggedIn1 = true },
                         style = TextStyle(
@@ -189,12 +198,14 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                             if (prisjegerViewModel.registrerAPI.value
                                     .equals("brukerEKS")
                             ) {
-                                text = "bruker eksisterer allerede"
+                                //"bruker eksisterer allerede"
+                                text = userAlreadyExists
 
                             } else {
-                                text = "bruker registrert"
+                                //Bruker registrert
+                                text = userRegistered
                             }
-                        } else text = "brukernavn og passord må ha verdi"
+                        } else text = userMustHaveValue
                         openDialog.value = true
                         isLoggedIn1 = false
 
@@ -209,7 +220,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     )
                 ) {
                     Text(
-                        text = "Registrer",
+                        text = register,
                         textAlign = TextAlign.Center
                     )
 
@@ -235,7 +246,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     contentColor = Color.White
                 )
             ){Text(
-                text = "Logg ut",
+                text = logout,
                 textAlign = TextAlign.Center
             ) }
         }
