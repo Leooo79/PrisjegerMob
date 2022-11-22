@@ -1,7 +1,6 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
@@ -13,8 +12,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -22,13 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.usn.rygleo.prisjegermobv1.R
@@ -37,7 +32,7 @@ import no.usn.rygleo.prisjegermobv1.ui.theme.Purple700
 
 @Composable
 fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
-    var isLoggedIn1 by remember { mutableStateOf(false) }
+    var regisrerView by remember { mutableStateOf(false) }
     var isLoggedIn by remember { mutableStateOf(false) }
     var brukerNavn by remember { mutableStateOf("") }
     var passord by remember { mutableStateOf("") }
@@ -144,7 +139,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 )
             )
 
-            if (isLoggedIn1 == false) {
+            if (regisrerView == false) {
                 OutlinedButton(
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
@@ -155,10 +150,11 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                             ) {
                                 // TODO: trenger ny verdi brukernavn
                                 isLoggedIn = true
-                                text = loggetInn
+                                text = feilBrukerNavn
                             } else {
                                 isLoggedIn = false
-                                text = feilBrukerNavn
+                                text = loggetInn
+
                             }
                             //HVIS VELLYKKET = RES.JSON("MEDLING": 'INNLOGGET')
                         } else {
@@ -191,7 +187,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     ClickableText(
                         text = AnnotatedString(stringResource(id = R.string.registerUser)),
 
-                        onClick = { isLoggedIn1 = true },
+                        onClick = { regisrerView = true },
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = FontFamily.Default,
@@ -217,7 +213,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                             }
                         } else text = userMustHaveValue
                         openDialog.value = true
-                        isLoggedIn1 = false
+                        regisrerView = false
 
                     },
                     modifier = Modifier
