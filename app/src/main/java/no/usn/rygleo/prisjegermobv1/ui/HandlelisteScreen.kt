@@ -1,5 +1,6 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
+import android.content.res.Resources
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -63,6 +64,7 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
     val vareListe by prisjegerViewModel.alleVarer.observeAsState(initial = emptyList())
     // Alle butikker fra server:
     val valgbare by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
+    
 
     // Innhold for komposisjon
     Column(Modifier
@@ -110,7 +112,7 @@ fun Overskrift() {
                 modifier = Modifier
                     .weight(3F)
             ) {
-                Text("Vare")
+                Text(stringResource(id = R.string.item))
             }
             Column(
                 modifier = Modifier
@@ -122,7 +124,7 @@ fun Overskrift() {
                 modifier = Modifier
                     .weight(1F)
             ) {
-                Text("Antall")
+                Text(stringResource(id = R.string.amount))
             }
         }
     }
@@ -175,12 +177,13 @@ private fun HeaderDialog(
  */
 @Composable
 fun VisSumPrButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<String>) {
+    
     AlertDialog(
         onDismissRequest = {
             prisjegerViewModel.butikkDialog.value = false
         },
         title = {
-            Text(text = "Totalsum pr butikk")
+            Text(text = stringResource(id = R.string.totalSumStores))
         },
         buttons = {
             Row(
@@ -191,7 +194,7 @@ fun VisSumPrButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<Strin
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {prisjegerViewModel.butikkDialog.value = false}
                 ) {
-                    Text("Tilbake")
+                    Text(stringResource(id = R.string.goBack))
                 }
             }
             Row(modifier = Modifier
@@ -203,7 +206,7 @@ fun VisSumPrButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<Strin
                         .padding(start = 20.dp)
                 ) {
                     Text(
-                        text = "Butikker",
+                        text = stringResource(id = R.string.store),
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(Modifier.size(10.dp))
@@ -218,7 +221,7 @@ fun VisSumPrButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<Strin
                         .weight(2F)
                         .padding(end = 20.dp)
                 ) {
-                    Text(text = "Totalsum",
+                    Text(text = stringResource(id = R.string.totalsum),
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(Modifier.size(10.dp))
@@ -248,8 +251,20 @@ fun VisSumPrButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<Strin
  */
 @Composable
 fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
-    var text by remember { mutableStateOf("") }
-    var tittel by remember { mutableStateOf("Skriv inn navn på ny handleliste")}
+
+    /** Språkvariabler */
+    val listAlreadyExistLabel = stringResource(id = R.string.listAlreadyExists)
+    val max16lettersLabel = stringResource(id = R.string.max16letters)
+    val chooseStoreLabel = stringResource(id = R.string.chooseStore)
+    val newNameLabel = stringResource(id = R.string.newNameforShoppingList)
+
+    //Disse to variablene under var begge
+    //val tittel/text by remember { mutableStateOf("")}
+    //Tror ikke det er nødvendig, så endret det
+    var text =""
+    var tittel = newNameLabel
+    
+
 
     AlertDialog(
         onDismissRequest = {
@@ -275,20 +290,21 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
                         if (prisjegerViewModel.kontrollerListenavn(text)) {
-                            tittel = "Listen finnes fra før, velg et annet navn"
+                            
+                            tittel = listAlreadyExistLabel
                             text = ""
                         } else if (text.length > 16){ // antall tillate tegn
-                            tittel = "Listenavn kan maksimalt bestå av 16 tegn"
+                            tittel = max16lettersLabel
                             text = ""
                         } else {
                             prisjegerViewModel.setListeNavn(text) // endrer listenavn
                             prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data
                             prisjegerViewModel.valgDialog.value = false
-                            prisjegerViewModel.setButikknavn("Velg butikk") // nullstill butikk
+                            prisjegerViewModel.setButikknavn(Resources.getSystem().getString(R.string.chooseStore)) // nullstill butikk
                         }
                     }
                 ) {
-                    Text("Lagre ny liste")
+                    Text(stringResource(id = R.string.saveNewList))
                 }
             }
             //  Ekstra knapper
@@ -301,7 +317,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
-                Text("Vis bare valgte")
+                Text(stringResource(id = R.string.showOnlySelected))
             }
             Button( // Knapp for å vise alle. Inkludert antall == 0.
                 modifier = Modifier
@@ -312,7 +328,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
-                Text("Vis alle varer")
+                Text(stringResource(id = R.string.showAllItems))
             }
             Button( // Knapp for å hente nye varer fra server (komplett liste - IGNORE)
                 modifier = Modifier
@@ -323,7 +339,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
-                Text("Oppdater handleliste")
+                Text(stringResource(id = R.string.updateShoppinglist))
             }
             Button( // Knapp for å slette handleliste fra lokal DB. Egen alert med bekreftelse.
                 modifier = Modifier
@@ -334,7 +350,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
-                Text("Slett handleliste")
+                Text(stringResource(id = R.string.deleteShoppinglist))
             }
             Button( // Knapp for å gå tilbake/ lukke alert
                 modifier = Modifier
@@ -344,7 +360,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel.valgDialog.value = false
                 }
             ) {
-                Text("Tilbake")
+                Text(stringResource(id = R.string.goBack))
             }
         }
     )
@@ -364,9 +380,17 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
 @Composable
 fun BekreftelseBruker(prisjegerViewModel: PrisjegerViewModel) {
 
+    /** språkvariabler */
+    val confirmDeleteLabel = stringResource(id = R.string.confirmDelete)
+    val shoppingListLabel = stringResource(id = R.string.shoppingList)
+    val wasDeletedLabel = stringResource(id = R.string.wasDeleted)
+    val deleteLabel = stringResource(id = R.string.delete)
+    
+    
+    
     var tittel by remember {
         mutableStateOf(
-            "Vil du virkelig slette handleliste "
+            "" + confirmDeleteLabel +  " "
                     +prisjegerViewModel.currentListenavn
                     +" ?"
         )
@@ -388,13 +412,13 @@ fun BekreftelseBruker(prisjegerViewModel: PrisjegerViewModel) {
                         onClick = {prisjegerViewModel.vilSletteDialog.value =
                             !prisjegerViewModel.vilSletteDialog.value}
                     ) {
-                        Text("Angre sletting")
+                        Text(stringResource(id = R.string.CancelDelete))
                     }
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            tittel = "Handleliste "+prisjegerViewModel.currentListenavn+
-                                    " ble slettet"
+                            tittel = shoppingListLabel + " " + prisjegerViewModel.currentListenavn + " " +
+                                    wasDeletedLabel
                             prisjegerViewModel.slettHandleliste() // slett liste lokalt/sentralt
                             prisjegerViewModel.vilSletteDialog.value =
                                 !prisjegerViewModel.vilSletteDialog.value
@@ -403,7 +427,7 @@ fun BekreftelseBruker(prisjegerViewModel: PrisjegerViewModel) {
                             prisjegerViewModel.getLokaleVarer(prisjegerViewModel.currentListenavn)
                         }
                     ) {
-                        Text("Slett "+prisjegerViewModel.currentListenavn)
+                        Text(deleteLabel+ " " +prisjegerViewModel.currentListenavn)
                     }
                 }
 
@@ -1167,7 +1191,7 @@ private fun visDetaljer(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = visDetaljer
                 ) {
-                    Text("Tilbake")
+                    Text(stringResource(id = R.string.goBack))
                 }
             }
             Row(modifier = Modifier
@@ -1180,7 +1204,7 @@ private fun visDetaljer(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Butikker",
+                        text = stringResource(id = R.string.store),
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(Modifier.size(10.dp))
@@ -1190,8 +1214,8 @@ private fun visDetaljer(
                         Spacer(Modifier.size(10.dp))
                     }
                     Spacer(Modifier.size(10.dp))
-                    Text("Antall i handleliste")
-                    Text("Summert for vare")
+                    Text(stringResource(id = R.string.amount))
+                    Text(stringResource(id = R.string.totalsum))
                     Spacer(Modifier.size(10.dp))
 
                     Button( // knapp for å trekke fra
@@ -1221,7 +1245,7 @@ private fun visDetaljer(
                         .padding(end = 20.dp)
                         .fillMaxWidth()
                 ) {
-                    Text(text = "Enhetspris",
+                    Text(text = stringResource(id = R.string.price),
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(Modifier.size(10.dp))

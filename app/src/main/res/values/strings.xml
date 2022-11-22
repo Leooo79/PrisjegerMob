@@ -36,7 +36,24 @@
     <string name="register">Registrer</string>
     <string name="logout">Logg ut</string>
     <string name="searchForItem">Søk etter vare</string>
-    <string name="seeHistory">See historikk</string>
+    <string name="seeHistory">Se historikk</string>
     <string name="store">Butikk</string>
     <string name="date">Dato</string>
+    <string name="item">Vare</string>
+    <string name="amount">Antall</string>
+    <string name="listAlreadyExists">Denne listen finnes fra før. Velg et annet navn</string>
+    <string name="totalSumStores">Totalsum per butikk</string>
+    <string name="totalsum">Totalsum</string>
+    <string name="max16letters">Max 16 bokstaver</string>
+    <string name="chooseStore">Velg butikk</string>
+    <string name="saveNewList">Lagre ny liste</string>
+    <string name="showOnlySelected">Vis kun valgte</string>
+    <string name="showAllItems">Vis alle varer</string>
+    <string name="newNameforShoppingList">Skriv et nytt navn for denne handlelisten</string>
+    <string name="updateShoppinglist">Oppdater handleliste</string>
+    <string name="deleteShoppinglist">Slett handleliste</string>
+    <string name="confirmDelete">Vil du virkelig slette handlelisten</string>
+    <string name="CancelDelete">Angre sletting</string>
+    <string name="wasDeleted">ble slettet</string>
+    <string name="delete">Slett</string>
 </resources>

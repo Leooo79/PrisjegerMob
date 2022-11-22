@@ -2,10 +2,12 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
+import android.content.res.Resources
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
 import androidx.core.util.toRange
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.API
+import no.usn.rygleo.prisjegermobv1.R
 import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.*
@@ -111,7 +114,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     // Default listenavn og butikk TODO: alle brukere må ha "MinHandleliste" som default
     var currentListenavn = "MinHandleliste" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
-    var currentButikk = "Velg butikk" // VARIABEL FOR INNEVÆRENDE BUTIKK
+    var currentButikk = "sdgfdfh" // VARIABEL FOR INNEVÆRENDE BUTIKK
     private val _uiStateNy = MutableStateFlow(
         VarerUiState(
             listenavn = currentListenavn,

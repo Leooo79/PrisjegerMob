@@ -61,8 +61,8 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
     val prissammenligningLabel = stringResource(id = R.string.priceComparison)
     val searchForItemLabel = stringResource(id = R.string.searchForItem)
 
+    val scrollState = rememberScrollState()
 
-        val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()

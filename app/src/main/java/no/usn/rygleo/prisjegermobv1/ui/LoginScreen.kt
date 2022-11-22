@@ -1,6 +1,7 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -118,8 +120,13 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp, top = 10.dp)
+                    .padding(10.dp),
+                keyboardOptions= KeyboardOptions(keyboardType= KeyboardType.Text, imeAction = ImeAction.Next),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White
+                )
             )
+
             OutlinedTextField(
                 value = passord,
                 onValueChange = { passord = it },
@@ -129,9 +136,12 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp, top = 10.dp),
+                    .padding(10.dp),
                 visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Go),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White
+                )
             )
 
             if (isLoggedIn1 == false) {
@@ -158,7 +168,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 10.dp, top = 10.dp),
+                        .padding(10.dp),
                     elevation = ButtonDefaults.elevation(100.dp),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.Blue,
@@ -239,7 +249,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
 
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp, top = 10.dp),
+                    .padding(10.dp),
                 elevation = ButtonDefaults.elevation(100.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Blue,

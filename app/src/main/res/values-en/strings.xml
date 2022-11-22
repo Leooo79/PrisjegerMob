@@ -21,8 +21,8 @@
     <string name="aboutDmitriy">Dmitriy has a ginormous brain</string>
     <string name="aboutDaniel">Daniel has a great heart</string>
     <string name="aboutTore">Tore has a huge you know what ;)</string>
-    <string name="price">price</string>
-    <string name="showDetailsButton">Vis detaljer</string>
+    <string name="price">Price</string>
+    <string name="showDetailsButton">Show details</string>
     <string name="goBack">Go back</string>
     <string name="userName">Username</string>
     <string name="password">Password</string>
@@ -39,4 +39,21 @@
     <string name="seeHistory">See history</string>
     <string name="store">Store</string>
     <string name="date">Date</string>
+    <string name="item">Item</string>
+    <string name="amount">Amount</string>
+    <string name="listAlreadyExists">This list already exist. Choose another name</string>
+    <string name="totalSumStores">Total per store</string>
+    <string name="totalsum">Total</string>
+    <string name="max16letters">Max 16 letters</string>
+    <string name="chooseStore">Choose store</string>
+    <string name="saveNewList">Save new list</string>
+    <string name="showOnlySelected">Show only selected</string>
+    <string name="showAllItems">Show all items</string>
+    <string name="newNameforShoppingList">Type a new name for this shopping list</string>
+    <string name="updateShoppinglist">Update shopping list</string>
+    <string name="deleteShoppinglist">Delete shopping list</string>
+    <string name="confirmDelete">Do you really want to delete shopping list</string>
+    <string name="CancelDelete">Cancel delete</string>
+    <string name="wasDeleted">Was deleted</string>
+    <string name="delete">Delete</string>
 </resources>

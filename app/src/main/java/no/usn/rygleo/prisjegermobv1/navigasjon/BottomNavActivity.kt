@@ -167,7 +167,7 @@ fun DrawerContent(
 
     Column(
         modifier = Modifier
-       .background(Color.Transparent),
+       .background(MaterialTheme.colors.primary),
         horizontalAlignment = Alignment.Start
     ) {
         // Header
