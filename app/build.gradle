@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.kapt'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+
 }
 
 android {
@@ -56,6 +58,16 @@ android {
 }
 
 dependencies {
+    //permission for lokasjon
+    //  implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
+    implementation "com.google.accompanist:accompanist-permissions:0.21.1-beta"
+    implementation 'com.google.maps.android:maps-compose:2.7.2'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation "androidx.compose.material3:material3:1.0.0-alpha12"
+    implementation "androidx.compose.material3:material3-window-size-class:1.0.0-alpha12"
+
+
     //Bar Chart
     implementation 'com.github.MahmoudIbrahim3:android-compose-charts:1.2.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -66,6 +78,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

@@ -106,8 +106,20 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val brukerDAO: BrukerDAO // for bruker
 
 
+    /**
+     * variabler for å sette og hente lokasjonsinformasjon
+     */
+    var lon : Double =0.0
+    var lat : Double =0.0
 
 
+    fun setLokasjon(lonG : Double, latI: Double){
+        lon = lonG
+        lat = latI
+        println("viewmodel printer koord")
+        print(lon)
+        print(lat)
+    }
 
     /**
      * Statevariabeler i egen klasse for å ivareta endringer i state utover LiveData

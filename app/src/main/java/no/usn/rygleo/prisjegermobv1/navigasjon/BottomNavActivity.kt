@@ -162,7 +162,9 @@ fun DrawerContent(
         BottomNavItem.Handleliste,
         BottomNavItem.Prissammenligning,
         BottomNavItem.OmOss,
-        BottomNavItem.Login
+        BottomNavItem.Login,
+        BottomNavItem.Kart
+
     )
 
     Column(
@@ -391,6 +393,11 @@ fun NavigationGraph(
             // Setter som aktiv i ViewModel mtp. TopAppBar
             prisjegerViewModel.setAktiv("Login")
             LoginScreen(prisjegerViewModel)
+        }
+        // KART
+        composable(BottomNavItem.Kart.screen_route) {
+            prisjegerViewModel.setAktiv("Kart")
+            KartScreen(prisjegerViewModel)
         }
     }
 }
