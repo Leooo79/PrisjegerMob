@@ -124,7 +124,7 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
             }
         },
         actions = {
-            if (activeNavItem == "Handleliste") {
+            if (activeNavItem == stringResource(id = R.string.shoppingList)) {
                 IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
                     prisjegerViewModel.handleModus.value = !prisjegerViewModel.handleModus.value
                     prisjegerViewModel.filtrerEtterAntall.value =
