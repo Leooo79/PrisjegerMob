@@ -126,7 +126,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     // Default listenavn og butikk TODO: alle brukere må ha "MinHandleliste" som default
     var currentListenavn = "MinHandleliste" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
-    var currentButikk = "sdgfdfh" // VARIABEL FOR INNEVÆRENDE BUTIKK
+    var currentButikk = "Velg butikk" // VARIABEL FOR INNEVÆRENDE BUTIKK
     private val _uiStateNy = MutableStateFlow(
         VarerUiState(
             listenavn = currentListenavn,

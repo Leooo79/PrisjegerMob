@@ -133,7 +133,7 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
                     Icon(
                         imageVector = Icons.Filled.Edit,
                         contentDescription = "Handlemodus",
-                        tint = Color.White
+                        tint = MaterialTheme.colors.onPrimary
                     )
                 }
                 IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
@@ -142,13 +142,13 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
                     Icon(
                         imageVector = Icons.Filled.Settings,
                         contentDescription = "HandlelisteInnstillinger",
-                        tint = Color.White
+                        tint = MaterialTheme.colors.onPrimary
                     )
                 }
             }
         },
         backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.secondary
+        contentColor = MaterialTheme.colors.onPrimary
     )
 
 }
@@ -158,9 +158,9 @@ fun DrawerContent(
     scaffoldState: ScaffoldState,
     navController: NavController) {
     val items = listOf(
-        BottomNavItem.Hjem,
-        BottomNavItem.Handleliste,
         BottomNavItem.Prissammenligning,
+        //BottomNavItem.Hjem,
+        BottomNavItem.Handleliste,
         BottomNavItem.OmOss,
         BottomNavItem.Login,
         BottomNavItem.Kart
@@ -169,7 +169,8 @@ fun DrawerContent(
 
     Column(
         modifier = Modifier
-       .background(MaterialTheme.colors.primary),
+            .padding(end = 20.dp)
+            .background(MaterialTheme.colors.secondary),
         horizontalAlignment = Alignment.Start
     ) {
         // Header
@@ -183,33 +184,35 @@ fun DrawerContent(
         // List of navigation items
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { item ->
-            DrawerItem(item = item, selected = currentRoute == item.screen_route, onItemClick = {
-                navController.navigate(item.screen_route) {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
+        Column() {
+            items.forEach { item ->
+                DrawerItem(item = item, selected = currentRoute == item.screen_route, onItemClick = {
+                    navController.navigate(item.screen_route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
                         }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
                     }
-                    // Avoid multiple copies of the same destination when
-                    // reselecting the same item
-                    launchSingleTop = true
-                    // Restore state when reselecting a previously selected item
-                    restoreState = true
-                }
-                // Close drawer
-                scope.launch {
-                    scaffoldState.drawerState.close()
-                }
-            })
+                    // Close drawer
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                })
+            }
         }
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = painterResource(id = R.drawable.gaute),
-            contentDescription = "Bilde av Gaute",
+            painter = painterResource(id = R.drawable.prisjegerlogo),
+            contentDescription = "Bilde av Prisjeger",
             modifier = Modifier
                 .height(100.dp)
                 //   .fillMaxWidth()
@@ -229,21 +232,21 @@ fun DrawerContent(
 }
 @Composable
 fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavItem) -> Unit) {
+    Spacer(modifier = Modifier.padding(10.dp) .width(20.dp))
   // TODO: Kjærsjer:  val background = if (selected) MaterialTheme.colors.onPrimary else Color.Transparent
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            //     .background(color = Color.Gray, shape = RoundedCornerShape(20.dp))
             .width(200.dp)
             .clickable(onClick = { onItemClick(item) })
             .height(45.dp)
-            .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colors.primary, shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp))
             .padding(start = 10.dp)
     ) {
         Image(
             painter = painterResource(id = item.icon),
             contentDescription = stringResource(id = item.title),
-            colorFilter = ColorFilter.tint(Color.White),
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .height(35.dp)
@@ -253,7 +256,7 @@ fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavIt
         Text(
             text = stringResource(id = item.title),
             fontSize = 18.sp,
-            color = Color.White
+            color = MaterialTheme.colors.onPrimary
         )
     }
 }

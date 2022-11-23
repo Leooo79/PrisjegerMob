@@ -101,30 +101,30 @@ fun HandlelisteScreen(prisjegerViewModel: PrisjegerViewModel) {
 @Composable
 fun Overskrift() {
     Card(modifier = Modifier
-        .padding(horizontal = 10.dp, vertical = 5.dp),
+        .padding(start = 10.dp, end = 10.dp, top = 9.dp, bottom = 0.dp),
         backgroundColor = MaterialTheme.colors.primary,
     ) {
         Row(
             modifier = Modifier
-                .padding(start = 20.dp)
+                .padding(start = 20.dp, top = 10.dp, bottom = 10.dp)
         ) {
             Column(
                 modifier = Modifier
                     .weight(3F)
             ) {
-                Text(stringResource(id = R.string.item))
+                Text(stringResource(id = R.string.item), fontWeight = FontWeight.Bold)
             }
             Column(
                 modifier = Modifier
                     .weight(1F)
             ) {
-                Text(stringResource(id = R.string.price))
+                Text(stringResource(id = R.string.price), fontWeight = FontWeight.Bold)
             }
             Column(
                 modifier = Modifier
                     .weight(1F)
             ) {
-                Text(stringResource(id = R.string.amount))
+                Text(stringResource(id = R.string.amount), fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -494,7 +494,7 @@ private fun HeaderInnhold(
                 ) {
                     Text(modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                        color = Color.White,
+                        color = MaterialTheme.colors.onPrimary,
                         text = // viser totalsum pr handleliste pr butikk
                         prisjegerViewModel.finnSumPrButikk(prisjegerViewModel.currentButikk)
                     )
@@ -531,7 +531,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
         // knapp for å åpne nedtrekksmeny
             Text(modifier = Modifier
                 .align(Alignment.CenterHorizontally),
-                color = Color.White,
+                color = MaterialTheme.colors.onPrimary,
                 text = tekst
             )
         // nedtrekksmeny
@@ -554,7 +554,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
                         prisjegerViewModel.setButikknavn(tekst) // henter priser for valgt butikk
                     },
                 ) {
-                    Text(text = itemValue)
+                    Text(text = itemValue, color = MaterialTheme.colors.onSecondary)
                 }
             }
         }
@@ -588,7 +588,7 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
         ) {  // navnet på listen som vises
             Text(modifier = Modifier
                 .align(Alignment.CenterHorizontally),
-                color = Color.White,
+                color = MaterialTheme.colors.onPrimary,
                 text = tekst
             )
             // nedtrekksmeny
@@ -614,7 +614,7 @@ private fun VelgHandleliste(prisjegerViewModel: PrisjegerViewModel) {
                         prisjegerViewModel.getLokaleVarer(tekst) // oppdaterer Flow fra DB
                     },
                 ) {
-                    Text(text = itemValue)
+                    Text(text = itemValue, color = MaterialTheme.colors.onSecondary)
                 }
             }
         }
@@ -678,10 +678,10 @@ private fun Sokefelt(state: MutableState<TextFieldValue>) {
         singleLine = true,
         // bør testes på håndholdt enhet :
         colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.White,
-            cursorColor = Color.White,
-            leadingIconColor = Color.White,
-            trailingIconColor = Color.White,
+            textColor = MaterialTheme.colors.onSecondary,
+            cursorColor = MaterialTheme.colors.onSecondary,
+            leadingIconColor = MaterialTheme.colors.onSecondary,
+            trailingIconColor = MaterialTheme.colors.onSecondary,
             backgroundColor = MaterialTheme.colors.secondaryVariant,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -906,9 +906,12 @@ private fun HandleItem(
   //          )
   //      ),
         backgroundColor =
-        if (endreFarge) Color.DarkGray
-        else MaterialTheme.colors.primary,
-    ) {
+        if (endreFarge)  {
+            Color.DarkGray
+        }
+        else MaterialTheme.colors.secondaryVariant,
+        )
+    {
         Column()
         {
             // Når ikke expandedState
@@ -1047,7 +1050,7 @@ private fun VarelisteItem(
         ),
         backgroundColor =
         if (endreFarge) Color.DarkGray
-        else MaterialTheme.colors.primary,
+        else MaterialTheme.colors.secondaryVariant,
     ) {
         Column()
         {
@@ -1078,8 +1081,8 @@ private fun VarelisteItem(
                     TextButton( // knapp for å legge til
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = if (vare.antall < 1)
-                                    (MaterialTheme.colors.primary)
-                            else Color(0xF00ff00),
+                                    (MaterialTheme.colors.secondaryVariant)
+                            else Color(0x4300FF00),
                             contentColor = MaterialTheme.colors.secondary
                         ),
                         onClick = {
@@ -1089,7 +1092,11 @@ private fun VarelisteItem(
                             )
                         }
                     ) {  // viser antall pr vare/ liste
-                        Text(vare.antall.toString() + " +")
+                        Text(vare.antall.toString() + " +", color = if (vare.antall < 1) {
+                            MaterialTheme.colors.onSecondary
+                        } else {
+                            MaterialTheme.colors.onSecondary
+                        })
                     }
                 }
             }
@@ -1106,8 +1113,8 @@ private fun VarelisteItem(
                             modifier = Modifier
                                 .padding(8.dp, top = 0.dp),
                             colors = ButtonDefaults.buttonColors(
-                                contentColor = MaterialTheme.colors.secondary,
-                                backgroundColor = MaterialTheme.colors.secondaryVariant
+                                contentColor = MaterialTheme.colors.onPrimary,
+                                backgroundColor = MaterialTheme.colors.primary
                             ),
                             onClick = visDetaljer,
 
@@ -1123,7 +1130,7 @@ private fun VarelisteItem(
                         Button( // knapp for å legge til
                             colors = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colors.secondary,
-                                backgroundColor = MaterialTheme.colors.secondaryVariant
+                                backgroundColor = MaterialTheme.colors.primary
                             ),
                             onClick = {
                                 if (vare.antall >= 1) {
@@ -1134,7 +1141,7 @@ private fun VarelisteItem(
                                 }
                             }
                         ) {  // viser antall pr vare/ liste
-                            Text("- 1")
+                            Text("- 1", color = MaterialTheme.colors.onPrimary)
                         }
 
                     }
@@ -1142,7 +1149,7 @@ private fun VarelisteItem(
                         Button( // knapp for å legge til
                             colors = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colors.secondary,
-                                backgroundColor = MaterialTheme.colors.secondaryVariant
+                                backgroundColor = MaterialTheme.colors.primary
                             ),
                             onClick = {
                                 prisjegerViewModel.inkementerVareAntall(
@@ -1150,7 +1157,7 @@ private fun VarelisteItem(
                                     vare.listenavn)
                             }
                         ) {  // viser antall pr vare/ liste
-                            Text("+ 1")
+                            Text("+ 1", color = MaterialTheme.colors.onPrimary)
                         }
                     }
                 }
@@ -1214,8 +1221,8 @@ private fun visDetaljer(
                         Spacer(Modifier.size(10.dp))
                     }
                     Spacer(Modifier.size(10.dp))
-                    Text(stringResource(id = R.string.amount))
-                    Text(stringResource(id = R.string.totalsum))
+                    Text(stringResource(id = R.string.amount), color = MaterialTheme.colors.onPrimary)
+                    Text(stringResource(id = R.string.totalsum), color = MaterialTheme.colors.onPrimary)
                     Spacer(Modifier.size(10.dp))
 
                     Button( // knapp for å trekke fra
@@ -1223,8 +1230,8 @@ private fun visDetaljer(
                             .padding(8.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = MaterialTheme.colors.secondary,
-                            backgroundColor = MaterialTheme.colors.secondaryVariant
+                            contentColor = MaterialTheme.colors.onSecondary,
+                            backgroundColor = MaterialTheme.colors.primary
                         ),
                         onClick = {
                             // minimum 0 vare. Kontrolleres også av lokal DB ved update
@@ -1236,7 +1243,7 @@ private fun visDetaljer(
                             }
                         }
                     ) {
-                        Text("- 1")
+                        Text("- 1", color = MaterialTheme.colors.onSecondary)
                     }
                 }
                 Column(

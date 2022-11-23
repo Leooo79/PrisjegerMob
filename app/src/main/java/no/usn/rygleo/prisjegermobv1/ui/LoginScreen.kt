@@ -1,6 +1,7 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
@@ -9,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -109,9 +111,9 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             OutlinedTextField(
                 value = brukerNavn,
                 onValueChange = { brukerNavn = it },
-                label = { Text(stringResource(id = R.string.userName)) },
+                label = { Text(stringResource(id = R.string.userName, Modifier.background(Color.Red)), color = MaterialTheme.colors.onSecondary) },
                 leadingIcon = {
-                    Icon(Icons.Default.Person, contentDescription = "bruker")
+                    Icon(Icons.Default.Person, contentDescription = "bruker", tint = MaterialTheme.colors.onSecondary)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
