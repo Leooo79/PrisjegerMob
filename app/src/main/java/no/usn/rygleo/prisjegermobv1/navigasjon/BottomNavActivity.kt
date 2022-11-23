@@ -316,10 +316,10 @@ fun NavigationGraph(
     val openDialog = remember { mutableStateOf(true) }
   //  val uiState2 by viewModel.uiState.collectAsState()
 
-    NavHost(navController, startDestination = BottomNavItem.Hjem.screen_route) {
-        composable(BottomNavItem.Hjem.screen_route) {
+    NavHost(navController, startDestination = BottomNavItem.Prissammenligning.screen_route) {
+        composable(BottomNavItem.Prissammenligning.screen_route) {
             // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv("Hjem")
+            prisjegerViewModel.setAktiv("Prissammenligning")
          //   HomeScreen()
           //  if (prisjegerViewModel.equals("Vellykket, data hentet"))
 
