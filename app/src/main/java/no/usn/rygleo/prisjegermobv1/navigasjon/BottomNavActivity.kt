@@ -106,7 +106,7 @@ fun MainScreenView(){
 // Husk at tilhørende streng i prisjegerViewModel.activeNavItem må eksistere og bli satt
 // fun NavigationGraph()
 fun shouldDrawerSwipe(prisjegerViewModel: PrisjegerViewModel): Boolean {
-    return prisjegerViewModel.activeNavItem.value != "DinVisningHer"
+    return prisjegerViewModel.activeNavItem.value != "Kart"
 }
 
 @Composable
