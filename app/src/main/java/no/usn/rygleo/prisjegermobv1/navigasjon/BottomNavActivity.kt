@@ -331,7 +331,6 @@ fun NavigationGraph(
                 prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: kjører flere ganger?
                 prisjegerViewModel.setAktiv(stringResource(id = R.string.shoppingList))
                 prisjegerViewModel.seEtterOppdateringer()
-                prisjegerViewModel.setAktiv("Handleliste")
                 HandlelisteScreen(prisjegerViewModel)
             } else {
                 prisjegerViewModel.setAktiv("Innlogging")
