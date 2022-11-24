@@ -45,7 +45,7 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
     //STVG val t1 = 5.73938278829869
     val test = LatLng(lat, lon)
     val cameraPositionState = rememberCameraPositionState {
-        position =CameraPosition.fromLatLngZoom(test , 10f)
+        position =CameraPosition.fromLatLngZoom(test , 17f)
       //  position = CameraPosition.fromLatLngZoom(singapore, 10f)
     }
       GoogleMap(
@@ -73,11 +73,11 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
               title = "Rema 1000",
               snippet = "nærmeste rema"
           )
-          MapMarker(
-              context = LocalContext.current,
-              position = test,
+          Marker(
+              state = MarkerState(position = test),
               title = "du er her",
-              iconResourceId = R.drawable.ic_my_network,
+              snippet = "du er her",
+              icon = (bitmapDescriptorFromVector(LocalContext.current, R.drawable.ic_my_network) )
           )
 
 
@@ -88,6 +88,10 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
 
 
 }
+/**
+ * brukte stoff fra https://towardsdev.com/jetpack-compose-custom-google-map-marker-erselan-khan-e6e04178a30b
+ * til å oprette et custom markør ikon i GoogleMap objektet
+ */
 fun bitmapDescriptorFromVector(
     context: Context,
     vectorResId: Int

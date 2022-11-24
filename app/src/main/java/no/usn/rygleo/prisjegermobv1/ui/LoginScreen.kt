@@ -189,7 +189,9 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     ClickableText(
                         text = AnnotatedString(stringResource(id = R.string.registerUser)),
 
-                        onClick = { regisrerView = true },
+                        onClick = { regisrerView = true
+                                   passord =""
+                                  brukerNavn ="" },
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = FontFamily.Default,
@@ -203,15 +205,14 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
                             prisjegerViewModel.postAPIRegistrer(brukerNavn, passord)
-                            if (prisjegerViewModel.registrerAPI.value
-                                    .equals("brukerEKS")
+                            if (prisjegerViewModel.registert.value
                             ) {
                                 //"bruker eksisterer allerede"
-                                text = userAlreadyExists
+                                text = userRegistered
 
                             } else {
                                 //Bruker registrert
-                                text = userRegistered
+                                text = userAlreadyExists
                             }
                         } else text = userMustHaveValue
                         openDialog.value = true
