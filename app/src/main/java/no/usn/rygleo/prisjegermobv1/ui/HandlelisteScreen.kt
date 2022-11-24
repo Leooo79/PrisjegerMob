@@ -261,8 +261,11 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
     //Disse to variablene under var begge
     //val tittel/text by remember { mutableStateOf("")}
     //Tror ikke det er nødvendig, så endret det
-    var text =""
-    var tittel = newNameLabel
+  //  var text =""
+  //  var tittel = newNameLabel
+
+    var text by remember {mutableStateOf("")}
+    var tittel by remember {mutableStateOf("")}
     
 
 
@@ -300,7 +303,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                             prisjegerViewModel.setListeNavn(text) // endrer listenavn
                             prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data
                             prisjegerViewModel.valgDialog.value = false
-                            prisjegerViewModel.setButikknavn(Resources.getSystem().getString(R.string.chooseStore)) // nullstill butikk
+                            prisjegerViewModel.setButikknavn("Velg butikk") // nullstill butikk
                         }
                     }
                 ) {
