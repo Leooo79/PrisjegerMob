@@ -79,6 +79,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     private val  _isLoggedIn = mutableStateOf(false)
     val isLoggedIn = _isLoggedIn
 
+    //variabel for å sjekke status på registrering
+    private val _registrert = mutableStateOf(false)
+    val registert = _registrert
+
     //variabel for regstrerAPI
     private val _registrerAPI = MutableLiveData<String>()
     var registrerAPI: LiveData<String> = _registrerAPI
@@ -291,6 +295,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 _registrerAPI.value = API.retrofitService.registrerBruker(map)
                 registrerAPI = _registrerAPI
+                 if(registrerAPI.value.equals("bruker regisrert")){
+                _registrert.value = true
+
+                }
                 _status.value = "Vellykket, postAPIRegitrer opprettet ny bruker"
                 println(status.value)
             } catch (e: Exception) {
