@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,14 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -170,7 +174,8 @@ fun DrawerContent(
     Column(
         modifier = Modifier
             .padding(end = 20.dp)
-            .background(MaterialTheme.colors.secondary),
+            .background(MaterialTheme.colors.secondary)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.Start
     ) {
         // Header
@@ -184,7 +189,33 @@ fun DrawerContent(
         // List of navigation items
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-        Column() {
+        Column(verticalArrangement = Arrangement.Center) {
+            Image(
+                painter = painterResource(id = R.drawable.prisjegerlogo),
+                contentDescription = "Bilde av Prisjeger",
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxSize()
+                    .padding(1.dp)
+                    .align(Alignment.CenterHorizontally),
+            )
+            Text(
+                text = "Prisjeger",
+                color = MaterialTheme.colors.onPrimary,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    shadow = Shadow(
+                        color = Color.Black,
+                        blurRadius = 5f
+                    )
+                ),
+                modifier = Modifier
+                    .padding(12.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
             items.forEach { item ->
                 DrawerItem(item = item, selected = currentRoute == item.screen_route, onItemClick = {
                     navController.navigate(item.screen_route) {
@@ -208,30 +239,12 @@ fun DrawerContent(
                     }
                 })
             }
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Image(
-            painter = painterResource(id = R.drawable.prisjegerlogo),
-            contentDescription = "Bilde av Prisjeger",
-            modifier = Modifier
-                .height(100.dp)
-                //   .fillMaxWidth()
-                .padding(10.dp)
-            //  .align(Alignment.Start)
-        )
-        Text(
-            text = "Prisjeger",
-            color = Color.White,
-            textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(12.dp)
-                .align(Alignment.Start)
-        )
+        } //End of column
     }
 }
 @Composable
 fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavItem) -> Unit) {
+    /*
     Spacer(modifier = Modifier.padding(10.dp) .width(20.dp))
   // TODO: Kjærsjer:  val background = if (selected) MaterialTheme.colors.onPrimary else Color.Transparent
     Row(
@@ -259,6 +272,42 @@ fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavIt
             color = MaterialTheme.colors.onPrimary
         )
     }
+     */
+    Card(modifier = Modifier
+        .padding(horizontal = 30.dp, vertical = 10.dp)
+        .fillMaxWidth()
+        .background(Color.Black.copy(alpha = 0f)),
+        shape = RoundedCornerShape(size = 15.dp)
+    ) {
+        Column(modifier = Modifier
+            .background(MaterialTheme.colors.primary)
+            .clickable(onClick = { onItemClick(item) })
+            .padding(top = 5.dp, bottom = 0.dp, start = 0.dp, end = 0.dp),
+            horizontalAlignment = Alignment.Start)
+        {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = item.icon),
+                    contentDescription = stringResource(id = item.title),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(50.dp)
+                        .padding(start = 20.dp)
+                )
+                Spacer(modifier = Modifier.width(30.dp))
+                Text(
+                    text = stringResource(id = item.title),
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colors.onPrimary,
+                    textAlign = TextAlign.Left
+                )
+            }//End of row
+            Spacer(modifier = Modifier.height(5.dp))
+            Divider(color = MaterialTheme.colors.onPrimary, thickness = 3.dp)
+        }//End of column
+    } //End of card
 }
 
 /*@Composable

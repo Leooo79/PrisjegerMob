@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -77,20 +78,15 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
+                /*
                 Text(
                     text = prissammenligningLabel,
                     color = MaterialTheme.colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                 )
-                if (valgtVare.value == "Ingen") {
-                    Text(
-                        text = searchForItemLabel,
-                        color = MaterialTheme.colors.onPrimary,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 17.sp,
-                    )
-                }
+
+                 */
                 Sokefelt(
                     textState,
                     textFieldFocus,
@@ -98,12 +94,32 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel,
                     valgtVare
                 )
+                if (valgtVare.value == "Ingen") {
+                    Text(
+                        text = searchForItemLabel,
+                        color = MaterialTheme.colors.onPrimary,
+                        fontWeight = FontWeight.SemiBold,
+                        style = TextStyle(
+                            fontSize = 22.sp,
+                            shadow = Shadow(
+                                color = Color.Black,
+                                blurRadius = 5f
+                            )
+                        )
+                    )
+                }
                 if (valgtVare.value != "Ingen") {
                     //SokNyVareButton(valgtVare)
                     Text(
                         text = valgtVare.value,
                         color = MaterialTheme.colors.onPrimary,
-                        fontSize = 20.sp,
+                        style = TextStyle(
+                            fontSize = 22.sp,
+                            shadow = Shadow(
+                                color = Color.Black,
+                                blurRadius = 5f
+                            )
+                        )
                     )
                     Innstillinger(butikkListe,
                         filterListe = filterListe,

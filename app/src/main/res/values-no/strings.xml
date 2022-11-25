@@ -29,7 +29,7 @@
     <string name="userName">Brukernavn</string>
     <string name="password">Password</string>
     <string name="wrongUserNameOrPassword">Feil brukernavn eller passord</string>
-    <string name="loggedIn">Logget in</string>
+    <string name="loggedIn">Velkommen</string>
     <string name="Login">Logg in</string>
     <string name="registerUser">Registrer bruker</string>
     <string name="userAlreadyExists">Denne brukeren finnes allerede</string>

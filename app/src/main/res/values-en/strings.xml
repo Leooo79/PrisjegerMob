@@ -29,7 +29,7 @@
     <string name="userName">Username</string>
     <string name="password">Password</string>
     <string name="wrongUserNameOrPassword">Wrong username or password</string>
-    <string name="loggedIn">Logged in</string>
+    <string name="loggedIn">Welcome</string>
     <string name="Login">Log in</string>
     <string name="registerUser">Register user</string>
     <string name="userAlreadyExists">This user already exists</string>

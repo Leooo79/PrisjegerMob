@@ -8,7 +8,7 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 val HandlelistePrimaryDark = Color(0xFF072f5d)
 val HandlelisteSecondaryDark = Color(0xFF664f50)
-val HandlelistePrimaryLight = Color(0xFF664f50)//Knapper
+val HandlelistePrimaryLight = Color(0xFF00323C)//Knapper
 val HandlelisteSecondaryLight = Color(0xFF00758c)//Color(0xFFEBC999)
 val HandlelisteHeader = Color(0xFFFFFFFF)//Color(0xFFCD7700)
 
