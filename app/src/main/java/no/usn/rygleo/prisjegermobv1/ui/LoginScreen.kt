@@ -163,7 +163,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 )
             )
 
-            if (regisrerView == false) {
+            if (!regisrerView) {
                 OutlinedButton(
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
