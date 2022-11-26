@@ -58,4 +58,6 @@
     <string name="CancelDelete">Angre sletting</string>
     <string name="wasDeleted">ble slettet</string>
     <string name="delete">Slett</string>
+    <string name="lastUpdateLabel">"Siste oppdatering var: "</string>
+    <string name="loginYourName">"Du er innlogget som: "</string>
 </resources>

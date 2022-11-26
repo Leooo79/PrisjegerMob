@@ -4,10 +4,7 @@ import android.graphics.drawable.Icon
 import androidx.annotation.StringRes
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -175,7 +172,8 @@ fun DrawerContent(
         modifier = Modifier
             .padding(end = 20.dp)
             .background(MaterialTheme.colors.secondary)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(state = ScrollState(2000)),
         horizontalAlignment = Alignment.Start
     ) {
         // Header
@@ -429,26 +427,26 @@ fun NavigationGraph(
         // OM OSS
         composable(BottomNavItem.Prissammenligning.screen_route) {
             // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv("Prissammenligning")
+            prisjegerViewModel.setAktiv(stringResource(id = R.string.priceComparison))
             SammenligningScreen(prisjegerViewModel)
         }
 
         // PRISSAMMENLINGNING
         composable(BottomNavItem.OmOss.screen_route) {
             // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv("OmOss")
+            prisjegerViewModel.setAktiv(stringResource(id = R.string.aboutUs))
             OmOss()
         }
 
         // LOGIN
         composable(BottomNavItem.Login.screen_route) {
             // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv("Login")
+            prisjegerViewModel.setAktiv(stringResource(id = R.string.login))
             LoginScreen(prisjegerViewModel)
         }
         // KART
         composable(BottomNavItem.Kart.screen_route) {
-            prisjegerViewModel.setAktiv("Kart")
+            prisjegerViewModel.setAktiv(stringResource(id = R.string.map))
             KartScreen(prisjegerViewModel)
         }
     }

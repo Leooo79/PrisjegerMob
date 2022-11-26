@@ -308,21 +308,18 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
         ) {
             val t = prisjegerViewModel.brukernavn
             Text(
-                text = "Du er innlogget som " + t.value,
+                text = stringResource(id = R.string.loginYourName) + t.value,
                 color = MaterialTheme.colors.onPrimary,
                 style = TextStyle(
                     fontSize = 20.sp,
-                shadow = Shadow(
-                    color = Color.Black,
-                    blurRadius = 5f
-                )
-            ),)
+                    shadow = Shadow(
+                        color = Color.Black,
+                        blurRadius = 5f
+                    )
+                ),
+            )
             OutlinedButton(
                 onClick = {prisjegerViewModel.postAPILoggout()},
-
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
                 elevation = ButtonDefaults.elevation(100.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.primary,

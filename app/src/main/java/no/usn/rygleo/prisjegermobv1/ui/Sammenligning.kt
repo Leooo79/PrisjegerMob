@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -69,7 +70,6 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
     var filterListe = rememberSaveable { mutableStateOf(ArrayList<String>()) }
     var filterteButikkListe = rememberSaveable { mutableStateOf(ArrayList<String>()) }
     var filtertePrisListe = rememberSaveable { mutableStateOf(ArrayList<Float>()) }
-    val prissammenligningLabel = stringResource(id = R.string.priceComparison)
     val searchForItemLabel = stringResource(id = R.string.searchForItem)
 
     val scrollState = rememberScrollState()
@@ -82,7 +82,6 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
         if (!grafFokus.value) {
             Column(
                 modifier = Modifier
-                    .scrollable(state = scrollState, orientation = Orientation.Vertical)
                     .padding(10.dp)
                     .background(MaterialTheme.colors.secondary)
                     .fillMaxWidth(),
@@ -119,43 +118,46 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                     )
                 }
                 if (valgtVare.value != "Ingen") {
-                    //SokNyVareButton(valgtVare)
-                    Text(
-                        text = valgtVare.value,
-                        color = MaterialTheme.colors.onPrimary,
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            shadow = Shadow(
-                                color = Color.Black,
-                                blurRadius = 5f
+                    Column(modifier = Modifier
+                        .verticalScroll(ScrollState(1000)),
+                        horizontalAlignment = Alignment.CenterHorizontally)
+                    {
+                        //SokNyVareButton(valgtVare)
+                        Text(
+                            text = valgtVare.value,
+                            color = MaterialTheme.colors.onPrimary,
+                            style = TextStyle(
+                                fontSize = 22.sp,
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    blurRadius = 5f
+                                )
                             )
                         )
-                    )
-                    Innstillinger(butikkListe,
-                        filterListe = filterListe,
-                        filterLaget,
-                        aktiverInnstillinger,
-                        valgtVare,
-                        prisjegerViewModel,
-                        aktiverInnstillinger,
-                        grafFokus,
-                        filterteButikkListe,
-                        filtertePrisListe)
-                    //ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
-                    //"see history"
-                    Button(
-                        onClick = { updateGrafFocus(grafFokus) },
-                        modifier = Modifier
-                            .padding(horizontal = 100.dp, vertical = 10.dp)
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            contentColor = MaterialTheme.colors.onPrimary
-                        )
-                    ) {
+                        Innstillinger(butikkListe,
+                            filterListe = filterListe,
+                            filterLaget,
+                            aktiverInnstillinger,
+                            valgtVare,
+                            prisjegerViewModel,
+                            aktiverInnstillinger,
+                            grafFokus,
+                            filterteButikkListe,
+                            filtertePrisListe)
+                        //ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
+                        //"see history"
+                        Button(
+                            onClick = { updateGrafFocus(grafFokus) },
+                            modifier = Modifier.padding(top = 10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) {
                             Text(modifier = Modifier
                                 .padding(10.dp),
                                 text = stringResource(id = R.string.seeHistory))
+                        }
                     }
                 }
                 else {
@@ -195,8 +197,9 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                     )
                 }
-                Card(modifier = Modifier
-                    .fillMaxSize()) {
+                Column(modifier = Modifier
+                    .verticalScroll(state = ScrollState(2000))
+                    .background(Color.White)) {
                     //"gå tilbake"
                     MainChart(filtertePrisListe, filterteButikkListe)
                 }
@@ -634,7 +637,7 @@ private fun tabellItem(
             Box(modifier = Modifier
                 .padding(start = 30.dp, bottom = 10.dp, top = 10.dp)) {
                 Text(
-                    text = "Siste oppdatering var: " + prisjegerViewModel.priserPrButikk.value!!.dato,
+                    text = stringResource(id = R.string.lastUpdateLabel) + prisjegerViewModel.priserPrButikk.value!!.dato,
                     color = MaterialTheme.colors.onSecondary,
                     fontWeight = FontWeight.Bold
                 )
