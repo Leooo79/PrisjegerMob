@@ -13,6 +13,9 @@ interface BrukerDAO {
     fun getBruker(): Bruker
 
 
+    @Query("DELETE FROM Bruker")
+    fun slettBruker()
+
     /*
 
       @Query("SELECT * FROM Bruker WHERE brukerId IN (:alleBrukerId)")

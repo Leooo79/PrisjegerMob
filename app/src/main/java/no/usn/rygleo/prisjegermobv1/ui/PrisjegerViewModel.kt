@@ -434,7 +434,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 //    _brukernavn.value = brukerAPI.value?.get("bruker").toString()
                     _brukernavn.value = epost
                     // TODO: lagrer bruker i lokal DB
+                    println("BRUUUUUUUUKER : "+brukerDAO.getBruker())
+                    brukerDAO.slettBruker()
+                    println("BRUUUUUUUUKER ETTER SLETT: "+brukerDAO.getBruker())
                     brukerDAO.insert(Bruker(epost, lagSession(30))) // insert av ny bruker til lokal DB
+                    println("BRUUUUUUUUKER ETTER INNLOGGING: "+brukerDAO.getBruker())
                     _status.value = "Vellykket, bruker innlogget og lagret" // vellykket
                     println(status.value)
                 }
