@@ -241,8 +241,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 var svar = API.retrofitService.sjekkOppdatert(
                     sisteTidspunkt.value,
                     brukernavn.value,
-                    currentListenavn,
-                    sessionId.value
+                    sessionId.value,
+                    currentListenavn
                 )
                 sisteTidspunkt.value = API.retrofitService.hentTidspunkt()
                 println(
