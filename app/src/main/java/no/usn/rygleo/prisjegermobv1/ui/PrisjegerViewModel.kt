@@ -2,13 +2,10 @@
 package no.usn.rygleo.prisjegermobv1.ui
 
 import android.app.Application
-import android.content.res.Resources
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.res.stringResource
-import androidx.core.util.toRange
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -18,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.API
-import no.usn.rygleo.prisjegermobv1.R
 import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
 import no.usn.rygleo.prisjegermobv1.data.VarerUiState
 import no.usn.rygleo.prisjegermobv1.roomDB.*
@@ -222,37 +218,60 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         if (!oppdateringAktiv.value) { // forhindrer dobbel kjøring
             oppdateringAktiv.value = true
             while (oppdateringAktiv.value) {
-                if (måEndre()) oppdaterAlleDataFraApi()
+                oppdater()
                 delay(30000) // hvor mange millisekunder det skal være mellom oppdateringer
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    var sisteTidspunkt = mutableStateOf(nåTid()) // initialisering av tidspunkt
+    var sisteTidspunkt = mutableStateOf("") // henter tidspunkt
+    var førsteOppdatering = mutableStateOf(true)
     @RequiresApi(Build.VERSION_CODES.N)
-    suspend fun måEndre(): Boolean {
-        _status.value = "Sjekker om API data trenger oppfriskning..."
-        println(status.value)
-        try {
-            println("Siste tidspunkt: " + sisteTidspunkt.value)
-            var svar = API.retrofitService.sjekkOppdatert(
-                sisteTidspunkt.value,
-                brukernavn.value,
-                currentListenavn,
-                sessionId.value
-            )
-            sisteTidspunkt.value = nåTid()
-            println(
-                "Nytt tidspunkt: " + sisteTidspunkt.value +
-                ", bruker: " + brukernavn.value +
-                ", session:" + sessionId.value
-            )
-            return svar // TODO: Det skal være en egen metode her for å lese av svaret
-        } catch (e: Exception) {
-            _status.value = "Klarte ikke sjekke om data trenger oppfriskning: ${e.message}"
+    suspend fun oppdater() {
+        if (!førsteOppdatering.value) {
+            _status.value = "Sjekker om API data trenger oppfriskning..."
             println(status.value)
-            return false
+            try {
+                println("Tidspunkt for siste sjekk: " + sisteTidspunkt.value)
+                var svar = API.retrofitService.sjekkOppdatert(
+                    sisteTidspunkt.value,
+                    brukernavn.value,
+                    currentListenavn,
+                    sessionId.value
+                )
+                sisteTidspunkt.value = API.retrofitService.hentTidspunkt()
+                println(
+                    "Nytt tidspunkt: " + sisteTidspunkt.value +
+                            ", bruker: " + brukernavn.value +
+                            ", session:" + sessionId.value
+                )
+                if (svar.prisUtdatert) {
+                    // håndtere utgått prisdata
+                    _status.value = "Prisdata er utgått. Henter nytt..."
+                    println(_status.value)
+                    getAPIVarer()
+                    getAPIButikker()
+                    getAPIPriserPrButikk()
+                    oppdaterVarerFraApi()
+                }
+                if (svar.handlelisteUtdatert) {
+                    // håndtere utgått handleliste
+                    _status.value = "Handleliste er nyere på tjener. Henter ny data..."
+                    println(_status.value)
+                    oppdaterListeFraApi()
+                    getLokaleVarer(currentListenavn)
+                    getAlleListenavn()
+                }
+            } catch (e: Exception) {
+                _status.value = "Klarte ikke oppdatere data: ${e.message}"
+                println(status.value)
+            }
+        } else { // hvis første kjøring: hent tidspunkt fra tjener, og hopp over oppdatering
+            _status.value = "Starter oppdateringssystem..."
+            println(_status.value)
+            sisteTidspunkt.value = API.retrofitService.hentTidspunkt()
+            førsteOppdatering.value = false
         }
     }
 
@@ -795,7 +814,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 API.retrofitService.inkrementerHandleliste(
                     brukernavn.value,
                     listenavn,
-                    varenavn
+                    varenavn,
+                    sessionId.value
                 )
                 _status.value = "Vellykket, inkrementerVareAntall gjennomført"
                 println(status.value)
@@ -825,7 +845,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 API.retrofitService.dekrementerHandleliste(
                     brukernavn.value,
                     listenavn,
-                    varenavn
+                    varenavn,
+                    sessionId.value
                 )
                 _status.value = "Vellykket, dekrementerVareAntall gjennomført"
                 println(status.value)
@@ -887,7 +908,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                     .slettVareIListe(
                         brukernavn.value,
                         varer.listenavn,
-                        varer.varenavn
+                        varer.varenavn,
+                        sessionId.value
                     )
                 _status.value = "Vellykket, vare slettet"
                 println(status)
@@ -913,7 +935,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 API.retrofitService.slettVareIListe(
                     brukernavn.value,
                     varer.listenavn,
-                    varer.varenavn
+                    varer.varenavn,
+                    sessionId.value
                 )
                 _status.value = "Vellykket, settAntallTilNull gjennomført"
                 println(status.value)
@@ -940,7 +963,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         _status.value = "slettHandleliste forsøker å slette liste"
         try {// Hvis slettet fra lokal DB, slett fra sentral DB
             if (varerDAO.slettHandleliste(currentListenavn) >= 1) {
-                API.retrofitService.slettHandleliste(brukernavn.value, currentListenavn)
+                API.retrofitService.slettHandleliste(brukernavn.value, currentListenavn, sessionId.value)
                 _status.value = "Vellykket, handleliste slettet"
                 println(status.value)
             }

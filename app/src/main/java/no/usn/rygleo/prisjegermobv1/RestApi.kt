@@ -3,6 +3,7 @@ package no.usn.rygleo.prisjegermobv1
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import no.usn.rygleo.prisjegermobv1.data.OppdatertStatus
 import no.usn.rygleo.prisjegermobv1.data.PriserPrButikk
 import no.usn.rygleo.prisjegermobv1.roomDB.Varer
 import retrofit2.Retrofit
@@ -10,7 +11,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 
-private const val BASE_URL ="http://prisjeger-app.duckdns.org:6969/api/"
+private const val BASE_URL ="http://prisjeger-app.duckdns.org:6970/api/"
+
 
 private val
         moshi = Moshi.Builder()
@@ -74,10 +76,14 @@ interface RestApi {
         @Path("epost") epost: String,
         @Path("session") sessionId: String,
         @Path("handleliste") handleliste: String
-    ): Boolean
+    ): OppdatertStatus
+
+    // Funksjon for å nåværende tidspunkt fra tjener
+    @GET("tid")
+    suspend fun hentTidspunkt(): String
 
 
-    // Funksjonen for å autentisere bruker, og logge inn 
+    // Funksjonen for å autentisere bruker, og logge inn
     @POST("login")
     suspend fun login(
         @Body map: Map<String, String>
@@ -96,38 +102,41 @@ interface RestApi {
     // Backend ØKER antall med en pr vare pr handleliste
     // Dersom handleliste ikke finnes opprettes listen
     // Dersom varen ikke finnes legges den til i liste (antall = 1)
-    @POST("handlelister/{epost}/{tittel}/add/{vare}")
+    @POST("handlelister/{epost}/{tittel}/addvare/{vare}/{session}")
     suspend fun inkrementerHandleliste(
         @Path("epost") epost: String,
         @Path("tittel") tittel: String,
         @Path("vare") vare: String,
-    )
+        @Path("session") sessionId: String
+        )
 
 
     // Backend REDUSERER antall med en pr vare pr handleliste
     // Ved antall == 0 slettes vare fra handleliste
-    @POST("handlelister/{epost}/{tittel}/pop/{vare}")
+    @POST("handlelister/{epost}/{tittel}/pop/{vare}/{session}")
     suspend fun dekrementerHandleliste(
         @Path("epost") epost: String,
         @Path("tittel") tittel: String,
         @Path("vare") vare: String,
+        @Path("session") sessionId: String
     )
 
 
     // Backend sletter vare fra handleliste
-    @POST("handlelister/{epost}/{tittel}/delete/{vare}")
+    @POST("handlelister/{epost}/{tittel}/delete/{vare}/{session}")
     suspend fun slettVareIListe(
         @Path("epost") epost: String,
         @Path("tittel") tittel: String,
         @Path("vare") vare: String,
+        @Path("session") sessionId: String
     )
 
-
     // Backend sletter handleliste
-    @POST("handlelister/{epost}/{tittel}/remove")
+    @POST("handlelister/{epost}/{tittel}/remove/{session}")
     suspend fun slettHandleliste(
         @Path("epost") epost: String,
         @Path("tittel") tittel: String,
+        @Path("session") sessionId: String
     )
 }
 
