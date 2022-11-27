@@ -11,7 +11,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 
-private const val BASE_URL ="http://prisjeger-app.duckdns.org:6970/api/"
+private const val BASE_URL ="http://prisjeger-app.duckdns.org:6969/api/"
 
 
 private val
