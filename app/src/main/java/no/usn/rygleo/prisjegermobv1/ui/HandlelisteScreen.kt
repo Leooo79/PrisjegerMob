@@ -309,7 +309,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
 
                                 tittel = listAlreadyExistLabel
                                 text = ""
-                            } else if (text.length > 16){ // antall tillate tegn
+                            } else if (text.length > 16 || text.isEmpty()){ // antall tillate tegn
                                 tittel = max16lettersLabel
                                 text = ""
                             } else {

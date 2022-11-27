@@ -87,6 +87,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     //handlelister. Dette er nødvendig for logikken til livedata fra server.
     val _sessionId = mutableStateOf("")
     var sessionId = _sessionId
+    var sisteOppdatertTidspunkt = mutableStateOf("")
 
 
 
@@ -223,13 +224,12 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             oppdateringAktiv.value = true
             while (oppdateringAktiv.value) {
                 oppdater()
-                delay(30000) // hvor mange millisekunder det skal være mellom oppdateringer
+                delay(10000) // hvor mange millisekunder det skal være mellom oppdateringer
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    var sisteTidspunkt = mutableStateOf("") // henter tidspunkt
     var førsteOppdatering = mutableStateOf(true)
     @RequiresApi(Build.VERSION_CODES.N)
     suspend fun oppdater() {
@@ -237,38 +237,39 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             _status.value = "Sjekker om API data trenger oppfriskning..."
             println(status.value)
             try {
-                println("Tidspunkt for siste sjekk: " + sisteTidspunkt.value)
                 var svar = API.retrofitService.sjekkOppdatert(
-                    sisteTidspunkt.value,
+                    sisteOppdatertTidspunkt.value,
                     brukernavn.value,
                     sessionId.value,
                     currentListenavn
                 )
-                sisteTidspunkt.value = API.retrofitService.hentTidspunkt()
                 println(
-                    "Nytt tidspunkt: " + sisteTidspunkt.value +
+                    "Nytt tidspunkt: " + sisteOppdatertTidspunkt.value +
                             ", bruker: " + brukernavn.value +
                             ", session:" + sessionId.value
                 )
-                if (svar.prisUtdatert) {
-                    // håndtere utgått prisdata
-                    _status.value = "Prisdata er utgått. Henter nytt..."
-                    println(_status.value)
-                    getAPIVarer()
-                    getAPIButikker()
-                    getAPIPriserPrButikk()
-                    oppdaterVarerFraApi()
-                }
-                if (svar.handlelisteUtdatert) {
-                    // håndtere utgått handleliste
-                    _status.value = "Handleliste er nyere på tjener. Henter ny data..."
-                    println(_status.value)
-                    oppdaterListeFraApi()
-                    getLokaleVarer(currentListenavn)
-                    getAlleListenavn()
-                }
-                if (!svar.prisUtdatert && svar.handlelisteUtdatert) {
-                    _status.value = "Data trenger ikke oppdatert"
+                getAlleListenavn()
+                if (svar.prisUtdatert || svar.handlelisteUtdatert) {
+                    sisteOppdatertTidspunkt.value = API.retrofitService.hentTidspunkt()
+                    if (svar.prisUtdatert) {
+                        // håndtere utgått prisdata
+                        _status.value = "Prisdata er utgått. Henter nytt..."
+                        println(_status.value)
+                        getAPIVarer()
+                        getAPIButikker()
+                        getAPIPriserPrButikk()
+                        oppdaterVarerFraApi()
+                    }
+                    if (svar.handlelisteUtdatert) {
+                        // håndtere utgått handleliste
+                        //varerDAO.slettHandleliste(currentListenavn)
+                        _status.value = "Handleliste er nyere på tjener. Henter ny data..."
+                        println(_status.value)
+                        oppdaterListeFraApi()
+                        getLokaleVarer(currentListenavn)
+                    }
+                } else {
+                    _status.value = "Data er allerede oppdatert."
                     println(_status.value)
                 }
             } catch (e: Exception) {
@@ -278,7 +279,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         } else { // hvis første kjøring: hent tidspunkt fra tjener, og hopp over oppdatering
             _status.value = "Starter oppdateringssystem..."
             println(_status.value)
-            sisteTidspunkt.value = API.retrofitService.hentTidspunkt()
+            sisteOppdatertTidspunkt.value = API.retrofitService.hentTidspunkt()
             førsteOppdatering.value = false
         }
     }
@@ -490,7 +491,18 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             println(status.value)
         } else {
             _status.value = "oppdaterListeFraApi prøver å oppdatere lokal DB (handlelister) fra API"
-            try { // henter alle unike handlelistenavn fra server
+            try { // Tvinger alle verdier til 0 for å sette inn nye verdier uten å fjerne referanse
+                API.retrofitService.getVareliste()
+                for (varenavn in hentVarerAPI.value!!) {
+                    println("NULLSTILLER")
+                    varerDAO.insertAllForce( // insert til lokal DB, duplikater ignoreres
+                        Varer( // class Varer
+                            currentListenavn, // tittel/ listenavn
+                            varenavn, // varenavn
+                            0 // antall
+                        )
+                    )
+                } // henter alle unike handlelistenavn fra server
                 val alleHandlelister = API.retrofitService.getHandlelister(brukernavn.value)
                 for (lister in alleHandlelister) { // henter alle handlelisterader fra server
                     val komplettListe = API.retrofitService.getHandleliste(brukernavn.value, lister)
