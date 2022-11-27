@@ -52,6 +52,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     private val _priserPrButikk = MutableLiveData<PriserPrButikk>()
     val priserPrButikk: LiveData<PriserPrButikk> = _priserPrButikk
 
+    // VARIABLER FOR Å LESE INN PRISER FRA API
+    private val _prisliste = MutableLiveData<Map<String, String>>()
+    val prisliste: LiveData<Map<String, String>> = _prisliste
+
 
     // VARIABLER FOR Å LESE INN HANDLELISTE FRA API
     private val _handlelisteAPI = MutableLiveData<Map<String, Int>>()
@@ -59,8 +63,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     // VARIABLER FOR Å LESE INN HANDLELISTE FRA API
-    private val _alleHandlelisterAPI = MutableLiveData<Map<String, Int>>()
-    val alleHandlelisterAPI: LiveData<Map<String, Int>> = _alleHandlelisterAPI
+  //  private val _alleHandlelisterAPI = MutableLiveData<Map<String, Int>>()
+  //  val alleHandlelisterAPI: LiveData<Map<String, Int>> = _alleHandlelisterAPI
 
 
     // VARIABLER FOR LOGIN API
@@ -127,7 +131,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      */
     // Default listenavn og butikk TODO: alle brukere må ha "MinHandleliste" som default
     var currentListenavn = "MinHandleliste" // VARIABEL FOR INNEVÆRENDE HANDLELISTENAVN
-    var currentButikk = "Velg butikk" // VARIABEL FOR INNEVÆRENDE BUTIKK
+    var currentButikk = "Kiwi" // VARIABEL FOR INNEVÆRENDE BUTIKK
+  //  val defaultButikk = "Kiwi" // DEFAULT
     private val _uiStateNy = MutableStateFlow(
         VarerUiState(
             listenavn = currentListenavn,
@@ -211,6 +216,9 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             println(status.value)
         }
     }
+
+
+
 
     /**
      * Funksjon som sjekker om data må oppdateres, og iverksetter oppdatering dersom
@@ -492,20 +500,35 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         } else {
             _status.value = "oppdaterListeFraApi prøver å oppdatere lokal DB (handlelister) fra API"
             try { // Tvinger alle verdier til 0 for å sette inn nye verdier uten å fjerne referanse
-                API.retrofitService.getVareliste()
-                for (varenavn in hentVarerAPI.value!!) {
-                    println("NULLSTILLER")
-                    varerDAO.insertAllForce( // insert til lokal DB, duplikater ignoreres
-                        Varer( // class Varer
-                            currentListenavn, // tittel/ listenavn
-                            varenavn, // varenavn
-                            0 // antall
-                        )
-                    )
-                } // henter alle unike handlelistenavn fra server
-                val alleHandlelister = API.retrofitService.getHandlelister(brukernavn.value)
-                for (lister in alleHandlelister) { // henter alle handlelisterader fra server
+                API.retrofitService.getVareliste() // oppdaterer vareliste fra tjener
+                val alleHandlelister = API.retrofitService.getHandlelister(brukernavn.value) // unike listenavn tjener
+                for (lister in alleHandlelister) { // for alle unike listenavn
                     val komplettListe = API.retrofitService.getHandleliste(brukernavn.value, lister)
+                    for (varenavn in hentVarerAPI.value!!) { // og for alle unike varer
+                        println("NULLSTILLER")
+                        if (komplettListe.containsKey(varenavn)) {
+                            varerDAO.insertAllForce( // insert lokal DB, duplikater erstattes
+                                Varer( // class Varer
+                                    lister, // listenavn/ tittel
+                                    varenavn, // varenavn
+                                    komplettListe.getValue(varenavn) // antall
+                                )
+                            )
+                        } else {
+                            varerDAO.insertAllForce( // nullstiller lokale lister
+                                Varer( // class Varer
+                                    lister, // tittel/ listenavn TODO: nullstiller/ oppdaterer nå alle handlelister
+                                    varenavn, // varenavn // TODO: men oppdaterte data fra tjener gir ikke rekomp!
+                                    0 // antall
+                                )
+                            )
+                        }
+                    }
+                }
+                /*
+      //          val alleHandlelister = API.retrofitService.getHandlelister(brukernavn.value)
+                for (lister in alleHandlelister) { // henter alle handlelisterader fra server
+      //              val komplettListe = API.retrofitService.getHandleliste(brukernavn.value, lister)
                     for (varer in komplettListe) {   // server eier sannheten :
                         varerDAO.insertAllForce( // insert lokal DB, duplikater erstattes
                             Varer( // class Varer
@@ -516,6 +539,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                         )
                     }
                 }
+
+                 */
                 _status.value = "Vellykket, handlelister i lokal DB oppdatert"
                 println(status.value)
             } catch (e: Exception) {
@@ -567,12 +592,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         _status.value = "finnPrisPrVare prøver å vise enhetspris"
         println(status.value)
         try { // lopper ut enhetspris fra serverdata
-            for (priser in priserPrButikk.value?.varer!!) {
+            for (priser in priserPrButikk.value!!.varer) {
                 if (priser.key == varenavn) {
                     priserPrButikk.value?.varer?.get(priser.key)
                         ?.get(indeksForButikkNavn)?.let {
                             pris = it // ny enhetspris
                         }
+                    break // TODO: lagt inn break for å redusere ressursbruk
                 }
             }
             _status.value = "Vellykket, enhetspris vises"
@@ -586,6 +612,69 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
+
+    /*
+    /**
+     * Funksjonen kjøres ved bytte av butikk
+     * Henter ut aktuelle priser og mapper med varenavn som key
+     * Dette for å spare ressurbruk når pris hentes til LazyColumn
+     */
+    fun hentUtPriserPrButikk(butikknavn: String) {
+    //    if (butikknavn == defaultButikk) return // butikk må velges av bruker
+        var indeks = 0
+        println("hentUtPriserPrButikk KJØØØØØØØØØØØØØØØRERRRRE")
+        for (bNavn in priserPrButikk.value!!.butikker) {
+            if (bNavn == butikknavn) {
+                indeks = priserPrButikk.value!!.butikker.indexOf(bNavn)
+                println("INDEKS: " + indeks)
+            }
+            else {
+                println("NNNNNNNNNNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+                throw Exception("Ugyldig butikknavn")
+
+            }
+        }
+        println("KKKKKKKKKKKKKKKKKKKKKKKKK: " + priserPrButikk.value!!.varer.toString())
+        println("VVVVVVVVVVVVVVVVVVVVVVVVV: " + priserPrButikk.value!!.getPriserPrButikk(butikknavn))
+        for (varer in priserPrButikk.value!!.varer.entries) {
+            _prisliste.value = mapOf("varenavn" to varer.key, "pris" to varer.value[indeks])
+        }
+        println("PPPPPPPPPPRIIIIIIIISLIIIIIIIIIITREEWE: " + prisliste.value)
+    }
+
+
+
+
+    fun finnPrisPrVareNYYYYYY(butikknavn: String, varenavn: String) : String {
+        var pris = ""
+    //    val indeksForButikkNavn = indeksForButikk(butikknavn)
+        _status.value = "finnPrisPrVare prøver å vise enhetspris"
+        println(status.value)
+        try {
+            // TODO: trenger man å loope med Map?
+  //          pris = _prisliste.value!![varenavn].toString()
+
+
+            for (varer in prisliste.value!!) {
+                println("LIKILIKLIK: " + pris)
+                if (varer.key == varenavn) {
+                    pris = varer.value
+
+                }
+            }
+            _status.value = "Vellykket, enhetspris vises"
+            println(status.value)
+        } catch (e: Exception) {
+            _status.value = "Feil finnPrisPrVare: ${e.message}"
+            println(status.value)
+            return "0.0"
+        }
+        return pris
+    }
+
+
+
+     */
 
 
 

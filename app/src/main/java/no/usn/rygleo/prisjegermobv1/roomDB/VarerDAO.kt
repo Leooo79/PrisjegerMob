@@ -73,7 +73,7 @@ interface VarerDAO {
      */
     @Query("UPDATE varer SET antall=:antall WHERE varenavn=:varenavn " +
             "AND listenavn=:listenavn")
-    fun updateVare(antall: Int, listenavn: String, varenavn: String)
+    fun updateVareAntall(antall: Int, listenavn: String, varenavn: String)
 
 
   /* FUNGERER MULIGENS IKKE, TILFELLER AV ANTALL < 0. EMULATORTRØBBEL?!

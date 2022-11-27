@@ -411,7 +411,7 @@ private fun Sokefelt(
 
             })
         ,
-        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
         // søkeikon for å indikere søkefelt
         leadingIcon = {
             Icon(

@@ -265,7 +265,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
     //Tror ikke det er nødvendig, så endret det
   //  var text =""
   //  var tittel = newNameLabel
-
+ // TODO: endret tilbake etter Gaute
     var text by remember {mutableStateOf("")}
     var tittel by remember {mutableStateOf("")}
 
@@ -316,7 +316,7 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                                 prisjegerViewModel.setListeNavn(text) // endrer listenavn
                                 prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data
                                 prisjegerViewModel.valgDialog.value = false
-                                prisjegerViewModel.setButikknavn("Velg butikk") // nullstill butikk
+                   // TODO: trenger ikke lengre             prisjegerViewModel.setButikknavn("Velg butikk") // nullstill butikk
                             }
                         }
                     ) {
@@ -383,6 +383,13 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
         }
     )
 } // VisValg
+
+
+
+
+
+
+
 
 /**
  * Funksjonen viser AlertDialog hvor bruker må bekrefte sletting av
@@ -562,6 +569,7 @@ private fun VelgButikk(prisjegerViewModel: PrisjegerViewModel, valgbare: Array<S
                         tekst = itemValue
                         // Oppdaterer pris når bytt butikk
                         prisjegerViewModel.getAPIPriserPrButikk() // oppdaterer priser fra server
+                //        prisjegerViewModel.hentUtPriserPrButikk(tekst) // TODO: ny metode
                         prisjegerViewModel.setButikknavn(tekst) // henter priser for valgt butikk
                     },
                 ) {
@@ -656,7 +664,7 @@ private fun Sokefelt(state: MutableState<TextFieldValue>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp, horizontal = 10.dp),
-        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
         // søkeikon for å indikere søkefelt
         leadingIcon = {
             Icon(
@@ -1071,6 +1079,7 @@ private fun VarelisteItem(
                 Column(
                     modifier = Modifier
                         .weight(3F)
+                        .clickable { expandedState = !expandedState }
                 ) {
                     //viser varenavn
                     Text(modifier = Modifier
@@ -1080,6 +1089,7 @@ private fun VarelisteItem(
                 Column(
                     modifier = Modifier
                         .weight(1.2F)
+                        .clickable { expandedState = !expandedState }
                 ) {
                     Text(modifier = Modifier
                         .padding(13.dp),
@@ -1190,6 +1200,7 @@ private fun visDetaljer(
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>,
     visDetaljer: () -> Unit) {
+
     AlertDialog(
         onDismissRequest = visDetaljer,
         title = {

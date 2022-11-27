@@ -33,6 +33,8 @@ import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 import no.usn.rygleo.prisjegermobv1.ui.isPermanentlyDenied
 import no.usn.rygleo.prisjegermobv1.ui.theme.PrisjegerMobV1Theme
+
+
 @ExperimentalPermissionsApi
 class  MainActivity : ComponentActivity() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
