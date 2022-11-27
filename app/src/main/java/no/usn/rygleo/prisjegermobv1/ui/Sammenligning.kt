@@ -29,6 +29,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -39,13 +43,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mahmoud.composecharts.linechart.LineChart
-import com.mahmoud.composecharts.linechart.LineChartEntity
+import com.mahmoud.composecharts.barchart.BarChart
+import com.mahmoud.composecharts.barchart.BarChartEntity
+import com.mahmoud.composecharts.ui.theme.DefaultAxisColor
 import no.usn.rygleo.prisjegermobv1.R
+import java.lang.Float.NEGATIVE_INFINITY
 import java.lang.Float.POSITIVE_INFINITY
+import kotlin.math.roundToInt
 
+/**
+ * SammenligningScreen inneholder viewet for prissammenligning
+ */
 @Composable
 fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
@@ -57,8 +68,8 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
     val vareListe = prisjegerViewModel.hentVarerAPI.observeAsState(initial = emptyArray())
     val butikkListe by prisjegerViewModel.butikkerAPI.observeAsState(initial = emptyArray())
     var filterListe = rememberSaveable { mutableStateOf(ArrayList<String>()) }
-
-    val prissammenligningLabel = stringResource(id = R.string.priceComparison)
+    var filterteButikkListe = rememberSaveable { mutableStateOf(ArrayList<String>()) }
+    var filtertePrisListe = rememberSaveable { mutableStateOf(ArrayList<Float>()) }
     val searchForItemLabel = stringResource(id = R.string.searchForItem)
 
     val scrollState = rememberScrollState()
@@ -71,26 +82,20 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
         if (!grafFokus.value) {
             Column(
                 modifier = Modifier
-                    .scrollable(state = scrollState, orientation = Orientation.Vertical)
                     .padding(10.dp)
                     .background(MaterialTheme.colors.secondary)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
+                /*
                 Text(
                     text = prissammenligningLabel,
                     color = MaterialTheme.colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                 )
-                if (valgtVare.value == "Ingen") {
-                    Text(
-                        text = searchForItemLabel,
-                        color = MaterialTheme.colors.onPrimary,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 17.sp,
-                    )
-                }
+
+                 */
                 Sokefelt(
                     textState,
                     textFieldFocus,
@@ -98,23 +103,62 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                     prisjegerViewModel,
                     valgtVare
                 )
-                if (valgtVare.value != "Ingen") {
-                    //SokNyVareButton(valgtVare)
+                if (valgtVare.value == "Ingen") {
                     Text(
-                        text = valgtVare.value,
+                        text = searchForItemLabel,
                         color = MaterialTheme.colors.onPrimary,
-                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        style = TextStyle(
+                            fontSize = 22.sp,
+                            shadow = Shadow(
+                                color = Color.Black,
+                                blurRadius = 5f
+                            )
+                        )
                     )
-                    Innstillinger(butikkListe,
-                        filterListe = filterListe,
-                        filterLaget,
-                        aktiverInnstillinger,
-                        valgtVare,
-                        prisjegerViewModel,
-                        aktiverInnstillinger)
-                    //ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
-                    //"see history"
-                    grafBoxButton(grafFokus = grafFokus, tekst = stringResource(id = R.string.seeHistory))
+                }
+                if (valgtVare.value != "Ingen") {
+                    Column(modifier = Modifier
+                        .verticalScroll(ScrollState(1000)),
+                        horizontalAlignment = Alignment.CenterHorizontally)
+                    {
+                        //SokNyVareButton(valgtVare)
+                        Text(
+                            text = valgtVare.value,
+                            color = MaterialTheme.colors.onPrimary,
+                            style = TextStyle(
+                                fontSize = 22.sp,
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    blurRadius = 5f
+                                )
+                            )
+                        )
+                        Innstillinger(butikkListe,
+                            filterListe = filterListe,
+                            filterLaget,
+                            aktiverInnstillinger,
+                            valgtVare,
+                            prisjegerViewModel,
+                            aktiverInnstillinger,
+                            grafFokus,
+                            filterteButikkListe,
+                            filtertePrisListe)
+                        //ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
+                        //"see history"
+                        Button(
+                            onClick = { updateGrafFocus(grafFokus) },
+                            modifier = Modifier.padding(top = 10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) {
+                            Text(modifier = Modifier
+                                .padding(10.dp),
+                                text = stringResource(id = R.string.seeHistory))
+                        }
+                    }
                 }
                 else {
                     Image(
@@ -129,11 +173,36 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
             }
         }
         else {
-            Column(modifier = Modifier
-                .fillMaxSize()) {
-                //"gå tilbake"
-                grafBoxButton(grafFokus = grafFokus, tekst = stringResource(id = R.string.seeHistory))
-                MainChart()
+            Column() {
+                OutlinedButton(
+                    onClick = { updateGrafFocus(grafFokus) },
+                    contentPadding = PaddingValues(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 170.dp, vertical = 0.dp)
+                        .fillMaxWidth()
+                        .defaultMinSize(minWidth = 0.dp, minHeight = 0.dp),
+                    elevation = ButtonDefaults.elevation(100.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary
+                    )
+                ) {
+                    Image(modifier = Modifier
+                        .width(40.dp)
+                        .height(40.dp),
+                        painter = painterResource(R.drawable.leftarrow),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    )
+                }
+                Column(modifier = Modifier
+                    .verticalScroll(state = ScrollState(2000))
+                    .background(Color.White)) {
+                    //"gå tilbake"
+                    MainChart(filtertePrisListe, filterteButikkListe)
+                }
             }
         }
     }
@@ -149,11 +218,18 @@ private fun Innstillinger(
     aktiverInnstillinger: MutableState<Boolean>,
     valgtVare: MutableState<String>,
     prisjegerViewModel: PrisjegerViewModel,
-    aktiverInnstillinger1: MutableState<Boolean>
+    aktiverInnstillinger1: MutableState<Boolean>,
+    grafFokus: MutableState<Boolean>,
+    filterteButikkListe: MutableState<ArrayList<String>>,
+    filtertePrisListe: MutableState<ArrayList<Float>>
 ){
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue =
     if (expandedState) 180f else 0f)
+
+    //Lagrer all data på et sted
+    //Da kan det gjenbrukes til søylediagrammet
+
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 10.dp)
@@ -259,44 +335,49 @@ private fun Innstillinger(
             }
         }
     }
-    tabellItem(
-        butikkListe = butikkListe,
-        valgtVare = valgtVare,
-        prisjegerViewModel = prisjegerViewModel,
-        filterListe = filterListe,
-        filterLaget = filterLaget,
-        aktiverInnstillinger = aktiverInnstillinger
-    )
+    Column() {
+        tabellItem(
+            butikkListe = butikkListe,
+            valgtVare = valgtVare,
+            prisjegerViewModel = prisjegerViewModel,
+            filterListe = filterListe,
+            filterLaget = filterLaget,
+            aktiverInnstillinger = aktiverInnstillinger,
+            filtertePrisListe = filtertePrisListe,
+            filterteButikkListe = filterteButikkListe,
+        )
+    }
 }
 
 @Composable
-private fun MainChart() {
-    /*
+private fun MainChart(
+    filtertePrisListe: MutableState<ArrayList<Float>>,
+    filterteButikkListe: MutableState<ArrayList<String>>
+) {
+    var høyestPris = NEGATIVE_INFINITY
+    val farger = listOf<Color>(Color.Red, Color.Blue, Color.Magenta, Color.Green, Color.Cyan, Color.Yellow, Color(0xFFFFAA84), Color(0xFF9495E4))
     val barChartData = ArrayList<BarChartEntity>()
-    barChartData.add(BarChartEntity(150.0f, Color(0xFF618A32), "1"))
-    barChartData.add(BarChartEntity(450.0f, Color(0xFFC32A33), "2"))
-    barChartData.add(BarChartEntity(300.0f, Color.Blue, "3"))
-    barChartData.add(BarChartEntity(150.0f, Color.Cyan, "4"))
-    barChartData.add(BarChartEntity(500.0f, Color.Magenta, "5"))
+    for (i in filterteButikkListe.value.indices) {
+        System.out.println(filterteButikkListe)
+        barChartData.add(BarChartEntity(filtertePrisListe.value[i], label = filterteButikkListe.value[i], color = MaterialTheme.colors.onPrimary))
+        var hentetPris = filtertePrisListe.value[i]
+        if (hentetPris > høyestPris) høyestPris = hentetPris
+    }
+    høyestPris = ((høyestPris / 10.0).roundToInt() * 10).toFloat()
+    høyestPris += 5
+    val verticalAxis = ArrayList<Float>()
+    val dekramere = høyestPris/4
+    var verAxisValue = 0.0f
+    for (i in 4 downTo 0) {
+        verticalAxis.add(verAxisValue)
+        verAxisValue += dekramere
+    }
     BarChart(
         barChartData = barChartData,
-        verticalAxisValues = listOf(0.0f, 100.0f, 200.0f, 300.0f, 400.0f, 500.0f)
-    )
-     */
-
-
-    val lineChartData = listOf(
-        LineChartEntity(10.0f, "Jan"),
-        LineChartEntity(30.0f, "Feb"),
-        LineChartEntity(40.0f, "Mar"),
-        LineChartEntity(50.0f, "Apr"),
-        LineChartEntity(20.0f, "Mai"),
-    )
-
-    LineChart(
-        lineChartData = lineChartData,
-        verticalAxisValues = listOf(0.0f, 25.0f, 50.0f, 75.0f),
-    )
+        axisColor = MaterialTheme.colors.onSecondary,
+        verticalAxisValues = verticalAxis,
+        horizontalAxisLabelFontSize = 12.sp,
+        verticalAxisLabelFontSize = 12.sp)
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -366,9 +447,9 @@ private fun Sokefelt(
         // bør testes på håndholdt enhet :
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.onSecondary,
-            cursorColor = MaterialTheme.colors.onPrimary,
-            leadingIconColor = MaterialTheme.colors.onPrimary,
-            trailingIconColor = MaterialTheme.colors.onPrimary,
+            cursorColor = MaterialTheme.colors.onSecondary,
+            leadingIconColor = MaterialTheme.colors.onSecondary,
+            trailingIconColor = MaterialTheme.colors.onSecondary,
             backgroundColor = MaterialTheme.colors.secondaryVariant,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -475,73 +556,93 @@ private fun tabellItem(
                        prisjegerViewModel: PrisjegerViewModel,
                        filterListe: MutableState<ArrayList<String>>,
                        filterLaget: MutableState<Boolean>,
-                       aktiverInnstillinger: MutableState<Boolean>) {
+                       aktiverInnstillinger: MutableState<Boolean>,
+                       filtertePrisListe: MutableState<ArrayList<Float>>,
+                       filterteButikkListe: MutableState<ArrayList<String>>) {
     var lavestPris = POSITIVE_INFINITY
+    var høyestPris = NEGATIVE_INFINITY
+    filterteButikkListe.value.clear() //Trengs slik at det ikke blir duplikater i data
+    filtertePrisListe.value.clear()
         for (butikker in butikkListe) {
+            filterteButikkListe.value.add(butikker)
             var hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
-            if (hentetPris < lavestPris) {
-                lavestPris = hentetPris
-            }
+            filtertePrisListe.value.add(hentetPris)
+            if (hentetPris < lavestPris) lavestPris = hentetPris
+            if (hentetPris > høyestPris) høyestPris = hentetPris
     }
     Card(
         shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp),
     ) {
-        Row(modifier = Modifier
-            .background(MaterialTheme.colors.secondaryVariant)
-            .padding(10.dp),
-        ) {
-            //Butikknavn
-            Column(
-                modifier = Modifier
-                    .weight(2F)
-                    .padding(start = 5.dp)
+        Column() {
+            Row(modifier = Modifier
+                .background(MaterialTheme.colors.secondaryVariant)
+                .padding(10.dp),
             ) {
-                Text(
-                    text = stringResource(id = R.string.store),
-                    color = MaterialTheme.colors.onSecondary,
-                    fontWeight = FontWeight.Bold
-                )
-                for (butikker in butikkListe) {
-                    if (filterListe.value.contains(butikker) || !filterLaget.value) {
-                        tabellItemButikk(butikker)
-                    }
-                }
-            }
-            //Pris
-            Column(
-                modifier = Modifier
-                    .weight(2F)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.price),
-                    color = MaterialTheme.colors.onSecondary,
-                    fontWeight = FontWeight.Bold
-                )
-                for (butikker in butikkListe) {
-                    var hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
-                    if (filterListe.value.contains(butikker) || !filterLaget.value) {
-                        if (hentetPris == lavestPris) {
-                            tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), true)
-                        } else {
-                            tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), false)
+                //Butikknavn
+                Column(
+                    modifier = Modifier
+                        .weight(6F)
+                        .padding(start = 20.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.store),
+                        color = MaterialTheme.colors.onSecondary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    for (butikker in butikkListe) {
+                        if (filterListe.value.contains(butikker) || !filterLaget.value) {
+                            tabellItemButikk(butikker)
                         }
                     }
                 }
-            }
-            //Dato
-            Column(
-                modifier = Modifier
-                    .weight(1F)
-                    .padding(end = 0.dp)
-            ) {
+                //Pris
+                Column(
+                    modifier = Modifier
+                        .weight(2F)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.price),
+                        color = MaterialTheme.colors.onSecondary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    for (butikker in butikkListe) {
+                        var hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
+                        if (filterListe.value.contains(butikker) || !filterLaget.value) {
+                            if (hentetPris == lavestPris) {
+                                tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), true)
+                            } else {
+                                tabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), false)
+                            }
+                        }
+                    }
+                }
+                /*
+                //Dato
+                Column(
+                    modifier = Modifier
+                        .weight(1F)
+                        .padding(end = 0.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.date),
+                        color = MaterialTheme.colors.onSecondary,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                }
+                 */
+                Spacer(Modifier.size(30.dp))
+            } //End of row
+            Divider(color = MaterialTheme.colors.onSecondary, thickness = 3.dp)
+            Box(modifier = Modifier
+                .padding(start = 30.dp, bottom = 10.dp, top = 10.dp)) {
                 Text(
-                    text = stringResource(id = R.string.date),
+                    text = stringResource(id = R.string.lastUpdateLabel) + prisjegerViewModel.priserPrButikk.value!!.dato,
                     color = MaterialTheme.colors.onSecondary,
                     fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(Modifier.size(30.dp))
-        }
+        } //End of column
     }
 }
 

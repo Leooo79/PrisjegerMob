@@ -29,7 +29,7 @@
     <string name="userName">Brukernavn</string>
     <string name="password">Password</string>
     <string name="wrongUserNameOrPassword">Feil brukernavn eller passord</string>
-    <string name="loggedIn">Logget in</string>
+    <string name="loggedIn">Velkommen</string>
     <string name="Login">Logg in</string>
     <string name="registerUser">Registrer bruker</string>
     <string name="userAlreadyExists">Denne brukeren finnes allerede</string>
@@ -38,7 +38,7 @@
     <string name="register">Registrer</string>
     <string name="logout">Logg ut</string>
     <string name="searchForItem">Søk etter vare</string>
-    <string name="seeHistory">Se historikk</string>
+    <string name="seeHistory">Se søyle</string>
     <string name="store">Butikk</string>
     <string name="date">Dato</string>
     <string name="item">Vare</string>
@@ -58,4 +58,6 @@
     <string name="CancelDelete">Angre sletting</string>
     <string name="wasDeleted">ble slettet</string>
     <string name="delete">Slett</string>
+    <string name="lastUpdateLabel">"Siste oppdatering var: "</string>
+    <string name="loginYourName">"Du er innlogget som: "</string>
 </resources>

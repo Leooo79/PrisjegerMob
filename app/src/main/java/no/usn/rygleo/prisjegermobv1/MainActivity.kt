@@ -34,7 +34,7 @@ import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 import no.usn.rygleo.prisjegermobv1.ui.isPermanentlyDenied
 import no.usn.rygleo.prisjegermobv1.ui.theme.PrisjegerMobV1Theme
 @ExperimentalPermissionsApi
-class MainActivity : ComponentActivity() {
+class  MainActivity : ComponentActivity() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     //   private lateinit var appDatabase:AppDatabase
     @RequiresApi(Build.VERSION_CODES.N)

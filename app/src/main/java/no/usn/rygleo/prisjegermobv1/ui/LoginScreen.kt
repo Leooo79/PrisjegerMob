@@ -15,12 +15,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -93,6 +96,23 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     modifier = Modifier.fillMaxSize()
                 )
             }
+            Text(
+                text = "Prisjeger",
+                color = MaterialTheme.colors.onPrimary,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    shadow = Shadow(
+                        color = Color.Black,
+                        blurRadius = 5f
+                    )
+                ),
+                modifier = Modifier
+                    .padding(12.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
         }
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -111,7 +131,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             OutlinedTextField(
                 value = brukerNavn,
                 onValueChange = { brukerNavn = it },
-                label = { Text(stringResource(id = R.string.userName, Modifier.background(Color.Red)), color = MaterialTheme.colors.onSecondary) },
+                label = { Text(modifier = Modifier.background(Color.White), text = stringResource(id = R.string.userName), color = MaterialTheme.colors.onSecondary) },
                 leadingIcon = {
                     Icon(Icons.Default.Person, contentDescription = "bruker", tint = MaterialTheme.colors.onSecondary)
                 },
@@ -120,16 +140,17 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     .padding(10.dp),
                 keyboardOptions= KeyboardOptions(keyboardType= KeyboardType.Text, imeAction = ImeAction.Next),
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White
+                    backgroundColor = Color.White,
+                    textColor = MaterialTheme.colors.onSecondary
                 )
             )
 
             OutlinedTextField(
                 value = passord,
                 onValueChange = { passord = it },
-                label = { Text(stringResource(id = R.string.password)) },
+                label = { Text(modifier = Modifier.background(Color.White),text = stringResource(id = R.string.password), color = MaterialTheme.colors.onSecondary) },
                 leadingIcon = {
-                    Icon(Icons.Default.Info, contentDescription = "password")
+                    Icon(Icons.Default.Info, contentDescription = "password", tint = MaterialTheme.colors.onSecondary)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -137,11 +158,12 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Go),
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White
+                    backgroundColor = Color.White,
+                    textColor = MaterialTheme.colors.onSecondary
                 )
             )
 
-            if (regisrerView == false) {
+            if (!regisrerView) {
                 OutlinedButton(
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
@@ -155,8 +177,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                                 text = feilBrukerNavn
                             } else {
                                 isLoggedIn = false
-                                text = loggetInn
-
+                                text = loggetInn + " " + brukerNavn
                             }
                             //HVIS VELLYKKET = RES.JSON("MEDLING": 'INNLOGGET')
                         } else {
@@ -166,16 +187,17 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp),
+                        .padding(horizontal = 80.dp),
                     elevation = ButtonDefaults.elevation(100.dp),
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Blue,
-                        contentColor = Color.White
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary
                     )
                 ) {
                     Text(
                         text = stringResource(id = R.string.Login),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colors.onPrimary
                     )
 
                 }
@@ -185,53 +207,95 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
 
 
                 ) {
-
+                    /*
                     ClickableText(
                         text = AnnotatedString(stringResource(id = R.string.registerUser)),
 
-                        onClick = { regisrerView = true },
+                        onClick = { regisrerView = true
+                            passord =""
+                            brukerNavn ="" },
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = FontFamily.Default,
                             textDecoration = TextDecoration.Underline,
-                            color = Purple700
+                            color = MaterialTheme.colors.onPrimary
                         )
                     )
+                     */
+                    OutlinedButton(onClick = { regisrerView = true
+                        passord =""
+                        brukerNavn ="" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 80.dp),
+                        elevation = ButtonDefaults.elevation(100.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            contentColor = MaterialTheme.colors.onPrimary
+                        ))
+                    {
+                        Text(
+                            text = AnnotatedString(stringResource(id = R.string.registerUser)),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    }
                 }
             } else {
                 OutlinedButton(
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
                             prisjegerViewModel.postAPIRegistrer(brukerNavn, passord)
-                            if (prisjegerViewModel.registrerAPI.value
-                                    .equals("brukerEKS")
+                            if (prisjegerViewModel.registert.value
                             ) {
                                 //"bruker eksisterer allerede"
-                                text = userAlreadyExists
+                                text = userRegistered
 
                             } else {
                                 //Bruker registrert
-                                text = userRegistered
+                                text = userAlreadyExists
                             }
                         } else text = userMustHaveValue
                         openDialog.value = true
                         regisrerView = false
-
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 10.dp, top = 10.dp),
+                        .padding(horizontal = 80.dp),
                     elevation = ButtonDefaults.elevation(100.dp),
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Blue,
-                        contentColor = Color.White
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary
                     )
                 ) {
                     Text(
                         text = register,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colors.onPrimary
                     )
-
+                }
+                OutlinedButton(
+                    onClick = { regisrerView = false },
+                    contentPadding = PaddingValues(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 170.dp, vertical = 0.dp)
+                        .fillMaxWidth()
+                        .defaultMinSize(minWidth = 0.dp, minHeight = 0.dp),
+                    elevation = ButtonDefaults.elevation(100.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary
+                    )
+                ) {
+                    Image(modifier = Modifier
+                        .width(40.dp)
+                        .height(40.dp),
+                        painter = painterResource(R.drawable.leftarrow),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    )
                 }
 
             }
@@ -242,21 +306,32 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val t = prisjegerViewModel.brukernavn
+            Text(
+                text = stringResource(id = R.string.loginYourName) + t.value,
+                color = MaterialTheme.colors.onPrimary,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    shadow = Shadow(
+                        color = Color.Black,
+                        blurRadius = 5f
+                    )
+                ),
+            )
             OutlinedButton(
                 onClick = {prisjegerViewModel.postAPILoggout()},
-
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
                 elevation = ButtonDefaults.elevation(100.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Blue,
-                    contentColor = Color.White
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary
                 )
-            ){Text(
+            ){
+                Text(modifier = Modifier
+                    .padding(horizontal = 80.dp),
                 text = logout,
-                textAlign = TextAlign.Center
-            ) }
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onPrimary
+            )}
         }
 
 

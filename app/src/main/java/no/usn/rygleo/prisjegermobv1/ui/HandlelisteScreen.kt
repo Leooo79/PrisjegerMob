@@ -6,6 +6,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -261,117 +263,126 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
     //Disse to variablene under var begge
     //val tittel/text by remember { mutableStateOf("")}
     //Tror ikke det er nødvendig, så endret det
-    var text =""
-    var tittel = newNameLabel
-    
+  //  var text =""
+  //  var tittel = newNameLabel
+
+    var text by remember {mutableStateOf("")}
+    var tittel by remember {mutableStateOf("")}
+
 
 
     AlertDialog(
+
         onDismissRequest = {
             prisjegerViewModel.valgDialog.value = false
         },
+
         title = {
             Text(tittel)
         },
-        text = {
+        /*text = {
             Column() {
                 TextField(
                     value = text,
                     onValueChange = { text = it }
                 )
             }
-        },
+        },*/
         buttons = {
-            Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) { // Bekreftelse fra bruker
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
-                        if (prisjegerViewModel.kontrollerListenavn(text)) {
-                            
-                            tittel = listAlreadyExistLabel
-                            text = ""
-                        } else if (text.length > 16){ // antall tillate tegn
-                            tittel = max16lettersLabel
-                            text = ""
-                        } else {
-                            prisjegerViewModel.setListeNavn(text) // endrer listenavn
-                            prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data
-                            prisjegerViewModel.valgDialog.value = false
-                            prisjegerViewModel.setButikknavn(Resources.getSystem().getString(R.string.chooseStore)) // nullstill butikk
+            Column(
+                modifier = Modifier
+                    .verticalScroll(state = ScrollState(2000)),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextField(
+                    value = text,
+                    onValueChange = { text = it }
+                )
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) { // Bekreftelse fra bruker
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
+                            if (prisjegerViewModel.kontrollerListenavn(text)) {
+
+                                tittel = listAlreadyExistLabel
+                                text = ""
+                            } else if (text.length > 16){ // antall tillate tegn
+                                tittel = max16lettersLabel
+                                text = ""
+                            } else {
+                                prisjegerViewModel.setListeNavn(text) // endrer listenavn
+                                prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data
+                                prisjegerViewModel.valgDialog.value = false
+                                prisjegerViewModel.setButikknavn("Velg butikk") // nullstill butikk
+                            }
                         }
+                    ) {
+                        Text(stringResource(id = R.string.saveNewList))
+                    }
+                }
+                //  Ekstra knapper
+                Button( // Knapp for å filtrerte varer i handleliste. Antall > 0.
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.filtrerEtterAntall.value = true
+                        prisjegerViewModel.valgDialog.value = false
                     }
                 ) {
-                    Text(stringResource(id = R.string.saveNewList))
+                    Text(stringResource(id = R.string.showOnlySelected))
                 }
-            }
-            //  Ekstra knapper
-            Button( // Knapp for å filtrerte varer i handleliste. Antall > 0.
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    prisjegerViewModel.filtrerEtterAntall.value = true
-                    prisjegerViewModel.valgDialog.value = false
+                Button( // Knapp for å vise alle. Inkludert antall == 0.
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.filtrerEtterAntall.value = false
+                        prisjegerViewModel.valgDialog.value = false
+                    }
+                ) {
+                    Text(stringResource(id = R.string.showAllItems))
                 }
-            ) {
-                Text(stringResource(id = R.string.showOnlySelected))
-            }
-            Button( // Knapp for å vise alle. Inkludert antall == 0.
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    prisjegerViewModel.filtrerEtterAntall.value = false
-                    prisjegerViewModel.valgDialog.value = false
+                Button( // Knapp for å hente nye varer fra server (komplett liste - IGNORE)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data fra server
+                        prisjegerViewModel.valgDialog.value = false
+                    }
+                ) {
+                    Text(stringResource(id = R.string.updateShoppinglist))
                 }
-            ) {
-                Text(stringResource(id = R.string.showAllItems))
-            }
-            Button( // Knapp for å hente nye varer fra server (komplett liste - IGNORE)
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    prisjegerViewModel.oppdaterAlleDataFraApi() // oppdaterer alle data fra server
-                    prisjegerViewModel.valgDialog.value = false
+                Button( // Knapp for å slette handleliste fra lokal DB. Egen alert med bekreftelse.
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.vilSletteDialog.value = true
+                        prisjegerViewModel.valgDialog.value = false
+                    }
+                ) {
+                    Text(stringResource(id = R.string.deleteShoppinglist))
                 }
-            ) {
-                Text(stringResource(id = R.string.updateShoppinglist))
-            }
-            Button( // Knapp for å slette handleliste fra lokal DB. Egen alert med bekreftelse.
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    prisjegerViewModel.vilSletteDialog.value = true
-                    prisjegerViewModel.valgDialog.value = false
+                Button( // Knapp for å gå tilbake/ lukke alert
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    onClick = {
+                        prisjegerViewModel.valgDialog.value = false
+                    }
+                ) {
+                    Text(stringResource(id = R.string.goBack))
+
                 }
-            ) {
-                Text(stringResource(id = R.string.deleteShoppinglist))
-            }
-            Button( // Knapp for å gå tilbake/ lukke alert
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    prisjegerViewModel.valgDialog.value = false
-                }
-            ) {
-                Text(stringResource(id = R.string.goBack))
             }
         }
     )
 } // VisValg
-
-
-
-
-
-
-
 
 /**
  * Funksjonen viser AlertDialog hvor bruker må bekrefte sletting av
@@ -676,7 +687,7 @@ private fun Sokefelt(state: MutableState<TextFieldValue>) {
             }
         },
         singleLine = true,
-        // bør testes på håndholdt enhet :
+        // bør testes på håndholdt enhet :"
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.onSecondary,
             cursorColor = MaterialTheme.colors.onSecondary,
@@ -1055,11 +1066,11 @@ private fun VarelisteItem(
         Column()
         {
             // Når ikke expandedState
-            Row() {
+            Row(modifier = Modifier
+                .clickable { expandedState = !expandedState }) {
                 Column(
                     modifier = Modifier
                         .weight(3F)
-                        .clickable { expandedState = !expandedState }
                 ) {
                     //viser varenavn
                     Text(modifier = Modifier
@@ -1069,7 +1080,6 @@ private fun VarelisteItem(
                 Column(
                     modifier = Modifier
                         .weight(1.2F)
-                        .clickable { expandedState = !expandedState }
                 ) {
                     Text(modifier = Modifier
                         .padding(13.dp),
@@ -1130,7 +1140,7 @@ private fun VarelisteItem(
                         Button( // knapp for å legge til
                             colors = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colors.secondary,
-                                backgroundColor = MaterialTheme.colors.primary
+                                backgroundColor = MaterialTheme.colors.secondaryVariant
                             ),
                             onClick = {
                                 if (vare.antall >= 1) {
@@ -1141,7 +1151,7 @@ private fun VarelisteItem(
                                 }
                             }
                         ) {  // viser antall pr vare/ liste
-                            Text("- 1", color = MaterialTheme.colors.onPrimary)
+                            Text("- 1")
                         }
 
                     }
@@ -1149,7 +1159,7 @@ private fun VarelisteItem(
                         Button( // knapp for å legge til
                             colors = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colors.secondary,
-                                backgroundColor = MaterialTheme.colors.primary
+                                backgroundColor = MaterialTheme.colors.secondaryVariant
                             ),
                             onClick = {
                                 prisjegerViewModel.inkementerVareAntall(
@@ -1157,7 +1167,7 @@ private fun VarelisteItem(
                                     vare.listenavn)
                             }
                         ) {  // viser antall pr vare/ liste
-                            Text("+ 1", color = MaterialTheme.colors.onPrimary)
+                            Text("+ 1")
                         }
                     }
                 }
@@ -1180,7 +1190,6 @@ private fun visDetaljer(
     prisjegerViewModel: PrisjegerViewModel,
     valgbare: Array<String>,
     visDetaljer: () -> Unit) {
-
     AlertDialog(
         onDismissRequest = visDetaljer,
         title = {
@@ -1190,103 +1199,106 @@ private fun visDetaljer(
             )
         },
         buttons = {
-            Row(
-                modifier = Modifier.padding(all = 28.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = visDetaljer
+            Column(modifier = Modifier
+                .verticalScroll(state = ScrollState(2000))) {
+                Row(
+                    modifier = Modifier.padding(all = 28.dp),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text(stringResource(id = R.string.goBack))
-                }
-            }
-            Row(modifier = Modifier
-                .padding(all = 8.dp),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .weight(2.5F)
-                        .padding(start = 20.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.store),
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(Modifier.size(10.dp))
-                    for (butikker in valgbare) {// looper ut butikknavn
-                        Text(butikker)
-                        Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
-                        Spacer(Modifier.size(10.dp))
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = visDetaljer
+                    ) {
+                        Text(stringResource(id = R.string.goBack))
                     }
-                    Spacer(Modifier.size(10.dp))
-                    Text(stringResource(id = R.string.amount), color = MaterialTheme.colors.onPrimary)
-                    Text(stringResource(id = R.string.totalsum), color = MaterialTheme.colors.onPrimary)
-                    Spacer(Modifier.size(10.dp))
-
-                    Button( // knapp for å trekke fra
+                }
+                Row(modifier = Modifier
+                    .padding(all = 8.dp),
+                ) {
+                    Column(
                         modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = MaterialTheme.colors.onSecondary,
-                            backgroundColor = MaterialTheme.colors.primary
-                        ),
-                        onClick = {
-                            // minimum 0 vare. Kontrolleres også av lokal DB ved update
-                            if (vare.antall >= 1) {
-                                prisjegerViewModel.dekrementerVareAntall(
+                            .weight(2.5F)
+                            .padding(start = 20.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.store),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.size(10.dp))
+                        for (butikker in valgbare) {// looper ut butikknavn
+                            Text(butikker)
+                            Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+                            Spacer(Modifier.size(10.dp))
+                        }
+                        Spacer(Modifier.size(10.dp))
+                        Text(stringResource(id = R.string.amount), color = MaterialTheme.colors.onSecondary)
+                        Text(stringResource(id = R.string.totalsum), color = MaterialTheme.colors.onSecondary)
+                        Spacer(Modifier.size(10.dp))
+
+                        Button( // knapp for å trekke fra
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = MaterialTheme.colors.secondary,
+                                backgroundColor = MaterialTheme.colors.secondaryVariant
+                            ),
+                            onClick = {
+                                // minimum 0 vare. Kontrolleres også av lokal DB ved update
+                                if (vare.antall >= 1) {
+                                    prisjegerViewModel.dekrementerVareAntall(
+                                        vare.varenavn,
+                                        vare.listenavn,
+                                    )
+                                }
+                            }
+                        ) {
+                            Text("- 1", color = MaterialTheme.colors.secondary)
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .weight(2.5F)
+                            .padding(end = 20.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = stringResource(id = R.string.price),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.size(10.dp))
+                        for (butikker in valgbare) {// looper ut enhetspriser
+                            Text(
+                                prisjegerViewModel
+                                    .finnPrisPrVare(butikker, vare.varenavn)
+                            )
+                            Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
+                            Spacer(Modifier.size(10.dp))
+                        }
+                        Spacer(Modifier.size(10.dp))
+                        Text(": "+vare.antall)
+                        Text(": "+prisjegerViewModel.sumPrVare(vare)+",-")
+                        Spacer(Modifier.size(10.dp))
+
+                        Button( // knapp for å legge til
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = MaterialTheme.colors.secondary,
+                                backgroundColor = MaterialTheme.colors.secondaryVariant
+                            ),
+                            onClick = {
+                                prisjegerViewModel.inkementerVareAntall(
                                     vare.varenavn,
-                                    vare.listenavn,
+                                    vare.listenavn
                                 )
                             }
+                        ) {
+                            Text("+ 1")
                         }
-                    ) {
-                        Text("- 1", color = MaterialTheme.colors.onSecondary)
+                        Spacer(Modifier.size(30.dp))
                     }
-                }
-                Column(
-                    modifier = Modifier
-                        .weight(2.5F)
-                        .padding(end = 20.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(text = stringResource(id = R.string.price),
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(Modifier.size(10.dp))
-                    for (butikker in valgbare) {// looper ut enhetspriser
-                        Text(
-                            prisjegerViewModel
-                                .finnPrisPrVare(butikker, vare.varenavn)
-                        )
-                        Divider(color = MaterialTheme.colors.primary, thickness = 2.dp)
-                        Spacer(Modifier.size(10.dp))
-                    }
-                    Spacer(Modifier.size(10.dp))
-                    Text(": "+vare.antall)
-                    Text(": "+prisjegerViewModel.sumPrVare(vare)+",-")
-                    Spacer(Modifier.size(10.dp))
-
-                    Button( // knapp for å legge til
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = MaterialTheme.colors.secondary,
-                            backgroundColor = MaterialTheme.colors.secondaryVariant
-                        ),
-                        onClick = {
-                            prisjegerViewModel.inkementerVareAntall(
-                                vare.varenavn,
-                                vare.listenavn
-                            )
-                        }
-                    ) {
-                        Text("+ 1")
-                    }
-                    Spacer(Modifier.size(30.dp))
                 }
             }
         }

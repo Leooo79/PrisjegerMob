@@ -38,7 +38,7 @@ val PersonListe = listOf(
     Person(R.string.Gaute, R.string.aboutGaute, R.drawable.gaute),
     Person(R.string.Leonard, R.string.aboutLeonard, R.drawable.leonard),
     Person(R.string.Dmitriy, R.string.aboutDmitriy, R.drawable.dmitriy),
-    Person(R.string.Daniel, R.string.aboutDaniel, R.drawable.daniel),
+    Person(R.string.Daniel, R.string.aboutDaniel, R.drawable.dmitriy),
     Person(R.string.Tore, R.string.aboutTore, R.drawable.tore))
 
 @Composable
