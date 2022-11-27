@@ -267,6 +267,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                     getLokaleVarer(currentListenavn)
                     getAlleListenavn()
                 }
+                if (!svar.prisUtdatert && svar.handlelisteUtdatert) {
+                    _status.value = "Data trenger ikke oppdatert"
+                    println(_status.value)
+                }
             } catch (e: Exception) {
                 _status.value = "Klarte ikke oppdatere data: ${e.message}"
                 println(status.value)
