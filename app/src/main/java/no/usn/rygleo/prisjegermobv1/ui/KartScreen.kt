@@ -41,13 +41,11 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
     val lat = prisjegerViewModel.lat
     val lon = prisjegerViewModel.lon
     println(lat)
-   //STVG val tt = 58.97265328704611
-    //STVG val t1 = 5.73938278829869
     val test = LatLng(lat, lon)
     val cameraPositionState = rememberCameraPositionState {
         position =CameraPosition.fromLatLngZoom(test , 17f)
-      //  position = CameraPosition.fromLatLngZoom(singapore, 10f)
     }
+
       GoogleMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
@@ -77,7 +75,7 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
               state = MarkerState(position = test),
               title = "du er her",
               snippet = "du er her",
-              icon = (bitmapDescriptorFromVector(LocalContext.current, R.drawable.ic_my_network) )
+              icon = (bitmapDescriptorFromVector(LocalContext.current, R.drawable.ic_baseline_my_location_24) )
           )
 
 
@@ -97,7 +95,6 @@ fun bitmapDescriptorFromVector(
     vectorResId: Int
 ): BitmapDescriptor? {
 
-    // retrieve the actual drawable
     val drawable = ContextCompat.getDrawable(context, vectorResId) ?: return null
     drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
     val bm = Bitmap.createBitmap(
@@ -106,25 +103,8 @@ fun bitmapDescriptorFromVector(
         Bitmap.Config.ARGB_8888
     )
 
-    // draw it onto the bitmap
     val canvas = android.graphics.Canvas(bm)
     drawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
 }
-@Composable
-fun MapMarker(
-    context: Context,
-    position: LatLng,
-    title: String,
-    @DrawableRes iconResourceId: Int
-) {
 
-    val icon = bitmapDescriptorFromVector(
-        context, iconResourceId
-    )
-    Marker(
-        state = MarkerState(position = position),
-        title = title,
-        icon = icon,
-    )
-}

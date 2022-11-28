@@ -449,11 +449,13 @@ fun NavigationGraph(
         }
         // KART
         composable(BottomNavItem.Kart.screen_route) {
-            prisjegerViewModel.setAktiv(stringResource(id = R.string.map))
-            KartScreen(prisjegerViewModel)
+                prisjegerViewModel.setAktiv(stringResource(id = R.string.map))
+                KartScreen(prisjegerViewModel)
+            }
+
         }
     }
-}
+
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)

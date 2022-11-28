@@ -150,9 +150,10 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Disse benyttes for å holde oversikt over hvilken visning som er i bruk
      * slik at de rette elementene kan vises.
      */
-    var activeNavItem = mutableStateOf("")
+    private val _activeNavItem = mutableStateOf("")
+    var activeNavItem = _activeNavItem
     fun setAktiv(newActiveNavItem: String) {
-        activeNavItem.value = newActiveNavItem
+        _activeNavItem.value = newActiveNavItem
     }
     // Booleans som benyttes for å vise innstillinger for handleliste
     val valgDialog = mutableStateOf(false) // vise valgmuligheter?
