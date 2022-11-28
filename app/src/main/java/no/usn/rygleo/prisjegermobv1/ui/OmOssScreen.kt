@@ -32,7 +32,6 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
-data class Person(val name: Int, val description: Int, val profilePic: Int)
 val PersonListe = listOf(
     Person(R.string.project, R.string.aboutProject , R.drawable.prisjegerlogo),
     Person(R.string.Gaute, R.string.aboutGaute, R.drawable.gaute),
