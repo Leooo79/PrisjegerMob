@@ -108,7 +108,7 @@ interface RestApi {
         @Path("tittel") tittel: String,
         @Path("vare") vare: String,
         @Path("session") sessionId: String
-        )
+    )
 
 
     // Backend REDUSERER antall med en pr vare pr handleliste

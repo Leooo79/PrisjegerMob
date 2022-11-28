@@ -161,6 +161,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val filtrerEtterAntall = mutableStateOf(false) // vis kun varer med antall < 0
     val handleModus = mutableStateOf(false) // Handleliste i handlemodus?
 
+    val openDialog = mutableStateOf(false)
+
 
 
 
@@ -327,11 +329,15 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 _registrerAPI.value = API.retrofitService.registrerBruker(map)
                 registrerAPI = _registrerAPI
-                 if(registrerAPI.value.equals("bruker registrert")){
-                _registrert.value = true
-
+                 if(registrerAPI.value.equals("bruker registrert")) {
+                    _registrert.value = true // er registrert
+                     openDialog.value = true // viser
+                     _status.value = "Vellykket, postAPIRegitrer opprettet ny bruker"
+                } else {
+                    _registrert.value = false
+                     openDialog.value = true
+                     _status.value = "Feil postAPIRegitrer, bruker eksisterer"
                 }
-                _status.value = "Vellykket, postAPIRegitrer opprettet ny bruker"
                 println(status.value)
             } catch (e: Exception) {
                 _status.value = "Feil postAPIRegistrer: ${e.message}"
@@ -429,19 +435,20 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 _brukerAPI.value = API.retrofitService.login(map)
                 if (brukerAPI.value?.get("melding").equals("innlogget")) {
-                    _isLoggedIn.value = true
-                //    _brukernavn.value = brukerAPI.value?.get("bruker").toString()
-                    _brukernavn.value = epost
-                    // TODO: NYTT: sletter bruker før ny legges inn, resetter handlelister
-                    println("BRUUUUUUUUKER : "+brukerDAO.getBruker())
-                    brukerDAO.slettBruker() // sletter bruker i lokal DB
-                    varerDAO.slettAlleHandlelister() // sletter handlelister i lokal DB
-                    println("BRUUUUUUUUKER ETTER SLETT: "+brukerDAO.getBruker())
+                    currentListenavn = "MinHandleliste"
                     brukerDAO.insert(Bruker(epost, lagSession(30))) // insert av ny bruker til lokal DB
+                    // TODO: er det egentlig nødvendig å spørre DB, eller bruke lokal variabler?
+                    _brukernavn.value = brukerDAO.getBruker().brukerNavn
+                    _sessionId.value = brukerDAO.getBruker().sessionId
+                    _isLoggedIn.value = true // er innlogget
+                    openDialog.value = true // vis innlogging dialog
                     oppdaterListeFraApi() // oppdaterer brukers handlelister fra server
-                    println("BRUUUUUUUUKER ETTER INNLOGGING: "+brukerDAO.getBruker())
                     _status.value = "Vellykket, bruker innlogget og lagret" // vellykket
                     println(status.value)
+                } else {
+                    _isLoggedIn.value = false
+                    openDialog.value = true
+                    println("ISLOGGED IN ER FALSE")
                 }
             } catch (e: Exception) {
                 _status.value = "Feil postAPILogin: ${e.message}"
@@ -449,9 +456,14 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
+
+
     //funksjon for å logge ut
     fun postAPILoggout(){
-        _isLoggedIn.value=false
+        // TODO: lagt til nullstilling av lokal DB
+        brukerDAO.slettBruker() // sletter bruker i lokal DB
+        varerDAO.slettAlleHandlelister() // sletter handlelister i lokal DB
+        _isLoggedIn.value = false
     }
 
 
@@ -1139,6 +1151,9 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
      * Funksjon for å kontrollere om nytt listenavn er duplikat
      */
     fun kontrollerListenavn(listenavn: String) : Boolean {
+        if (alleListenavn.value == null) {
+            return false // eneste/ første navn
+        }
         return alleListenavn.value!!.contains(listenavn)
     }
 

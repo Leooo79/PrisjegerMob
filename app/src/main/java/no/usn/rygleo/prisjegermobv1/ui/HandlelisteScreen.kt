@@ -306,7 +306,6 @@ fun VisValg(prisjegerViewModel: PrisjegerViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { // Bekreftelse lukker alert og oppretter ny liste i lokal DB
                             if (prisjegerViewModel.kontrollerListenavn(text)) {
-
                                 tittel = listAlreadyExistLabel
                                 text = ""
                             } else if (text.length > 16 || text.isEmpty()){ // antall tillate tegn

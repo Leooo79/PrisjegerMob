@@ -41,7 +41,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
   //  var isLoggedIn by remember { mutableStateOf(false) } TODO: trenger ikke?
     var brukerNavn by remember { mutableStateOf("") }
     var passord by remember { mutableStateOf("") }
-    val openDialog = remember { mutableStateOf(false) }
+  //  val openDialog = remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
 
     val feilBrukerNavn = stringResource(id = R.string.wrongUserNameOrPassword)
@@ -64,10 +64,20 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
         }
     }
 
-    if (openDialog.value) {
+    if (prisjegerViewModel.registert.value) {
+        LaunchedEffect(Unit) {
+            text = userRegistered
+        }
+    } else {
+        LaunchedEffect(Unit) {
+            text = userAlreadyExists
+        }
+    }
+
+    if (prisjegerViewModel.openDialog.value) {
         AlertDialog(
             onDismissRequest = {
-                openDialog.value = false
+                prisjegerViewModel.openDialog.value = false
             },
             title = {
                 Text(text = text)
@@ -79,7 +89,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { openDialog.value = false }
+                        onClick = { prisjegerViewModel.openDialog.value = false }
                     ) {
                         Text(stringResource(id = R.string.goBack))
                     }
@@ -179,7 +189,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
                             prisjegerViewModel.postAPILogin(brukerNavn, passord)
-                            openDialog.value = true
+                   //         prisjegerViewModel.openDialog.value = true
                             /*
                             // TODO: denne if-en skjer aldri:
                       //      if (prisjegerViewModel.brukerAPI.value?.get("melding")
@@ -264,8 +274,10 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             } else {
                 OutlinedButton(
                     onClick = {
-                        if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
+                        if (brukerNavn.isNotEmpty() && passord.isNotEmpty() ) {
                             prisjegerViewModel.postAPIRegistrer(brukerNavn, passord)
+                  //          prisjegerViewModel.openDialog.value = true
+                            /*
                             if (prisjegerViewModel.registert.value
                             ) {
                                 //"bruker eksisterer allerede"
@@ -278,6 +290,9 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                         } else text = userMustHaveValue
                         openDialog.value = true
                         regisrerView = false
+
+                             */
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -339,7 +354,8 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 ),
             )
             OutlinedButton(
-                onClick = {prisjegerViewModel.postAPILoggout()},
+                onClick = {
+                    prisjegerViewModel.postAPILoggout()},
                 elevation = ButtonDefaults.elevation(100.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.primary,

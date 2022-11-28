@@ -360,7 +360,7 @@ fun NavigationGraph(
     prisjegerViewModel: PrisjegerViewModel,
 ) {
 
-    val openDialog = remember { mutableStateOf(true) }
+   // val openDialog = remember { mutableStateOf(true) }
   //  val uiState2 by viewModel.uiState.collectAsState()
 
     NavHost(navController, startDestination = BottomNavItem.Prissammenligning.screen_route) {
@@ -376,7 +376,7 @@ fun NavigationGraph(
         // HANDLELISTE
         composable(BottomNavItem.Handleliste.screen_route) {
             if (prisjegerViewModel.isLoggedIn.value) {
-                openDialog.value = false
+         //       openDialog.value = false
                 // Setter som aktiv i ViewModel mtp. TopAppBar
                 prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: kjører flere ganger?
           //      prisjegerViewModel.setAktiv(stringResource(id = R.string.shoppingList))
@@ -385,6 +385,7 @@ fun NavigationGraph(
                 HandlelisteScreen(prisjegerViewModel)
             } else {
                 prisjegerViewModel.setAktiv("Innlogging")
+            //    prisjegerViewModel.openDialog.value = false
                 LoginScreen(prisjegerViewModel)
             }
         }
