@@ -376,6 +376,8 @@ fun NavigationGraph(
         // HANDLELISTE
         composable(BottomNavItem.Handleliste.screen_route) {
             if (prisjegerViewModel.isLoggedIn.value) {
+                prisjegerViewModel.loginDialog.value = false
+                prisjegerViewModel.registrerDialog.value = false
          //       openDialog.value = false
                 // Setter som aktiv i ViewModel mtp. TopAppBar
                 prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: kjører flere ganger?

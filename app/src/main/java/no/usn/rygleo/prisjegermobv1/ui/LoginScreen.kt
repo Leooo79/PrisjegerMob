@@ -38,11 +38,10 @@ import no.usn.rygleo.prisjegermobv1.ui.theme.Purple700
 @Composable
 fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
     var regisrerView by remember { mutableStateOf(false) }
-  //  var isLoggedIn by remember { mutableStateOf(false) } TODO: trenger ikke?
     var brukerNavn by remember { mutableStateOf("") }
     var passord by remember { mutableStateOf("") }
-  //  val openDialog = remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf("") }
+    var textLogin by remember { mutableStateOf("") }
+    var textRegistrer by remember { mutableStateOf("") }
 
     val feilBrukerNavn = stringResource(id = R.string.wrongUserNameOrPassword)
     val loggetInn = stringResource(id = R.string.loggedIn)
@@ -52,35 +51,36 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
     val register = stringResource(id = R.string.register)
     val logout = stringResource(id = R.string.logout)
 
-    // TODO: lagt til suspendert endring av tekst i alertDialog
-    // TODO: endrer basert på om innlogget
+    // kontroller om logget inn og oppdaterer dialogmelding
     if (prisjegerViewModel.isLoggedIn.value) {
         LaunchedEffect(Unit) {
-            text = loggetInn + " " + brukerNavn
+            textLogin = loggetInn + " " + brukerNavn
         }
     } else {
         LaunchedEffect(Unit) {
-            text = feilBrukerNavn
+            textLogin = feilBrukerNavn
         }
     }
 
-    if (prisjegerViewModel.registert.value) {
+    // kontrollerer om vellykket regitrering av bruker og oppdaterer dialog
+    if (prisjegerViewModel.registert.value){
         LaunchedEffect(Unit) {
-            text = userRegistered
+            textRegistrer = userRegistered
         }
     } else {
         LaunchedEffect(Unit) {
-            text = userAlreadyExists
+            textRegistrer = userAlreadyExists
         }
     }
 
-    if (prisjegerViewModel.openDialog.value) {
+    // alerDialog for status innlogging
+    if (prisjegerViewModel.loginDialog.value) {
         AlertDialog(
             onDismissRequest = {
-                prisjegerViewModel.openDialog.value = false
+                prisjegerViewModel.loginDialog.value = false
             },
             title = {
-                Text(text = text)
+                Text(text = textLogin)
             },
             buttons = {
                 Row(
@@ -89,7 +89,9 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { prisjegerViewModel.openDialog.value = false }
+                        onClick = {
+                            prisjegerViewModel.loginDialog.value = false
+                        }
                     ) {
                         Text(stringResource(id = R.string.goBack))
                     }
@@ -97,6 +99,35 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             }
         )
     }
+
+    // alerDialog for status registrer ny bruker
+    if (prisjegerViewModel.registrerDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                prisjegerViewModel.registrerDialog.value = false
+            },
+            title = {
+                Text(text = textRegistrer)
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            prisjegerViewModel.registrerDialog.value = false
+                        }
+                    ) {
+                        Text(stringResource(id = R.string.goBack))
+                    }
+                }
+            }
+        )
+    }
+
+    // testfelt for innlogging/ registrering
     if (!prisjegerViewModel.isLoggedIn.value) {
         Column(
             modifier = Modifier
@@ -140,15 +171,6 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            /*  Text(text = "Login her",
-              style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.ExtraBold),
-              modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(bottom = 20.dp),
-              textAlign = TextAlign.Left,
-              color = Color.Red
-          )*/
             OutlinedTextField(
                 value = brukerNavn,
                 onValueChange = { brukerNavn = it },
@@ -189,31 +211,10 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
                             prisjegerViewModel.postAPILogin(brukerNavn, passord)
-                   //         prisjegerViewModel.openDialog.value = true
-                            /*
-                            // TODO: denne if-en skjer aldri:
-                      //      if (prisjegerViewModel.brukerAPI.value?.get("melding")
-                      //              .equals("innlogget")
-                      // TODO: denne if-en skjer aldri:
-                            if (prisjegerViewModel.isLoggedIn.value) {
-                        //        isLoggedIn = true
-                                println("LLLLLLLLLLLLLLLLLOGOOOOOOOOOOOG")
-                                openDialog.value = true
-                         //       text = loggetInn + " " + brukerNavn
-                                // TODO: denne else-en skjer alltid
-                            } else {
-                      //          isLoggedIn = false
-                                openDialog.value = true
-                       //         text = feilBrukerNavn
-                            }
-                            //HVIS VELLYKKET = RES.JSON("MEDLING": 'INNLOGGET')
                         } else {
-                            text = "HVa her"
-                            */
-
+                            textLogin = userMustHaveValue
+                            prisjegerViewModel.loginDialog.value = true
                         }
-
-              //          openDialog.value = true
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -237,21 +238,6 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
 
 
                 ) {
-                    /*
-                    ClickableText(
-                        text = AnnotatedString(stringResource(id = R.string.registerUser)),
-
-                        onClick = { regisrerView = true
-                            passord =""
-                            brukerNavn ="" },
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontFamily = FontFamily.Default,
-                            textDecoration = TextDecoration.Underline,
-                            color = MaterialTheme.colors.onPrimary
-                        )
-                    )
-                     */
                     OutlinedButton(onClick = { regisrerView = true
                         passord =""
                         brukerNavn ="" },
@@ -276,22 +262,9 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty() ) {
                             prisjegerViewModel.postAPIRegistrer(brukerNavn, passord)
-                  //          prisjegerViewModel.openDialog.value = true
-                            /*
-                            if (prisjegerViewModel.registert.value
-                            ) {
-                                //"bruker eksisterer allerede"
-                                text = userRegistered
-
-                            } else {
-                                //Bruker registrert
-                                text = userAlreadyExists
-                            }
-                        } else text = userMustHaveValue
-                        openDialog.value = true
-                        regisrerView = false
-
-                             */
+                        } else {
+                            textRegistrer = userMustHaveValue
+                            prisjegerViewModel.registrerDialog.value = true
                         }
                     },
                     modifier = Modifier

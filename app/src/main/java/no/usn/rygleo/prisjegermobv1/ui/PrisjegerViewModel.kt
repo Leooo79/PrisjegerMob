@@ -161,7 +161,8 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
     val filtrerEtterAntall = mutableStateOf(false) // vis kun varer med antall < 0
     val handleModus = mutableStateOf(false) // Handleliste i handlemodus?
 
-    val openDialog = mutableStateOf(false)
+    val loginDialog = mutableStateOf(false)
+    val registrerDialog = mutableStateOf(false)
 
 
 
@@ -331,11 +332,11 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                 registrerAPI = _registrerAPI
                  if(registrerAPI.value.equals("bruker registrert")) {
                     _registrert.value = true // er registrert
-                     openDialog.value = true // viser
+                     registrerDialog.value = true // viser
                      _status.value = "Vellykket, postAPIRegitrer opprettet ny bruker"
                 } else {
                     _registrert.value = false
-                     openDialog.value = true
+                     registrerDialog.value = true
                      _status.value = "Feil postAPIRegitrer, bruker eksisterer"
                 }
                 println(status.value)
@@ -441,13 +442,13 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
                     _brukernavn.value = brukerDAO.getBruker().brukerNavn
                     _sessionId.value = brukerDAO.getBruker().sessionId
                     _isLoggedIn.value = true // er innlogget
-                    openDialog.value = true // vis innlogging dialog
+                    loginDialog.value = true // vis innlogging dialog
                     oppdaterListeFraApi() // oppdaterer brukers handlelister fra server
                     _status.value = "Vellykket, bruker innlogget og lagret" // vellykket
                     println(status.value)
                 } else {
                     _isLoggedIn.value = false
-                    openDialog.value = true
+                    loginDialog.value = true
                     println("ISLOGGED IN ER FALSE")
                 }
             } catch (e: Exception) {
