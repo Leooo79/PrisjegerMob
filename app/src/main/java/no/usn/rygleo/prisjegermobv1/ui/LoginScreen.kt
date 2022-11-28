@@ -38,7 +38,7 @@ import no.usn.rygleo.prisjegermobv1.ui.theme.Purple700
 @Composable
 fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
     var regisrerView by remember { mutableStateOf(false) }
-    var isLoggedIn by remember { mutableStateOf(false) }
+  //  var isLoggedIn by remember { mutableStateOf(false) } TODO: trenger ikke?
     var brukerNavn by remember { mutableStateOf("") }
     var passord by remember { mutableStateOf("") }
     val openDialog = remember { mutableStateOf(false) }
@@ -52,6 +52,17 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
     val register = stringResource(id = R.string.register)
     val logout = stringResource(id = R.string.logout)
 
+    // TODO: lagt til suspendert endring av tekst i alertDialog
+    // TODO: endrer basert på om innlogget
+    if (prisjegerViewModel.isLoggedIn.value) {
+        LaunchedEffect(Unit) {
+            text = loggetInn + " " + brukerNavn
+        }
+    } else {
+        LaunchedEffect(Unit) {
+            text = feilBrukerNavn
+        }
+    }
 
     if (openDialog.value) {
         AlertDialog(
@@ -168,22 +179,31 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty()) {
                             prisjegerViewModel.postAPILogin(brukerNavn, passord)
-                            // TODO: Kun alertDialog som viser feil
-                            if (prisjegerViewModel.brukerAPI.value?.get("melding")
-                                    .equals("innlogget")
-                            ) {
-                                // TODO: trenger ny verdi brukernavn
-                                isLoggedIn = true
-                                text = feilBrukerNavn
+                            openDialog.value = true
+                            /*
+                            // TODO: denne if-en skjer aldri:
+                      //      if (prisjegerViewModel.brukerAPI.value?.get("melding")
+                      //              .equals("innlogget")
+                      // TODO: denne if-en skjer aldri:
+                            if (prisjegerViewModel.isLoggedIn.value) {
+                        //        isLoggedIn = true
+                                println("LLLLLLLLLLLLLLLLLOGOOOOOOOOOOOG")
+                                openDialog.value = true
+                         //       text = loggetInn + " " + brukerNavn
+                                // TODO: denne else-en skjer alltid
                             } else {
-                                isLoggedIn = false
-                                text = loggetInn + " " + brukerNavn
+                      //          isLoggedIn = false
+                                openDialog.value = true
+                       //         text = feilBrukerNavn
                             }
                             //HVIS VELLYKKET = RES.JSON("MEDLING": 'INNLOGGET')
                         } else {
-                            text = feilBrukerNavn
+                            text = "HVa her"
+                            */
+
                         }
-                        openDialog.value = true
+
+              //          openDialog.value = true
                     },
                     modifier = Modifier
                         .fillMaxWidth()

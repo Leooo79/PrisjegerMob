@@ -327,7 +327,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 _registrerAPI.value = API.retrofitService.registrerBruker(map)
                 registrerAPI = _registrerAPI
-                 if(registrerAPI.value.equals("bruker regisrert")){
+                 if(registrerAPI.value.equals("bruker registrert")){
                 _registrert.value = true
 
                 }
@@ -428,16 +428,17 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
             println(status.value)
             try {
                 _brukerAPI.value = API.retrofitService.login(map)
-                if(brukerAPI.value?.get("melding").equals("innlogget")){
+                if (brukerAPI.value?.get("melding").equals("innlogget")) {
                     _isLoggedIn.value = true
-                    // TODO: endret verdi for oppdatering av brukernavn:
                 //    _brukernavn.value = brukerAPI.value?.get("bruker").toString()
                     _brukernavn.value = epost
-                    // TODO: lagrer bruker i lokal DB
+                    // TODO: NYTT: sletter bruker før ny legges inn, resetter handlelister
                     println("BRUUUUUUUUKER : "+brukerDAO.getBruker())
-                    brukerDAO.slettBruker()
+                    brukerDAO.slettBruker() // sletter bruker i lokal DB
+                    varerDAO.slettAlleHandlelister() // sletter handlelister i lokal DB
                     println("BRUUUUUUUUKER ETTER SLETT: "+brukerDAO.getBruker())
                     brukerDAO.insert(Bruker(epost, lagSession(30))) // insert av ny bruker til lokal DB
+                    oppdaterListeFraApi() // oppdaterer brukers handlelister fra server
                     println("BRUUUUUUUUKER ETTER INNLOGGING: "+brukerDAO.getBruker())
                     _status.value = "Vellykket, bruker innlogget og lagret" // vellykket
                     println(status.value)
@@ -829,7 +830,7 @@ class PrisjegerViewModel(application: Application) : AndroidViewModel(applicatio
         _status.value = "Prøver å kontrollere lokal DB for brukere"
         println(status.value)
         try {
-            if (!brukerDAO.getBruker().brukerNavn.isEmpty()) {
+            if (brukerDAO.getBruker().brukerNavn.isNotEmpty()) {
                 _isLoggedIn.value = true
                 _brukernavn.value = brukerDAO.getBruker().brukerNavn
                 _sessionId.value = brukerDAO.getBruker().sessionId

@@ -128,10 +128,22 @@ interface VarerDAO {
 
 
 
-
     /**
      * Sletting av en hel handleliste, alle varer
      */
     @Query("DELETE FROM varer WHERE listenavn = :listenavn")
     fun slettHandleliste(listenavn: String): Int
+
+
+    /**
+     * Slett alle handlelister, alle varer
+     */
+    @Query("DELETE FROM varer")
+    fun slettAlleHandlelister()
+
+
 }
+
+
+
+
