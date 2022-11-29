@@ -27,20 +27,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import no.usn.rygleo.prisjegermobv1.data.Person
 
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
 val PersonListe = listOf(
     Person(R.string.project, R.string.aboutProject , R.drawable.prisjegerlogo),
     Person(R.string.Gaute, R.string.aboutGaute, R.drawable.gaute),
     Person(R.string.Leonard, R.string.aboutLeonard, R.drawable.leonard),
     Person(R.string.Dmitriy, R.string.aboutDmitriy, R.drawable.dmitriy),
-    Person(R.string.Daniel, R.string.aboutDaniel, R.drawable.dmitriy),
+    Person(R.string.Daniel, R.string.aboutDaniel, R.drawable.daniel),
     Person(R.string.Tore, R.string.aboutTore, R.drawable.tore))
 
+/**
+ * OmOss lager et view som skal fortelle mer om utviklerene for Prisjakt
+ * og deres bidrag
+ */
 @Composable
 fun OmOss() {
     PrisjegerMobV1Theme {
@@ -64,28 +62,9 @@ fun OmOss() {
     }
 }
 
-@Composable
-private fun makeAboutProject(content: @Composable () -> Unit = {}) {
-    Column(
-        modifier = Modifier
-            .padding(vertical = 5.dp, horizontal = 2.dp)
-    ) {
-        Row(
-        ) {
-            Column(modifier = Modifier
-                .padding(24.dp)
-                .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally){
-                Text(text = stringResource(id = R.string.about))
-                Text(text = stringResource(id = R.string.aboutProject))
-                //addImage(name = "logo", profilePic = R.drawable.prisjegerlogo)
-            }
-
-        }
-
-    }
-}
-
+/**
+ * Lager kortet for person
+ */
 @Composable
 private fun makeAbout(person: Person) {
     var expanded by remember {mutableStateOf(false)}
@@ -144,6 +123,9 @@ private fun makeAbout(person: Person) {
     }
 }
 
+/**
+ * Lager image i et kort slik at den kan få en ramme og hjørner
+ */
 @Composable
 fun addImage(name: String, profilePic: Int, imageSize: Dp) {
     Card(modifier = Modifier
