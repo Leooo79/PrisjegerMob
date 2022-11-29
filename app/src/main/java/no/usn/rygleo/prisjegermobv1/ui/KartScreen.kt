@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -43,7 +44,7 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
     println(lat)
     val test = LatLng(lat, lon)
     val cameraPositionState = rememberCameraPositionState {
-        position =CameraPosition.fromLatLngZoom(test , 17f)
+        position =CameraPosition.fromLatLngZoom(test , 14f)
     }
 
       GoogleMap(
@@ -80,7 +81,6 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
 
 
       }
-
 
 
 

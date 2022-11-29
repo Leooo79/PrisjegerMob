@@ -64,7 +64,6 @@ class  MainActivity : ComponentActivity() {
         val permissionsState = rememberMultiplePermissionsState(
             permissions = listOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA,
             )
         )
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -90,42 +89,12 @@ class  MainActivity : ComponentActivity() {
         ) {
             permissionsState.permissions.forEach { perm ->
                 when (perm.permission) {
-                    Manifest.permission.CAMERA -> {
-                        when {
-                            perm.hasPermission -> {
-//                                Text(text = "Kamera tilgang akseptert" + " "  )
-                            }
-                            perm.shouldShowRationale -> {
-                              /*  Text(
-                                    text = "tilgang til kameraet er nødvendig for å" +
-                                            "å ta bilde i appen"
-                                )*/
-                            }
-                            perm.isPermanentlyDenied() -> {
-                               /* Text(
-                                    text = "Camera tilgang permanent " +
-                                            "avslått. du kan aktivere det i" +
-                                            "innstillinger."
-                                )*/
-                            }
-                        }
-                    }
                     Manifest.permission.ACCESS_FINE_LOCATION -> {
                         when {
                             perm.hasPermission -> {
                                 println("fikk tilgang ")
                                 hentSistePosition(fusedLocationClient)
 
-                            }
-                            perm.shouldShowRationale -> {
-
-                            }
-                            perm.isPermanentlyDenied() -> {
-                                /*Text(
-                                    text = "Lokasjon tillatelse permanent " +
-                                            "avslått. Du kan aktivere det i " +
-                                            "innstillinger."
-                                )*/
                             }
                         }
                     }
