@@ -60,4 +60,6 @@
     <string name="delete">Delete</string>
     <string name="lastUpdateLabel">"Last update was: "</string>
     <string name="loginYourName">"You are logged in as: "</string>
+    <string name="youarehere">You are here</string>
+    <string name="closest">closest </string>
 </resources>

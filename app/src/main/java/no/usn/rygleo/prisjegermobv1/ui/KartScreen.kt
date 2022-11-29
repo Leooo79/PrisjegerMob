@@ -54,28 +54,28 @@ fun KartScreen(prisjegerViewModel: PrisjegerViewModel){
           Marker(
               state = MarkerState(position = kiwi),
               title = "Kiwi",
-              snippet = "nærmeste Kiwi"
+              snippet = stringResource(id = R.string.closest) + " " + "Kiwi"
           )
           Marker(
               state = MarkerState(position = meny),
               title = "Meny",
-              snippet = "nærmeste Meny",
+              snippet = stringResource(id = R.string.closest) + " " +  "Meny",
 
               )
           Marker(
               state = MarkerState(position = xtra),
-              title = "extra",
-              snippet = "nærmeste xtra"
+              title = "Extra",
+              snippet = stringResource(id = R.string.closest) + " " + "Extra"
           )
           Marker(
               state = MarkerState(position = rema),
               title = "Rema 1000",
-              snippet = "nærmeste rema"
+              snippet = stringResource(id = R.string.closest) + " " + "Rema 1000"
           )
           Marker(
               state = MarkerState(position = test),
-              title = "du er her",
-              snippet = "du er her",
+              title = stringResource(id = R.string.youarehere),
+              snippet = stringResource(id = R.string.youarehere),
               icon = (bitmapDescriptorFromVector(LocalContext.current, R.drawable.ic_baseline_my_location_24) )
           )
 

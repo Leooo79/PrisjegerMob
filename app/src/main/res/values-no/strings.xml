@@ -60,4 +60,6 @@
     <string name="delete">Slett</string>
     <string name="lastUpdateLabel">"Siste oppdatering var: "</string>
     <string name="loginYourName">"Du er innlogget som: "</string>
+    <string name="youarehere">Du er her</string>
+    <string name="closest">Nærmeste </string>
 </resources>
