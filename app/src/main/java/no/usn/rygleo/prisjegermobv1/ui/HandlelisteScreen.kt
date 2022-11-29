@@ -1060,6 +1060,7 @@ private fun VarelisteItem(
 
     Card(modifier = Modifier
         .fillMaxWidth()
+        .clickable { expandedState = !expandedState }
         .animateContentSize(
             animationSpec = tween(
                 durationMillis = 300,
@@ -1073,12 +1074,14 @@ private fun VarelisteItem(
         Column()
         {
             // Når ikke expandedState
-            Row(modifier = Modifier
-                .clickable { expandedState = !expandedState }) {
+            Row(modifier = Modifier)
+                //.clickable { expandedState = !expandedState })
+            {
                 Column(
                     modifier = Modifier
                         .weight(3F)
-                        .clickable { expandedState = !expandedState }
+                        //.clickable { expandedState = !expandedState
+                    // }
                 ) {
                     //viser varenavn
                     Text(modifier = Modifier
@@ -1088,7 +1091,8 @@ private fun VarelisteItem(
                 Column(
                     modifier = Modifier
                         .weight(1.2F)
-                        .clickable { expandedState = !expandedState }
+                        //.clickable { expandedState = !expandedState
+                    // }
                 ) {
                     Text(modifier = Modifier
                         .padding(13.dp),

@@ -32,15 +32,6 @@ private val LightColorPalette = lightColors(
     background = HandlelisteSecondaryLight,
     onPrimary = PrimaryFontLightYellow,
     onSecondary = PrimaryFontLightBrown
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
 )
 
 
