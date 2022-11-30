@@ -1,3 +1,10 @@
 package no.usn.rygleo.prisjegermobv1.data
 
-data class Person(val name: Int, val description: Int, val profilePic: Int)
+/**
+ * Modellklasse for å definere personobjekter som vises i omOss
+ */
+data class Person(
+    val name: Int,
+    val description: Int,
+    val profilePic: Int
+    )

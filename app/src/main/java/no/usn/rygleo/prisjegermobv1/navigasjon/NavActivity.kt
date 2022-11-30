@@ -1,7 +1,5 @@
 package no.usn.rygleo.prisjegermobv1.navigasjon
 
-import android.graphics.drawable.Icon
-import androidx.annotation.StringRes
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
@@ -18,16 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -40,43 +35,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import no.usn.rygleo.prisjegermobv1.R
+import no.usn.rygleo.prisjegermobv1.data.NavItem
 import no.usn.rygleo.prisjegermobv1.ui.*
-// Klasser/ Visninger/ Funksjoner:
 
-
-// SKAL VI BENYTTE KLASSE HER? KUN FUNKSJON?
-/*
-class BottomNavActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MainScreenView()
-        }
-    }
-}
-
-
+/**
+ * MainScreenView med navigasjonsskuff
+ * Oppretter Scaffold og laster inn øvrig innhold i form av composables
+ * Inspirert av kodemønster. Kilde: https://johncodeos.com/how-to-create-a-navigation-drawer-with-jetpack-compose/
  */
-
-/*
-@Composable
-fun MainScreenView(){
-    val navController = rememberNavController()
-    Scaffold(
-        drawerContent = {
-            Text("Skufftittel")
-            Divider()
-        },
-        topBar = { TopAppBar(navController = navController) }
-    ) {
-
-    }
-}*/
-
-// Ny MainScreenView med navigasjonsskuff
-// Kilde:
-// https://johncodeos.com/how-to-create-a-navigation-drawer-with-jetpack-compose/
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun MainScreenView(){
@@ -88,13 +54,12 @@ fun MainScreenView(){
         scaffoldState = scaffoldState,
         topBar = { TopBar(scaffoldState = scaffoldState, scope = scope, prisjegerViewModel = prisjegerViewModel) },
         drawerBackgroundColor = Color.Transparent,
-        //    drawerContainerColor = Color.Transparent,
-
         drawerContent = {
             DrawerContent(
                 scaffoldState = scaffoldState,
                 scope = scope,
-                navController = navController)
+                navController = navController,
+            )
         },
         drawerGesturesEnabled = shouldDrawerSwipe(prisjegerViewModel = prisjegerViewModel)
     ) {
@@ -103,16 +68,21 @@ fun MainScreenView(){
     }
 }
 
-// Metode som kontrollerer hvilke visninger som skal skru av gestikulasjoner for skuff.
-// Husk at tilhørende streng i prisjegerViewModel.activeNavItem må eksistere og bli satt
-// fun NavigationGraph()
+/**
+ * Metode som kontrollerer hvilke visninger som skal skru av gestikulasjoner for skuff.
+ * Husk at tilhørende streng i prisjegerViewModel.activeNavItem må eksistere og bli satt
+ */
 fun shouldDrawerSwipe(prisjegerViewModel: PrisjegerViewModel): Boolean {
     return prisjegerViewModel.activeNavItem.value != "Kart"
 }
 
+/**
+ * Funksjonen bygger og viser TopBar. Innhold i TopBar avhenger av skjerm som vises
+ */
 @Composable
-fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewModel: PrisjegerViewModel) {
-    var activeNavItem by prisjegerViewModel.activeNavItem // Nåværende visning fra ViewModel
+fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState,
+           prisjegerViewModel: PrisjegerViewModel) {
+    val activeNavItem by prisjegerViewModel.activeNavItem // Nåværende visning fra ViewModel
     TopAppBar(
         title = { Text(text = prisjegerViewModel.activeNavItem.value, fontSize = 18.sp) },
         navigationIcon = {
@@ -126,7 +96,8 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
         },
         actions = {
             if (activeNavItem == stringResource(id = R.string.shoppingList)) {
-                IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
+                IconButton(onClick = {
+                    // Setter alertDialog i ViewModel til True slik at innstillinger vises
                     prisjegerViewModel.handleModus.value = !prisjegerViewModel.handleModus.value
                     prisjegerViewModel.filtrerEtterAntall.value =
                         !prisjegerViewModel.filtrerEtterAntall.value
@@ -137,7 +108,8 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
                         tint = MaterialTheme.colors.onPrimary
                     )
                 }
-                IconButton(onClick = { // Setter alertDialog i ViewModel til True slik at innstillinger vises
+                IconButton(onClick = {
+                    // Setter alertDialog i ViewModel til True slik at innstillinger vises
                     prisjegerViewModel.valgDialog.value = !prisjegerViewModel.valgDialog.value
                 }) {
                     Icon(
@@ -153,19 +125,23 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, prisjegerViewMod
     )
 
 }
+
+/**
+ * Funksjonen bygger og viser skuffmeny med navigasjonsvalg til hovedskjermer
+ * Items av class NavItem
+ */
 @Composable
 fun DrawerContent(
     scope: CoroutineScope,
     scaffoldState: ScaffoldState,
-    navController: NavController) {
+    navController: NavController
+    ) {
     val items = listOf(
-        BottomNavItem.Prissammenligning,
-        //BottomNavItem.Hjem,
-        BottomNavItem.Handleliste,
-        BottomNavItem.OmOss,
-        BottomNavItem.Login,
-        BottomNavItem.Kart
-
+        NavItem.Prissammenligning,
+        NavItem.Handleliste,
+        NavItem.OmOss,
+        NavItem.Login,
+        NavItem.Kart
     )
 
     Column(
@@ -176,15 +152,11 @@ fun DrawerContent(
             .verticalScroll(state = ScrollState(2000)),
         horizontalAlignment = Alignment.Start
     ) {
-        // Header
-
-        // Spacing
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(5.dp)
         )
-        // List of navigation items
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         Column(verticalArrangement = Arrangement.Center) {
@@ -215,62 +187,37 @@ fun DrawerContent(
                     .align(Alignment.CenterHorizontally)
             )
             items.forEach { item ->
-                DrawerItem(item = item, selected = currentRoute == item.screen_route, onItemClick = {
+                DrawerItem(
+                    item = item,
+                    selected = currentRoute == item.screen_route,
+                    onItemClick = {
                     navController.navigate(item.screen_route) {
-                        // Pop up to the start destination of the graph to
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
+                        // For å forhindre bygging av stakk med items, returner til start
                         navController.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
                                 saveState = true
                             }
                         }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
+                        // Forhindre nye kopier
                         launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
+                        // Resett state
                         restoreState = true
                     }
-                    // Close drawer
+                    // Lukk meny
                     scope.launch {
                         scaffoldState.drawerState.close()
                     }
                 })
             }
-        } //End of column
+        }
     }
 }
+
+/**
+ * Funksjonen er en hjelpemetode for DrawerContent og bygger opp og viser items
+ */
 @Composable
-fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavItem) -> Unit) {
-    /*
-    Spacer(modifier = Modifier.padding(10.dp) .width(20.dp))
-  // TODO: Kjærsjer:  val background = if (selected) MaterialTheme.colors.onPrimary else Color.Transparent
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .width(200.dp)
-            .clickable(onClick = { onItemClick(item) })
-            .height(45.dp)
-            .background(MaterialTheme.colors.primary, shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp))
-            .padding(start = 10.dp)
-    ) {
-        Image(
-            painter = painterResource(id = item.icon),
-            contentDescription = stringResource(id = item.title),
-            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .height(35.dp)
-                .width(35.dp)
-        )
-        Spacer(modifier = Modifier.width(7.dp))
-        Text(
-            text = stringResource(id = item.title),
-            fontSize = 18.sp,
-            color = MaterialTheme.colors.onPrimary
-        )
-    }
-     */
+fun DrawerItem(item: NavItem, selected: Boolean, onItemClick: (NavItem) -> Unit) {
     Card(modifier = Modifier
         .padding(horizontal = 30.dp, vertical = 10.dp)
         .fillMaxWidth()
@@ -301,165 +248,66 @@ fun DrawerItem(item: BottomNavItem, selected: Boolean, onItemClick: (BottomNavIt
                     color = MaterialTheme.colors.onPrimary,
                     textAlign = TextAlign.Left
                 )
-            }//End of row
+            }
             Spacer(modifier = Modifier.height(5.dp))
             Divider(color = MaterialTheme.colors.onPrimary, thickness = 3.dp)
-        }//End of column
-    } //End of card
-}
-
-/*@Composable
-fun BottomNavigation(navController: NavController) {
-    val items = listOf(
-        BottomNavItem.Hjem,
-        BottomNavItem.Handleliste,
-        BottomNavItem.Prissammenligning,
-        BottomNavItem.OmOss,
-        BottomNavItem.Login
-    )
-    androidx.compose.material.BottomNavigation(
-        backgroundColor = MaterialTheme.colors.secondaryVariant,
-        contentColor = Color.Black
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = {
-                    Text(
-                        text = item.title,
-                        fontSize = 9.sp
-                    )
-                },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = Color.White,
-                alwaysShowLabel = true,
-                selected = currentRoute == item.screen_route,
-                onClick = {
-                    navController.navigate(item.screen_route) {
-
-                        navController.graph.startDestinationRoute?.let { screen_route ->
-                            popUpTo(screen_route) {
-                                saveState = true
-                            }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
         }
     }
-}*/
+}
 
+/**
+ * Funksjonen bygger navigsjonsgraf med NavHostController. Ruter til navigerbare hovedskjermer
+ * ved å kalle composables.
+ */
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
     prisjegerViewModel: PrisjegerViewModel,
 ) {
-
-   // val openDialog = remember { mutableStateOf(true) }
-  //  val uiState2 by viewModel.uiState.collectAsState()
-
-    NavHost(navController, startDestination = BottomNavItem.Prissammenligning.screen_route) {
-        composable(BottomNavItem.Prissammenligning.screen_route) {
-            // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv("Prissammenligning")
-         //   HomeScreen()
-          //  if (prisjegerViewModel.equals("Vellykket, data hentet"))
-
- visAPI(prisjegerViewModel)
+    NavHost(navController, startDestination = NavItem.Prissammenligning.screen_route) {
+        // SammenligningsScreen
+        composable(NavItem.Prissammenligning.screen_route) {
+            // Valgt skjerm settes som aktiv i ViewModel mtp. TopAppBar
+            prisjegerViewModel.setAktiv(stringResource(id = R.string.priceComparison))
+            SammenligningScreen(prisjegerViewModel)
         }
-
-        // HANDLELISTE
-        composable(BottomNavItem.Handleliste.screen_route) {
+        // HandlelisteScreen - krever innlogging
+        composable(NavItem.Handleliste.screen_route) {
             if (prisjegerViewModel.isLoggedIn.value) {
                 prisjegerViewModel.loginDialog.value = false
                 prisjegerViewModel.registrerDialog.value = false
-         //       openDialog.value = false
-                // Setter som aktiv i ViewModel mtp. TopAppBar
-                prisjegerViewModel.oppdaterAlleDataFraApi() // TODO: kjører flere ganger?
-          //      prisjegerViewModel.setAktiv(stringResource(id = R.string.shoppingList))
+                prisjegerViewModel.oppdaterAlleDataFraApi()
                 prisjegerViewModel.setAktiv(stringResource(id = R.string.shoppingList))
                 prisjegerViewModel.seEtterOppdateringer()
                 HandlelisteScreen(prisjegerViewModel)
             } else {
                 prisjegerViewModel.setAktiv("Innlogging")
-            //    prisjegerViewModel.openDialog.value = false
                 LoginScreen(prisjegerViewModel)
             }
         }
-
-            /*
-            else if (openDialog.value) {
-                AlertDialog(
-                    onDismissRequest = {
-                        openDialog.value = false
-                    },
-                    title = {
-                        Text(text = "Logg inn for å opprette handleliste")
-                    },
-                    buttons = {
-                        Row(
-                            modifier = Modifier.padding(all = 8.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Button(
-                                modifier = Modifier.fillMaxWidth(),
-                                onClick = {
-                                    openDialog.value = false
-                                }
-                            ) {
-                                Text("ok")
-                            }
-                        }
-                    }
-                )
-            }
-            if (!openDialog.value) {
-                // Setter som aktiv i ViewModel mtp. TopAppBar
-                prisjegerViewModel.setAktiv("Login")
-                LoginScreen(prisjegerViewModel)
-            }
-        }
-
-             */
-
-        // OM OSS
-        composable(BottomNavItem.Prissammenligning.screen_route) {
-            // Setter som aktiv i ViewModel mtp. TopAppBar
-            prisjegerViewModel.setAktiv(stringResource(id = R.string.priceComparison))
-            SammenligningScreen(prisjegerViewModel)
-        }
-
-        // PRISSAMMENLINGNING
-        composable(BottomNavItem.OmOss.screen_route) {
-            // Setter som aktiv i ViewModel mtp. TopAppBar
+        // OmOssScreen
+        composable(NavItem.OmOss.screen_route) {
             prisjegerViewModel.setAktiv(stringResource(id = R.string.aboutUs))
             OmOss()
         }
-
-        // LOGIN
-        composable(BottomNavItem.Login.screen_route) {
-            // Setter som aktiv i ViewModel mtp. TopAppBar
+        // LoginScreen
+        composable(NavItem.Login.screen_route) {
             prisjegerViewModel.setAktiv(stringResource(id = R.string.login))
             LoginScreen(prisjegerViewModel)
         }
-        // KART
-        composable(BottomNavItem.Kart.screen_route) {
+        // KartScreen
+        composable(NavItem.Kart.screen_route) {
                 prisjegerViewModel.setAktiv(stringResource(id = R.string.map))
                 KartScreen(prisjegerViewModel)
-
         }
-
     }
-
 }
 
 
-
+/**
+ * Preview
+ */
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
 @Composable

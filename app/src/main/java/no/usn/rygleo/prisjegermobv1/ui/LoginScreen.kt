@@ -4,13 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,18 +20,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import no.usn.rygleo.prisjegermobv1.R
 
-
+/**
+ * Funksjonen bygger og vises loginScreen. Endrer visning basert på login/ registrer
+ * ny bruker. Viser dialogvinduer med status.
+ */
 @Composable
 fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
     var regisrerView by remember { mutableStateOf(false) }
@@ -126,7 +125,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
         )
     }
 
-    // testfelt for innlogging/ registrering
+    // hvis ikke logget inn vises tekstfelt for brukernavn og passord
     if (!prisjegerViewModel.isLoggedIn.value) {
         Column(
             modifier = Modifier
@@ -138,8 +137,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             Card(
                 modifier = Modifier.size(90.dp),
                 shape = CircleShape,
-            )
-            {
+            ) {
                 Image(
                     painterResource(R.drawable.prisjegerlogo),
                     contentDescription = "",
@@ -173,38 +171,51 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             OutlinedTextField(
                 value = brukerNavn,
                 onValueChange = { brukerNavn = it },
-                label = { Text(modifier = Modifier.background(Color.White), text = stringResource(id = R.string.userName), color = MaterialTheme.colors.onSecondary) },
+                label = { Text(
+                    modifier = Modifier.background(Color.White),
+                    text = stringResource(id = R.string.userName),
+                    color = MaterialTheme.colors.onSecondary) },
                 leadingIcon = {
-                    Icon(Icons.Default.Person, contentDescription = "bruker", tint = MaterialTheme.colors.onSecondary)
+                    Icon(Icons.Default.Person,
+                        contentDescription = "bruker",
+                        tint = MaterialTheme.colors.onSecondary)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
-                keyboardOptions= KeyboardOptions(keyboardType= KeyboardType.Text, imeAction = ImeAction.Next),
+                keyboardOptions= KeyboardOptions(
+                    keyboardType= KeyboardType.Text,
+                    imeAction = ImeAction.Next),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.White,
                     textColor = MaterialTheme.colors.onSecondary
                 )
             )
-
             OutlinedTextField(
                 value = passord,
                 onValueChange = { passord = it },
-                label = { Text(modifier = Modifier.background(Color.White),text = stringResource(id = R.string.password), color = MaterialTheme.colors.onSecondary) },
+                label = { Text(
+                    modifier = Modifier.background(Color.White),
+                    text = stringResource(id = R.string.password),
+                    color = MaterialTheme.colors.onSecondary) },
                 leadingIcon = {
-                    Icon(Icons.Default.Info, contentDescription = "password", tint = MaterialTheme.colors.onSecondary)
+                    Icon(Icons.Default.Info,
+                        contentDescription = "password",
+                        tint = MaterialTheme.colors.onSecondary)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
                 visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Go),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Go),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.White,
                     textColor = MaterialTheme.colors.onSecondary
                 )
             )
-
+            // Hvis knapp for å registerere ny bruker ikke er aktivert
             if (!regisrerView) {
                 OutlinedButton(
                     onClick = {
@@ -229,13 +240,10 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colors.onPrimary
                     )
-
                 }
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally
-
-
                 ) {
                     OutlinedButton(onClick = { regisrerView = true
                         passord =""
@@ -256,7 +264,7 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                         )
                     }
                 }
-            } else {
+            } else { // Hvis knapp for å registerere ny bruker er aktivert
                 OutlinedButton(
                     onClick = {
                         if (brukerNavn.isNotEmpty() && passord.isNotEmpty() ) {
@@ -304,7 +312,6 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                     )
                 }
-
             }
         }
     } else {
@@ -327,22 +334,23 @@ fun LoginScreen( prisjegerViewModel: PrisjegerViewModel) {
             )
             OutlinedButton(
                 onClick = {
-                    prisjegerViewModel.postAPILoggout()},
+                    prisjegerViewModel.postAPILoggout()
+                },
                 elevation = ButtonDefaults.elevation(100.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.primary,
                     contentColor = MaterialTheme.colors.onPrimary
                 )
-            ){
+            ) {
                 Text(modifier = Modifier
                     .padding(horizontal = 80.dp),
                 text = logout,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.onPrimary
-            )}
+                )
+            }
         }
-
-
     }
+
 }
 

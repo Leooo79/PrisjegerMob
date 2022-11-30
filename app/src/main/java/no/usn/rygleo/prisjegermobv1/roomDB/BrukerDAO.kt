@@ -3,48 +3,42 @@ package no.usn.rygleo.prisjegermobv1.roomDB
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+
+/**
+ * Grensesnitt mot lokal database, entitet Bruker
+ * Det tillates kun en enkelt bruker i lokal DB
+ * Ivaretas ved at bruker slettes ved utlogging.
+ */
 @Dao
 interface BrukerDAO {
+
+    /**
+     * returnerer alle Brukere fra DB
+     */
     @Query("SELECT * FROM Bruker")
     fun getAlleBrukere(): LiveData<List<Bruker>>
 
-
+    /**
+     * returnerer en bruker fra DB
+     */
     @Query("SELECT * FROM Bruker")
     fun getBruker(): Bruker
 
-
+    /**
+     * Sletter alt innhold i entitet Bruker
+     */
     @Query("DELETE FROM Bruker")
     fun slettBruker()
 
-    /*
-
-      @Query("SELECT * FROM Bruker WHERE brukerId IN (:alleBrukerId)")
-      fun listePrId(alleBrukerId: IntArray): List<Bruker>
-
-
-      @Query("SELECT * FROM Bruker WHERE brukerId IN (:brukerId)")
-      fun getBruker(brukerId: Int): Bruker
-
-
-      @Query("SELECT brukerNavn FROM Bruker WHERE brukerId IN (:brukerId)")
-      fun getBrukerNavn(brukerId: Int): String
-
-
-      @Query("SELECT * FROM Bruker WHERE brukerNavn LIKE :first AND " +
-              "passord LIKE :last LIMIT 1")
-      fun findByBrukerNavnOgPassord(first: String, last: String): Bruker
-
-
-       */
-
- //   @Insert(onConflict = OnConflictStrategy.REPLACE)
- //   fun insertAll(vararg brukere: Bruker)
-
-
+    /**
+     * Insert av Bruker til lokal DB
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(bruker: Bruker)
 
-
+    /**
+     * Sletter en enkelt bruker fra lokal DB
+     */
     @Delete
     fun delete(bruker: Bruker)
 }

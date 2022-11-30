@@ -49,7 +49,8 @@ import java.lang.Float.NEGATIVE_INFINITY
 import java.lang.Float.POSITIVE_INFINITY
 import kotlin.math.roundToInt
 
-/** SammenligningScreen inneholder søkefelt for å finne vare
+/**
+ * SammenligningScreen inneholder søkefelt for å finne vare
  * Så presenteres dataen i en søylediagram og tabell
  * fun MainChart() inneholder søylediagrammet
  * fun Filtertabell(tabellItem) inneholder alt av filter og tabell
@@ -135,8 +136,6 @@ fun SammenligningScreen(prisjegerViewModel: PrisjegerViewModel) {
                             prisjegerViewModel,
                             filterteButikkListe,
                             filtertePrisListe)
-                        //ExpandableCard(title = "Se graf", description = "", metode2 = MainChart())
-                        //"see history"
                         Button(
                             onClick = { grafFokus.value = true },
                             modifier = Modifier.padding(top = 10.dp),
@@ -213,7 +212,7 @@ private fun FilterTabell(
     prisjegerViewModel: PrisjegerViewModel,
     filterteButikkListe: ArrayList<String>,
     filtertePrisListe: ArrayList<Float>
-){
+) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue =
     if (expandedState) 180f else 0f)
@@ -434,7 +433,6 @@ private fun Sokefelt(
             }
         },
         singleLine = true,
-        // bør testes på håndholdt enhet :
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.onSecondary,
             cursorColor = MaterialTheme.colors.onSecondary,
@@ -495,7 +493,7 @@ private fun SokeFeltVisning(
                     }
                 }
                 treffListe
-            } // OBS: Må bruke både varenavn og listenavn som key for id av unike
+            }
             items(filtrerteVarer ) { filtrerte ->
                 Sokliste(filtrerte, textFieldFocus, valgtVare, focusManager)
             }
@@ -513,8 +511,7 @@ fun Sokliste(
     textFieldFocus: MutableState<Boolean>,
     valgtVare: MutableState<String>,
     focusManager: FocusManager
-)
-{
+) {
     OutlinedButton(modifier = Modifier
         .fillMaxWidth()
         .background(MaterialTheme.colors.secondaryVariant)
@@ -549,7 +546,8 @@ private fun TabellItem(
     filtertePrisListe.clear()
     for (butikker in butikkListe) {
         filterteButikkListe.add(butikker)
-        val hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
+        val hentetPris : Float =
+            prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
         filtertePrisListe.add(hentetPris)
         if (hentetPris < lavestPris) lavestPris = hentetPris
     }
@@ -589,12 +587,15 @@ private fun TabellItem(
                         fontWeight = FontWeight.Bold
                     )
                     for (butikker in butikkListe) {
-                        val hentetPris : Float = prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
+                        val hentetPris : Float =
+                            prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value).toFloat()
                         if (filterListe.value.contains(butikker) || !filterLaget.value) {
                             if (hentetPris == lavestPris) {
-                                TabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), true)
+                                TabellItemPris(prisjegerViewModel
+                                    .finnPrisPrVare(butikker, valgtVare.value), true)
                             } else {
-                                TabellItemPris(prisjegerViewModel.finnPrisPrVare(butikker, valgtVare.value), false)
+                                TabellItemPris(prisjegerViewModel
+                                    .finnPrisPrVare(butikker, valgtVare.value), false)
                             }
                         }
                     }
@@ -605,7 +606,8 @@ private fun TabellItem(
             Box(modifier = Modifier
                 .padding(start = 30.dp, bottom = 10.dp, top = 10.dp)) {
                 Text(
-                    text = stringResource(id = R.string.lastUpdateLabel) + prisjegerViewModel.priserPrButikk.value!!.dato,
+                    text = stringResource(id = R.string.lastUpdateLabel) +
+                            prisjegerViewModel.priserPrButikk.value!!.dato,
                     color = MaterialTheme.colors.onSecondary,
                     fontWeight = FontWeight.Bold
                 )
