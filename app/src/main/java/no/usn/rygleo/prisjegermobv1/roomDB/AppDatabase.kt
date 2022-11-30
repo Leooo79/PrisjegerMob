@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 
-// satt exportSchema = false - se build.gradle for info og kode for export
-@Database(entities = arrayOf(Bruker::class, Varer::class), version = 19, exportSchema = false)
+/**
+ * Abstrakt klasse som oppretter eget companion-objekt. Oppretter lokal SQL database med
+ * wrapper Room. Kun en instans opprettes. Programmet kontrollerer for allerede opprettet instans.
+ * Oppretter også entiteter.
+ */
+@Database(entities = [Bruker::class, Varer::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {   // HUSK Å ENDRE VERSJON VED NYTT SCHEMA
 
     abstract fun brukerDAO(): BrukerDAO
@@ -17,6 +20,9 @@ abstract class AppDatabase : RoomDatabase() {   // HUSK Å ENDRE VERSJON VED NYT
         @Volatile
         private var instans : AppDatabase? = null
 
+        /**
+         * Kontroller om instansiert, ellers ny instans
+         */
         fun getRoomDb(context: Context): AppDatabase {
             if(instans == null) {
                 synchronized(this) {

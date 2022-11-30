@@ -28,7 +28,8 @@ import androidx.compose.ui.unit.Dp
 import no.usn.rygleo.prisjegermobv1.data.Person
 
 val PersonListe = listOf(
-    Person(R.string.project, R.string.aboutProject , R.drawable.prisjegerlogo),
+    Person(R.string.project, R.string.aboutProject ,
+        R.drawable.prisjegerlogo),
     Person(R.string.Gaute, R.string.aboutGaute, R.drawable.gaute),
     Person(R.string.Leonard, R.string.aboutLeonard, R.drawable.leonard),
     Person(R.string.Dmitriy, R.string.aboutDmitriy, R.drawable.dmitriy),
@@ -54,7 +55,7 @@ fun OmOss() {
                     modifier = Modifier.fillMaxWidth()
                 ){
                     items(items = PersonListe){
-                        person -> makeAbout(person)
+                        person -> MakeAbout(person)
                     }
                 }
             }
@@ -66,7 +67,7 @@ fun OmOss() {
  * Lager kortet for person
  */
 @Composable
-private fun makeAbout(person: Person) {
+private fun MakeAbout(person: Person) {
     var expanded by remember {mutableStateOf(false)}
     val extraPaddingHor by animateDpAsState(
         if (expanded) 10.dp else 40.dp,
@@ -100,14 +101,15 @@ private fun makeAbout(person: Person) {
                 .background(MaterialTheme.colors.primary)
                 .clickable(onClick = { expanded = !expanded }),
             horizontalAlignment = Alignment.CenterHorizontally
-            //color = MaterialTheme.colors.surface
-
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(id = R.string.about) + " " + stringResource(id = person.name), color = MaterialTheme.colors.onPrimary, fontWeight = FontWeight.Bold)
-                addImage(name = stringResource(id = person.name), person.profilePic, imageSize)
+                Text(text = stringResource(id = R.string.about) + " " + stringResource(id = person.name),
+                    color = MaterialTheme.colors.onPrimary,
+                    fontWeight = FontWeight.Bold
+                )
+                AddImage(name = stringResource(id = person.name), person.profilePic, imageSize)
                 Spacer(modifier = Modifier.padding(top = 130.dp))
             }
             Divider(color = MaterialTheme.colors.onPrimary, thickness = 3.dp)
@@ -116,7 +118,9 @@ private fun makeAbout(person: Person) {
                     .background(MaterialTheme.colors.secondaryVariant)
                     .padding(horizontal = extraPaddingHor, vertical = extraPaddingVer)
                     .fillMaxWidth()) {
-                    Text(text = stringResource(person.description), color = MaterialTheme.colors.onSecondary)
+                    Text(text = stringResource(person.description),
+                        color = MaterialTheme.colors.onSecondary
+                    )
                 }
             }
         }
@@ -127,11 +131,14 @@ private fun makeAbout(person: Person) {
  * Lager image i et kort slik at den kan få en ramme og hjørner
  */
 @Composable
-fun addImage(name: String, profilePic: Int, imageSize: Dp) {
+fun AddImage(name: String, profilePic: Int, imageSize: Dp) {
     Card(modifier = Modifier
         .padding(start = 20.dp, top = 10.dp, bottom = 10.dp)
         .background(Color.Transparent)
-        .border(border = BorderStroke(2.dp, MaterialTheme.colors.onPrimary), shape = RoundedCornerShape(25.dp)),
+        .border(
+            border = BorderStroke(2.dp, MaterialTheme.colors.onPrimary),
+            shape = RoundedCornerShape(25.dp)
+        ),
         shape = RoundedCornerShape(25.dp)
     ) {
         Image(modifier = Modifier
@@ -143,7 +150,9 @@ fun addImage(name: String, profilePic: Int, imageSize: Dp) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 300, heightDp = 300)
+/**
+ * Preview
+ */
 @Preview(showBackground = true, widthDp = 300, heightDp = 400)
 @Composable
 fun DefaultPreview() {

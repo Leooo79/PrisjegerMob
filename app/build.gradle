@@ -3,7 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.kapt'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-
 }
 
 android {
@@ -20,13 +19,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        // hvis vi vil opprette JSON DB schema. Interessant ift RetroFit
-        // https://stackoverflow.com/questions/44322178/room-schema-export-directory-is-not-provided-to-the-annotation-processor-so-we
-   //     javaCompileOptions {
-   //         annotationProcessorOptions {
-   //             arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-  //          }
-  //      }
     }
 
     buildTypes {
@@ -59,14 +51,12 @@ android {
 
 dependencies {
     //permission for lokasjon
-    //  implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
     implementation "com.google.accompanist:accompanist-permissions:0.21.1-beta"
     implementation 'com.google.maps.android:maps-compose:2.7.2'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation "androidx.compose.material3:material3:1.0.0-alpha12"
     implementation "androidx.compose.material3:material3-window-size-class:1.0.0-alpha12"
-
 
     //Bar Chart
     implementation 'com.github.MahmoudIbrahim3:android-compose-charts:1.2.2'
@@ -120,37 +110,23 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
-    // Lagt til LR for Room DB (fra pensum, slides)
+    // Lagt til LR for Room DB
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor("androidx.room:room-compiler:$room_version")
-// To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
-// To use Kotlin Symbol Processing (KSP) OBS: velge en av to metoder
-   // ksp("androidx.room:room-compiler:$room_version")
-// optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
-// optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
 
-
-    // LR: for settings : simplesettings
-
-    implementation 'com.chillibits:simplesettings:1.3.4'
-
-// Required dependencies
-    implementation 'com.google.android.material:material:<latest-version>'
-    implementation 'androidx.preference:preference:<latest-version>'
-
     // Lagt inn av Tore og Leo Retrofit
     def retrofit_version = "2.9.0"
-// Retrofit- biblioteket
+    // Retrofit- biblioteket
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-// Converter-bibliotek for å lese ren tekst fra API-kallet
+    // Converter-bibliotek for å lese ren tekst fra API-kallet
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
-// Biblioteket Moshi konverterer JSON til Kotlin-/Java-objekter
+    // Biblioteket Moshi konverterer JSON til Kotlin-/Java-objekter
     implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
-// ConverterFactory for å lage Converter av Moshi-biblioteket
+    // ConverterFactory for å lage Converter av Moshi-biblioteket
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     implementation 'com.github.MahmoudIbrahim3:android-compose-charts:1.2.2'
 

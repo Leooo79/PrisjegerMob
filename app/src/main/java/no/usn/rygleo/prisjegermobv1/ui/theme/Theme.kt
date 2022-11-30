@@ -20,7 +20,6 @@ private val DarkColorPalette = darkColors(
     background = SecondaryDark,
     onPrimary = PrimaryFontDark,
     onSecondary = PrimaryFontDark
-// TODO: skal vi ha annen bakgrunn enn hvit?
 )
 
 @SuppressLint("ConflictingOnColor")
@@ -34,7 +33,9 @@ private val LightColorPalette = lightColors(
     onSecondary = PrimaryFontLightBrown
 )
 
-
+/**
+ * Funksjonen definerer tema for applikasjon Prisjeger (mobilklient)
+ */
 @Composable
 fun PrisjegerMobV1Theme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -45,7 +46,6 @@ fun PrisjegerMobV1Theme(
     } else {
         LightColorPalette
     }
-
     MaterialTheme(
         colors = colors,
         typography = Typography,

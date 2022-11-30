@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
@@ -29,15 +28,20 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import no.usn.rygleo.prisjegermobv1.navigasjon.MainScreenView
-import no.usn.rygleo.prisjegermobv1.roomDB.AppDatabase
 import no.usn.rygleo.prisjegermobv1.ui.PrisjegerViewModel
 import no.usn.rygleo.prisjegermobv1.ui.theme.PrisjegerMobV1Theme
 
-
+/**
+ * Klasse MainActivity er appens entrypoint
+ * Spør om tilgang og setter posisjon
+ */
 @ExperimentalPermissionsApi
 class  MainActivity : ComponentActivity() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
-    //   private lateinit var appDatabase:AppDatabase
+
+    /**
+     * Override av onCreate med setContent
+     */
     @RequiresApi(Build.VERSION_CODES.N)
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,15 +53,18 @@ class  MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-              //      AppDatabase.getRoomDb(this)
                     MainScreenView()
                     permission()
                 }
             }
         }
     }
-    //metode for å spørre om tilgang til kamera og lokasjon,
-    //Kilde: https://github.com/philipplackner/PermissionHandlingCompose
+
+    /**
+     * Funksjon for å spørre om tilgang til kamera og lokasjon
+     * Inspirert av kodemønster
+     * Kilde: https://github.com/philipplackner/PermissionHandlingCompose
+     */
     @Composable
     fun permission() {
         val permissionsState = rememberMultiplePermissionsState(
@@ -93,15 +100,17 @@ class  MainActivity : ComponentActivity() {
                             perm.hasPermission -> {
                                 println("fikk tilgang ")
                                 hentSistePosition(fusedLocationClient)
-
                             }
                         }
                     }
                 }
             }
-
         }
     }
+
+    /**
+     * Funksjon for å hente ut posisjon ved hjelp av enhetens GPS
+     */
     @SuppressLint("MissingPermission")
     @Composable
     private fun hentSistePosition(fusedLocationProviderClient: FusedLocationProviderClient) {
@@ -114,7 +123,6 @@ class  MainActivity : ComponentActivity() {
         if (permissionCheck == PackageManager.PERMISSION_GRANTED || permissioncheck2 == PackageManager.PERMISSION_GRANTED ) {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location : Location? ->
                 location?.let {
-                    println("halloAHLLOHALSDJALSJDKLAKsDLKASD")
                     println(location.longitude )
                     println(location.latitude)
                     prisjegerViewModel1.setLokasjon(location.longitude, location.latitude)
